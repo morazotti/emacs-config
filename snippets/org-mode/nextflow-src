@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: nextflow source block
+# key: nf_
+# --
+#+BEGIN_SRC nextflow
+$0
+#+END_SRC

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: qm-usual
+# key: org-qm
+# --
+#+latex_header: \usepackage[braket,qm]{qcircuit}
+#+latex_header: \newcommand{\tr}[2][]{\mathrm{Tr}_{#1}[#2]}
+#+latex_header: \newcommand{\id}[1][]{\mathbb{I}_{#1}}
