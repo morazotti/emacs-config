@@ -2,18 +2,18 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("blackgenn"
- (filename . "~/.config/emacs/private/org/bg-meet.org")
+(("org-capture-last-stored"
+ (filename . "~/.config/emacs/private/org/tasks.org")
+ (front-context-string . "** TODO testar o")
+ (rear-context-string . "r minhas notas.\n")
+ (position . 2428)
+ (last-modified 26397 33787 96436 120000))
+("blackgenn"
+ (filename . "~/.config/emacs/private/org/blackgenn.org")
  (front-context-string . "#+TITLE: BlackGe")
  (rear-context-string)
  (position . 1)
  (last-modified 26214 56934 489952 744000))
-("cybersec"
- (filename . "~/Documents/zerosecday/Cybersec/README.org")
- (front-context-string . "#+title: Projeto")
- (rear-context-string)
- (position . 1)
- (last-modified 26163 42462 852326 762000))
 ("info"
  (filename . "~/.config/emacs/private/org/info.org")
  (front-context-string . "#+TITLE: Informa")

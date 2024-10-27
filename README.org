@@ -238,12 +238,14 @@ Bloco de =jupyter= para executar =python=.
            :commit "f97f4b5d8c83e0b901020f835183dde8a2bf649e"
            )
 
+    :bind ("C-M-s-h" . jupyter-org-hydra/body)
     ;; isso permite o tamanho da imagem ser controlado por #+attr_*
     :config (require 'jupyter-julia)
             (require 'jupyter-python))
 #+end_src
 
 #+RESULTS:
+: jupyter-org-hydra/body
 ** =ob-jupyter= em kernel externo
 Para acessar o diretório com kernel disponível pelo ~jupyter kernel~
 em uma máquina com acesso ~ssh~, podemos utilizar a opção
@@ -548,15 +550,16 @@ Para utilizar =org-roam= e =org-ref= em conjunto, precido do
 =org-agenda= é uma poderosa agenda que utiliza todos os arquivos
 selecionados para organizar o dia-a-dia.
 #+begin_src emacs-lisp :tangle init.el 
-  (setq org-directory "/home/nicolas/.config/emacs/private/org")
-  (setq org-default-notes-file (concat org-directory "/notes.org"))
-  (setq org-agenda-files (list (concat org-directory "/tasks.org")
-                               (concat org-directory "/opusdei.org")
-                               (concat org-directory "/planodevida.org")
-                               (concat org-directory "/notes.org")))
-  (global-set-key (kbd "C-c c") 'org-capture)
-  (global-set-key (kbd "C-c l") 'org-store-link)
-  (global-set-key (kbd "C-c a") 'org-agenda)
+    (setq org-directory "/home/nicolas/.config/emacs/private/org")
+    (setq org-default-notes-file (concat org-directory "/notes.org"))
+    (setq org-agenda-files (list (concat org-directory "/tasks.org")
+                                 (concat org-directory "/opusdei.org")
+                                 (concat org-directory "/blackgenn.org")
+                                 ;; (concat org-directory "/planodevida.org")
+                                 (concat org-directory "/notes.org")))
+    (global-set-key (kbd "C-c c") 'org-capture)
+    (global-set-key (kbd "C-c l") 'org-store-link)
+    (global-set-key (kbd "C-c a") 'org-agenda)
 #+end_src
 
 #+RESULTS:
@@ -592,13 +595,19 @@ configurado. Ver [[https://github.com/alphapapa/org-super-agenda/blob/master/exa
 #+begin_src emacs-lisp :tangle init.el
   (use-package org-super-agenda
     :init (org-super-agenda-mode 1)
+    ;; :init (setq initial-buffer-choice (lambda () (get-buffer "*Org Agenda*")))
     ;; organização por grupos utilizando a propriedade =:agenda-group:=
     :config (setq org-super-agenda-groups
-  		'((:auto-property "ProjectId")
-  		  (:name "emacs" :tag "emacs")
-  		  (:name "books"
-  			 :and (:tag "book")))))
+                '((:auto-property "ProjectId")
+                  (:name "blackgenn"
+                         :scheduled today)
+                  (:name "emacs" :tag "emacs")
+                  (:name "books"
+                         :and (:tag "book")))))
 #+end_src
+
+#+RESULTS:
+: t
 
 ** IN-PROGRESS =capture=
 =org-capture= nos permite tomar notas rapidamente. 
@@ -636,17 +645,17 @@ A biblioteca =org-cdlatex= adiciona algumas opções para agilizar a
 escrita matemática em documentos =org=.
 
 #+begin_src emacs-lisp :tangle init.el
-  (use-package cdlatex
-    :hook (org-mode . org-cdlatex-mode)
+    (use-package cdlatex
+      :hook (org-mode . org-cdlatex-mode)
 
-    ;; comandos extras
-    :config (add-to-list 'cdlatex-math-modify-alist '(115 "\\mathscr" nil t nil nil))
-            (add-to-list 'cdlatex-math-modify-alist '(66 "\\mathbb" nil t nil nil))
-            (add-to-list 'cdlatex-math-modify-alist '(107 "\\mathfrak" nil t nil nil))
-            (add-to-list 'cdlatex-math-symbol-alist '(42 ("\\times" "\\otimes")))
-            (add-to-list 'cdlatex-math-symbol-alist '(100 ("\\delta" "\\partial" "^{\\dag}")))
-            (add-to-list 'cdlatex-math-symbol-alist '(46 ("\\cdot" "\\odot")))
-            (cdlatex-reset-mode))
+      ;; comandos extras
+      :config (add-to-list 'cdlatex-math-modify-alist '(115 "\\mathscr" nil t nil nil))
+              (add-to-list 'cdlatex-math-modify-alist '(66 "\\mathbb" nil t nil nil))
+              (add-to-list 'cdlatex-math-modify-alist '(107 "\\mathfrak" nil t nil nil))
+              (add-to-list 'cdlatex-math-symbol-alist '(42 ("\\times" "\\otimes")))
+              (add-to-list 'cdlatex-math-symbol-alist '(100 ("\\delta" "\\partial" "^{\\dag}")))
+              (add-to-list 'cdlatex-math-symbol-alist '(46 ("\\cdot" "\\odot")))
+              (cdlatex-reset-mode))
 #+end_src
 
 * aparência
@@ -661,7 +670,16 @@ Aqui vou definir as coisas importantes para a aparência.
 
 #+RESULTS:
 : ((font . Ligamonacop 14))
+** variable pitch
+Adiciona o modo =variable pitch=, permitindo a fonte variar no buffer
+de org. Contudo, configuro algumas das fontes para permanecer monospaced.
+#+begin_src emacs-lisp :tangle init.el
+  (variable-pitch-mode 1)
+  (set-face-attribute 'org-table nil :family "Ligamonacop")
+  (set-face-attribute 'org-block nil :family "Ligamonacop")
+#+end_src
 
+#+RESULTS:
 ** prettify lambda
 Para escrever \lambda ao invés de lambda no =elisp=, mas sem perder o texto correto.
 #+begin_src emacs-lisp :tangle init.el
