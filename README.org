@@ -1251,24 +1251,25 @@ toda essa diferença.
 ** COMMENT =dashboard=
 Cria um dashboard das informações recentes relevantes.
 #+begin_src emacs-lisp :tangle init.el 
-    (use-package dashboard
-      :init (setq dashboard-startup-banner "~/.config/emacs/private/img/ihs2.png") 
-      :init (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-      :init (dashboard-setup-startup-hook)
-      :init (add-to-list 'recentf-exclude (recentf-expand-file-name "~/.config/emacs/private/*" ))
-      :config (setq dashboard-banner-logo-title "Iesu Hominum Salvator"
-                    dashboard-items '((recents  . 5)
-                                            ;(bookmarks . 5)
-                                      (projects . 5)
-                                      (agenda . 5)
-                                            ;(registers . 5)
-                                      )
-                     dashboard-footer-messages 'nil ;AD MAIOREM DEI GLORIAM🇻🇦")
-                     dashboard-footer-icon "🇻🇦"
-                     dashboard-set-heading-icons t
-                     dashboard-set-file-icons t
-                     ;; (setq dashboard-set-init-info nil)
-                     dashboard-center-content t))
+  (use-package dashboard
+    :init (setq dashboard-startup-banner "~/.config/emacs/private/img/ihs2.png") 
+    ;; :init (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+    :init (dashboard-setup-startup-hook)
+    :init (add-to-list 'recentf-exclude (recentf-expand-file-name "~/.config/emacs/private/*" ))
+    :config (setq dashboard-banner-logo-title "Iesu Hominum Salvator"
+                  dashboard-items '(
+                                    ;; (recents  . 5)
+                                    (bookmarks . 5)
+                                    (projects . 5)
+                                    (agenda . 5)
+                                          ;(registers . 5)
+                                    )
+                   dashboard-footer-messages 'nil ;AD MAIOREM DEI GLORIAM🇻🇦")
+                   dashboard-footer-icon "🇻🇦"
+                   dashboard-set-heading-icons t
+                   dashboard-set-file-icons t
+                   ;; (setq dashboard-set-init-info nil)
+                   dashboard-center-content t))
 #+end_src
 
 #+RESULTS:

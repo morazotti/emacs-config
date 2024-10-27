@@ -2,25 +2,7 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-capture-last-stored-marker"
- (filename . "~/.config/emacs/private/org/notes.org")
- (front-context-string . "** TODO <2024-06")
- (rear-context-string . "algumas coisas \n")
- (position . 231)
- (last-modified 26226 56574 531593 208000))
-("org-refile-last-stored"
- (filename . "~/.config/emacs/private/org/tasks.org")
- (front-context-string . "** DONE [#A] Hmm")
- (rear-context-string . "7-05 Fri 16:20]\n")
- (position . 46151)
- (last-modified 26342 22990 715648 467000))
-("org-capture-last-stored"
- (filename . "~/Documents/roam/20240924134011-ambiente_conda_em_kernel_jupyter.org")
- (front-context-string . "\nPara utilizar u")
- (rear-context-string . " kernel jupyter\n")
- (position . 110)
- (last-modified 26354 60451 79642 799000))
-("blackgenn"
+(("blackgenn"
  (filename . "~/.config/emacs/private/org/bg-meet.org")
  (front-context-string . "#+TITLE: BlackGe")
  (rear-context-string)
