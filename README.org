@@ -7,11 +7,11 @@ Atualizando e organizando minha config.
 
 * custom-file
 #+begin_src emacs-lisp :tangle init.el
-(setq custom-file "~/.config/emacs/custom.el")
+(setq custom-file "~/.config/emacs/emacs-custom.el")
 #+end_src
 
 #+RESULTS:
-: ~/.config/emacs/custom.el
+: ~/.config/emacs/emacs-custom.el
 
 * =package=
 Carregar o package, adicionar o melpa, carregar =common-lisp=.
