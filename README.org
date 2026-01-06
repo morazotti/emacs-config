@@ -5,34 +5,13 @@
 #+STARTUP: overview
 Atualizando e organizando minha config.
 
-* Não sei se coloco
-** =emms=
-Faz tempo que também não uso o =emms=, /emacs multimedia system/.
-Pensei em trocar o /leading chord/ pra outra coisa, parece ique =M-n= é
-usado por alguns plugins.
-#+begin_src emacs-lisp :tangle exwm.el 
-  (use-package emms
-    :config
-    (require 'emms-setup)
-    (require 'emms-player-mpd)
-    (emms-all) ; don't change this to values you see on stackoverflow questions if you expect emms to work
-    (setq emms-seek-seconds 5)
-    (setq emms-player-list '(emms-player-mpd))
-    (setq emms-info-functions '(emms-info-mpd))
-    (setq emms-player-mpd-server-name "127.0.0.1")
-    (setq emms-player-mpd-server-port "6600")
-    (emms-toggle-random-playlist)
-    (emms-player-mpd-connect)
-    :bind					
-    ("M-n p" . emms)
-    ("M-n b" . emms-smart-browse)
-    ("M-n r" . emms-player-mpd-update-all-reset-cache)
-    ("M-n ," . emms-player-mpd-previous)
-    ("M-n ." . emms-player-mpd-next)
-    ("M-n -" . emms-volume-lower)
-    ("M-n =" . emms-volume-raise)
-    ("M-n SPC" . emms-player-mpd-pause))
+* custom-file
+#+begin_src emacs-lisp :tangle init.el
+(setq custom-file "~/.config/emacs/custom.el")
 #+end_src
+
+#+RESULTS:
+: ~/.config/emacs/custom.el
 
 * =package=
 Carregar o package, adicionar o melpa, carregar =common-lisp=.
@@ -104,12 +83,10 @@ Adiciona algumas funcionalidades novas para o org-export, como utilizar
 a /headline/ =ignore= para pular a headline sem pular o texto dela na exportação..
 #+begin_src emacs-lisp :tangle init.el 
   (use-package org
-    ;; :init 
-    ;; (defun display-ansi-colors ()
-    ;;   "Fixes kernel output in emacs-jupyter"
-    ;;   (ansi-color-apply-on-region (point-min) (point-max)))
-    ;; :hook
-    ;; (org-mode . (lambda () ( (add-hook 'org-babel-after-execute-hook #'display-ansi-colors))))
+    :init 
+    (defun display-ansi-colors ()
+      "Fixes kernel output in emacs-jupyter"
+      (ansi-color-apply-on-region (point-min) (point-max)))
     :hook (org-mode . my/sane-heading-size)
     :hook (org-mode . org-indent-mode)
     :hook (org-mode . auto-fill-mode)
@@ -119,6 +96,7 @@ a /headline/ =ignore= para pular a headline sem pular o texto dela na exportaç�
                               (lambda()
                                 (interactive)
                                 (org-export-dispatch 1)))))
+  (add-hook 'org-babel-after-execute-hook #'display-ansi-colors)
   (use-package org-contrib)
   (require 'ox-extra)
   (ox-extras-activate '(latex-header-blocks ignore-headlines))
@@ -169,8 +147,27 @@ Seu uso é feito da seguinte maneira:
   [[subfig:img1.png][Subcaption 1 >(scale=0.6)]] 
   [[subfig:img2.png][Subcaption 2 >(scale=0.6)]]
   [[subfig:img3.png][Subcaption 3 >(scale=0.6)]]
-  #+end_figure
+      #+end_figure
 #+end_example
+** async
+Para utilizar =org-export= assíncrono, temos esse arquivo de inicialização:
+#+begin_src emacs-lisp :tangle init-async.el
+   ; Source - https://superuser.com/a
+   ; Posted by T. Verron
+   ; Retrieved 2025-12-05, License - CC BY-SA 3.0
+   
+   (require 'package)
+   (setq package-enable-at-startup nil)
+   (package-initialize)
+
+   (require 'org) 
+   (require 'ox)
+   (require 'cl)  
+   (setq org-export-async-debug nil)
+#+end_src
+#+begin_src emacs-lisp :tangle init.el
+  (setq org-export-async-init-file (concat user-emacs-directory "init-async.el"))
+#+end_src
 ** custom emphasis
 Adiciona uma ênfase customizada para o org-mode, que traduz
 palavra para fonte em negrito e vermelho.
@@ -216,7 +213,7 @@ Aqui, há uma parte do código que converte =!palavra!= para
 #+RESULTS:
 | my-org-latex-filter |
 
-** =julia=
+** COMMENT =julia=
 #+begin_src emacs-lisp :tangle init.el
   (use-package ob-julia
     :straight (:host github :repo "gjkerns/ob-julia" :branch "master")
@@ -257,21 +254,21 @@ script que faz isso automaticamente em ~elisp~.
 
 #+begin_src emacs-lisp :tangle init.el
   (defun my/choose-ssh-host (ssh-config-file)
-  "Read SSH config file and allow the user to choose a host.
-If the chosen host is not 'local', prefix it with '/ssh:<chosen-host>:'."
-  (let ((hosts '("local"))
-	(kern-dir "~/.local/share/jupyter/runtime/"))  ;; Add the "local" option to the hosts list
-    ;; Read the SSH config file
-    (with-temp-buffer
-      (insert-file-contents ssh-config-file)
-      ;; Use regex to find "Host" definitions
-      (while (re-search-forward "^Host\\s-+\\(.*\\)" nil t)
-        (push (match-string 1) hosts)))
-    ;; Use completing-read to select a host
-    (let ((chosen-host (completing-read "Choose SSH host: " (reverse hosts))))
-         (if (string= chosen-host "local")
-              (message kern-dir)
-        (message (concat "/ssh:" chosen-host ":" kern-dir))))))
+    "Read SSH config file and allow the user to choose a host.
+      If the chosen host is not 'localhost', prefix it with '/ssh:<chosen-host>:'."
+    (let ((hosts '("localhost"))
+      	(kern-dir "~/.local/share/jupyter/runtime/"))  ;; Add the "local" option to the hosts list
+      ;; Read the SSH config file
+      (with-temp-buffer
+        (insert-file-contents ssh-config-file)
+        ;; Use regex to find "Host" definitions
+        (while (re-search-forward "^Host\\s-+\\(.*\\)" nil t)
+          (push (match-string 1) hosts)))
+      ;; Use completing-read to select a host
+      (let ((chosen-host (completing-read "Choose SSH host: " (reverse hosts))))
+        (if (string= chosen-host "localhost")
+            (message kern-dir)
+          (message (concat "/ssh:" chosen-host ":" kern-dir))))))
 
   (defun my/jupyter-runtime-folder ()
     (interactive)
@@ -284,7 +281,7 @@ If the chosen host is not 'local', prefix it with '/ssh:<chosen-host>:'."
 
   (defun my/list-jupyter-kernel-files ()
     (interactive)
-     (mapcar
+    (mapcar
      (lambda (file) (cons (car file) (cdr (assq 'shell_port (json-read-file (car file))))))
      (sort
       (directory-files-and-attributes (my/jupyter-runtime-folder) t ".*kernel")
@@ -295,10 +292,10 @@ If the chosen host is not 'local', prefix it with '/ssh:<chosen-host>:'."
           (files (my/list-jupyter-kernel-files)))
       (completing-read
        "Jupyter kernels: " files)))
-       ;; (seq-filter
-       ;;  (lambda (file)
-       ;;    (member (cdr file) ports))
-       ;;  files))))
+  ;; (seq-filter
+  ;;  (lambda (file)
+  ;;    (member (cdr file) ports))
+  ;;  files))))
 
   (defun my/insert-jupyter-kernel ()
     "Insert a path to an active Jupyter kernel into the buffer"
@@ -328,10 +325,29 @@ If the chosen host is not 'local', prefix it with '/ssh:<chosen-host>:'."
                  (y-or-n-p (format "Delete %d files?" (length to-delete))))
         (dolist (file to-delete)
           (delete-file (car file))))))
-#+end_src
+
+  (defun my/jupyter-launch-local-kernel ()
+    (interactive)
+    (let* ((venv (concat (getenv "VIRTUAL_ENV") ".venv/" ))
+  	 (process-environment process-environment)
+  	 (venv-string (concat "VIRTUAL_ENV=" venv))
+  	 (jupyter-bin (format "%sbin/jupyter" venv))
+  	 (cmd-kernelspec-list (format "%s %s kernelspec list" venv-string jupyter-bin))
+  	 (kernel-and-location
+  	  (completing-read "Choose kernel: "
+  			   (seq-remove #'string-empty-p (mapcar 'string-trim-left (cdr (split-string (shell-command-to-string cmd-kernelspec-list) "\n"))))
+  			   nil t))
+  	 (kernel
+  	  (when (string-match "\\([a-zA-Z0-9\-.]+\\) *\\(.*\\)" kernel-and-location)
+  	    (match-string 1 kernel-and-location)))
+  	 (command `(,jupyter-bin "kernel" "--kernel" ,kernel)))
+      (make-process :name "virtual-jupyter"
+  		  :buffer "*Jupyter Kernel*"
+  		  :command command)))
+         #+end_src
 
 #+RESULTS:
-: my/jupyter-cleanup-kernels
+: my/jupyter-launch-local-kernel
 
 Podemos colocar também no cabeçalho a linha
 ~#+property: header-args:jupyter-python :session [/ssh:[USER@]HOST:]$HOME/.local/share/jupyter/runtime/kernel-<PID>.json~
@@ -363,6 +379,28 @@ O =mermaid= gera um flowchart melhor que o ditaa.
 #+RESULTS:
 : ((:pupeteer-config-file . /home/nicolas/.local/src/pupeteer.json) (:session . none) (:results . replace) (:exports . code) (:cache . no) (:noweb . no) (:hlines . no) (:tangle . no))
 
+
+** =org-transclude=
+Funciona como a citação de arquivos do obsidian com =![[nota]]=. Uso:
+=#+transclude: [[link para arquivo ]]:<properties>= 
+#+begin_src emacs-lisp :tangle init.el
+    (use-package org-transclusion)
+#+end_src
+
+#+RESULTS:
+| org-transclusion-mode | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | #[0 \205 \301 \205 \302\303\301 !\304P!\305!\205 \306!\262\207 [org-ctags-enabled-p buffer-file-name expand-file-name file-name-directory /TAGS file-exists-p visit-tags-table] 3] | #[0 \305\306	>\203 \307 |
+
+** =org-pomodoro=
+Preparando horários melhores para pomodoro.
+#+begin_src emacs-lisp :tangle init.el
+  (use-package org-pomodoro
+    :config (setq org-pomodoro-length 50
+                  org-pomodoro-short-break-length 10))
+#+end_src
+
+#+RESULTS:
+: t
+
 ** =org= babel
 =org-babel= estende a funcionalidade do =org= para permitir execução de
 blocos de código. Vou escolher as linguagens aqui.
@@ -372,6 +410,8 @@ blocos de código. Vou escolher as linguagens aqui.
    '((C . t)
      (jupyter . t)
      (shell . t)
+     (js . t)
+     (julia . t)
      (tmux . t)
      (mermaid . t)
      ; (nextflow . t)
@@ -470,7 +510,7 @@ metodologia de notas que eu estava olhando. Não tenho certeza ainda.
     (("<f12>" . delve))
     :config
     ;; set meaningful tag names for the dashboard query
-    (setq delve-dashboard-tags '("vida" "trabalho" "ilustracao" "blackgenn"))
+    (setq delve-dashboard-tags '("vida" "trabalho" "ilustracao"))
     ;; optionally turn on compact view as default
     (add-hook #'delve-mode-hook #'delve-compact-view-mode)
     ;; turn on delve-minor-mode when Org Roam file is opened:
@@ -482,33 +522,42 @@ metodologia de notas que eu estava olhando. Não tenho certeza ainda.
 
 Estou finalmente entendendo como ele funciona. Estou gostando.
 ** =org-ref=
-Referências a-la LaTeX /no org-mode/!  A maior parte das configurações
+Referências a-la \LaTeX /no org-mode/!  A maior parte das configurações
 eram importantes no doutorado, mas vou manter a maioria das coisas aqui.
+#+begin_src emacs-lisp :tangle init.el
+  (setq reftex-default-bibliography '("~/Dropbox/referencias.bib")
+        bibtex-completion-bibliography "~/Dropbox/referencias.bib"
+        org-cite-global-bibliography "~/Dropbox/referencias.bib"
+        bibtex-completion-notes-path "~/Documents/roam/"
+        citar-notes-paths '("~/Documents/roam/")
+        bibtex-completion-library-path "~/Documents/my_lib/pdfs/"
+        org-latex-listings 'minted
+        ;; org-latex-packages-alist '(("" "minted" "bbm") ("" "physics" t) ("AUTO" "babel" t ("pdflatex" "xelatex" "lualatex")))
+        org-latex-packages-alist '(("" "physics" t) ("" "tikz" t))
+        org-latex-pdf-process '("latexmk -shell-escape -bibtex -interaction=nonstopmode -f -pdfxe -8bit %f")
+        org-latex-prefer-user-labels t
+        org-src-fontify-natively t
+        org-confirm-babel-evaluate nil
+        org-format-latex-options '(:foreground default
+                                               :background default
+                                               :scale 2.0
+                                               :html-foreground "Black"
+                                               :html-background "Transparent"
+                                               :html-scale 1.0
+                                               :matchers ("begin" "$1" "$" "$$" "\\(" "\\[" ))
+        org-src-window-setup 'reorganize-frame)
+#+end_src
+
+#+RESULTS:
+: reorganize-frame
+
 #+begin_src emacs-lisp :tangle init.el 
   (use-package org-ref
     :hook (org-mode . (lambda () (require 'org-ref)))
     ;; :init (require 'org-ref-ivy)
     ;; :config (require 'org-ref-ivy)
     ;; (load-file "~/.config/emacs/straight/build/org-ref/org-ref-ivy.el") ;; talvez nao precise
-    :config (setq reftex-default-bibliography '("~/Dropbox/referencias.bib")
-                  bibtex-completion-bibliography "~/Dropbox/referencias.bib"
-                  bibtex-completion-notes-path "~/Documents/roam/"
-                  bibtex-completion-library-path "~/Documents/my_lib/pdfs/"
-                  org-latex-listings 'minted
-                  ;; org-latex-packages-alist '(("" "minted" "bbm") ("" "physics" t) ("AUTO" "babel" t ("pdflatex" "xelatex" "lualatex")))
-                  org-latex-packages-alist '(("" "physics" t))
-                  org-latex-pdf-process '("latexmk -shell-escape -bibtex -interaction=nonstopmode -f -pdfxe -8bit %f")
-                  org-latex-prefer-user-labels t
-                  org-src-fontify-natively t
-                  org-confirm-babel-evaluate nil
-                  org-format-latex-options '(:foreground default
-                                             :background default
-                                             :scale 1.6
-                                             :html-foreground "Black"
-                                             :html-background "Transparent"
-                                             :html-scale 1.0
-                                             :matchers ("begin" "$1" "$" "$$" "\\(" "\\[" ))
-                  org-src-window-setup 'current-window)
+    :config 
               (setq org-file-apps '((auto-mode . emacs)
                                     (directory . emacs)
                                     (\.mm\' . default)
@@ -538,58 +587,84 @@ Para utilizar =org-roam= e =org-ref= em conjunto, precido do
     (use-package biblio)
 #+end_src
 #+begin_src emacs-lisp :tangle init.el
-    (use-package org-roam-bibtex
-      :ensure t
-      :after (org-roam)
-      :load-path "~/Documents/roam/" 
-      :config (require 'org-ref)
-      :init (org-roam-bibtex-mode))
+  (use-package org-roam-bibtex
+    :ensure t
+    :after (org-roam)
+    :load-path "~/Documents/roam/" 
+    :config (require 'org-ref)
+    :init (org-roam-bibtex-mode))
 #+end_src
 
 ** =org-agenda=
 =org-agenda= é uma poderosa agenda que utiliza todos os arquivos
 selecionados para organizar o dia-a-dia.
 #+begin_src emacs-lisp :tangle init.el 
-    (setq org-directory "/home/nicolas/.config/emacs/private/org")
-    (setq org-default-notes-file (concat org-directory "/notes.org"))
-    (setq org-agenda-files (list (concat org-directory "/tasks.org")
-                                 (concat org-directory "/opusdei.org")
-                                 (concat org-directory "/blackgenn.org")
-                                 ;; (concat org-directory "/planodevida.org")
-                                 (concat org-directory "/notes.org")))
-    (global-set-key (kbd "C-c c") 'org-capture)
-    (global-set-key (kbd "C-c l") 'org-store-link)
-    (global-set-key (kbd "C-c a") 'org-agenda)
+  (setq org-directory "/home/nicolas/Documents/org")
+  (setq org-default-notes-file (concat org-directory "/notes.org"))
+  (setq org-agenda-files (list (concat org-directory "/tasks.org")
+                               (concat org-directory "/opusdei.org")
+                               ;; (concat org-directory "/media.org")
+                               ;; (concat org-directory "/planodevida.org")
+                               ;; (concat org-directory "/notes.org")
+                               ))
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c a") 'org-agenda)
 #+end_src
 
 #+RESULTS:
 : org-agenda
 
-Essa agenda aqui tem algumas informações a mais que a agenda padrão do emacs.
-#+begin_src emacs-lisp :tangle init.el 
-(defun air-org-skip-subtree-if-priority (priority)
-  "Skip an agenda subtree if it has a priority of PRIORITY.
+Com calfw e calfw-org, temos uma visão de calendário do nosso
+org-agenda -- como os spreads de um bullet journal.
 
-PRIORITY may be one of the characters ?A, ?B, or ?C."
-  (let ((subtree-end (save-excursion (org-end-of-subtree t)))
-        (pri-value (* 1000 (- org-lowest-priority priority)))
-        (pri-current (org-get-priority (thing-at-point 'line t))))
-    (if (= pri-value pri-current)
-
-        subtree-end
-      nil)))
-  (setq org-agenda-custom-commands
-        '(("c" "Simple agenda view"
-           ((tags "PRIORITY=\"A\""
-                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                   (org-agenda-overriding-header "High-priority unfinished tasks:")))
-            (agenda "")
-            (alltodo ""((org-agenda-skip-function
-                     '(or (air-org-skip-subtree-if-priority ?A)
-                          (org-agenda-skip-if nil '(scheduled deadline))))))))))
+#+begin_src emacs-lisp :tangle init.el
+  (use-package calfw)
+  (use-package calfw-org)
+  (require 'calfw-org)
 #+end_src
 
-*** =super-agenda=
+Essa agenda aqui tem algumas informações a mais que a agenda padrão do emacs.
+#+begin_src emacs-lisp :tangle init.el 
+   (defun air-org-skip-subtree-if-priority (priority)
+     "Skip an agenda subtree if it has a priority of PRIORITY.
+
+   PRIORITY may be one of the characters ?A, ?B, or ?C."
+     (let ((subtree-end (save-excursion (org-end-of-subtree t)))
+           (pri-value (* 1000 (- org-lowest-priority priority)))
+           (pri-current (org-get-priority (thing-at-point 'line t))))
+       (if (= pri-value pri-current)
+
+           subtree-end
+         nil)))
+     (setq org-agenda-custom-commands
+           '(("c" "Simple agenda view"
+              ((tags "PRIORITY=\"A\""
+                     ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                      (org-agenda-overriding-header "High-priority unfinished tasks:")))
+               (agenda "")
+               (alltodo ""((org-agenda-skip-function
+                        '(or (air-org-skip-subtree-if-priority ?A)
+                             (org-agenda-skip-if nil '(scheduled deadline))))))))
+             ("p" "Planning" ((tags-todo "+@planning-@work")
+                              (todo "BACKLOG" )))
+             ("u" "Untagged Tasks" ((tags-todo "-{.*}" ((org-agenda-overriding-header "Untagged Tasks")))
+                                    (todo ".*" ((org-agenda-files '("~/Documents/org/notes.org"))
+                                                (org-agenda-overriding-header "Inbox"))))) 
+             ("w" "Work" ((tags-todo "+@work" ((org-agenda-overriding-header "Work Tasks")))
+                          (agenda "" ((org-agenda-overriding-header "Work Agenda")
+                                      (org-agenda-files '("~/Documents/org/tasks.org"))
+                                      (org-agenda-skip-entry-if 'notscheduled 'notdeadline)
+                                      (org-agenda-span 'week)))))))
+#+end_src
+
+#+RESULTS:
+| c | Simple agenda view | ((tags PRIORITY="A" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done)) (org-agenda-overriding-header High-priority unfinished tasks:))) (agenda ) (alltodo  ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority 65) (org-agenda-skip-if nil '(scheduled deadline))))))) |
+| p | Planning           | ((tags-todo +@planning-@work) (todo BACKLOG))                                                                                                                                                                                                                                                          |
+| u | Untagged Tasks     | ((tags-todo -{.*} ((org-agenda-overriding-header Untagged Tasks))) (todo .* ((org-agenda-files '(~/Documents/org/notes.org)) (org-agenda-overriding-header Inbox))))                                                                                                                                   |
+| w | Work               | ((tags-todo +@work ((org-agenda-overriding-header Work Tasks))) (agenda  ((org-agenda-overriding-header Work Agenda) (org-agenda-files '(~/Documents/org/blackgenn.org)) (org-agenda-skip-entry-if 'notscheduled 'notdeadline) (org-agenda-span 'week))))                                              |
+
+*** COMMENT =super-agenda=
 =org-super-agenda= parece bastante útil, mas não tenho nada
 configurado. Ver [[https://github.com/alphapapa/org-super-agenda/blob/master/examples.org#feature-examples][aqui]].
 #+begin_src emacs-lisp :tangle init.el
@@ -598,9 +673,11 @@ configurado. Ver [[https://github.com/alphapapa/org-super-agenda/blob/master/exa
     ;; :init (setq initial-buffer-choice (lambda () (get-buffer "*Org Agenda*")))
     ;; organização por grupos utilizando a propriedade =:agenda-group:=
     :config (setq org-super-agenda-groups
-                '((:auto-property "ProjectId")
-                  (:name "blackgenn"
-                         :scheduled today)
+                '(
+                  (:auto-property "ProjectId")
+
+                  ;; (:name "blackgenn"
+                  ;;        :scheduled today)
                   (:name "emacs" :tag "emacs")
                   (:name "books"
                          :and (:tag "book")))))
@@ -609,17 +686,43 @@ configurado. Ver [[https://github.com/alphapapa/org-super-agenda/blob/master/exa
 #+RESULTS:
 : t
 
+** org-notifications
+Tem como notificar-me de acordo com o estado das coisas utilizando
+apenas o appt.
+#+begin_src emacs-lisp :tangle init.el
+  (setq appt-message-warning-time 60) ;; start warning 60 minutes before appointments
+  (setq appt-display-interval 10) ;; display warning every minute
+  (appt-activate t) ;; starts the appt "mode"
+  (org-agenda-to-appt t)
+  (require 'notifications)
+
+
+  (setq appt-disp-window-function
+        (lambda (remaining new-time msg)
+          (notifications-notify
+           :title (message "In %s minutes" remaining)
+           :body msg
+           :urgency 'critical)))
+  (advice-add 'appt-check
+              :before
+              (lambda (&rest args)
+                (org-agenda-to-appt t)))
+
+#+end_src
+
+#+RESULTS:
+
 ** IN-PROGRESS =capture=
 =org-capture= nos permite tomar notas rapidamente. 
 #+begin_src emacs-lisp :tangle init.el 
     (setq org-capture-templates
-          '(("n" "Notes" entry (file+headline "/home/nicolas/.config/emacs/private/org/notes.org" "Unsorted")
+          '(("n" "Notes" entry (file+headline "/home/nicolas/Documents/org/notes.org" "Unsorted")
              "* UNSEEN %?\n")
-            ("g" "Goals" entry (file+headline "/home/nicolas/.config/emacs/private/org/goals.org" "Unsorted")
+            ("g" "Goals" entry (file+headline "/home/nicolas/Documents/org/goals.org" "Unsorted")
              "* TODO %?\n")
-            ("i" "Inbox" entry (file+headline "/home/nicolas/.config/emacs/private/org/notes.org" "Inbox")
+            ("i" "Inbox" entry (file+headline "/home/nicolas/Documents/org/notes.org" "Inbox")
              "* TODO <%<%Y-%m-%d %H:%M:%S>> \n %?\n")
-  	  ("t" "Tasks" entry (file+headline "/home/nicolas/.config/emacs/private/org/tasks.org" "Tarefas")
+  	  ("t" "Tasks" entry (file+headline "/home/nicolas/Documents/org/tasks.org" "Tarefas")
              "* TODO %?\n")))
 #+end_src
 
@@ -634,11 +737,60 @@ Deixa o =org-mode= com uma aparência mais moderna.
   (use-package org-modern
     :straight (:host github :repo "minad/org-modern" :branch "main")
     :config (setq org-modern-table nil)
+    :config (setq org-modern-label-border nil)
     :hook (org-mode . org-modern-mode))	
 #+end_src
 
 #+RESULTS:
-| org-ref-org-menu | delve--maybe-activate-minor-mode | org-cdlatex-mode | org-modern-mode | (lambda nil (require 'org-ref)) | jupyter-org-interaction-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-fold-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | auto-fill-mode | org-indent-mode | my/sane-heading-size | org-babel-jupyter-make-local-aliases |
+| #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | delve--maybe-activate-minor-mode | org-cdlatex-mode | org-modern-mode | org-ref-org-menu | (lambda nil (require 'org-ref)) | jupyter-org-interaction-mode | org-transclusion-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-fold-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | auto-fill-mode | org-indent-mode | my/sane-heading-size | org-babel-jupyter-make-local-aliases |
+
+** =svg-tags=
+Altera org-tags para svgs customizados dos mesmos.
+#+begin_src emacs-lisp :tangle init.el
+  (use-package svg-lib)
+  (use-package svg-tag
+    :ensure svg-lib
+    :straight (:host github :repo "rougier/svg-tag-mode" :branch "main")
+    :hook (org-mode . svg-tag-mode))
+  (setq svg-tag-tags
+        '(("\\(:@[A-Za-z0-9]+\\)" . ((lambda (tag)
+                                       (svg-tag-make (upcase tag) :beg 2))))
+           ("\\(:@[A-Za-z0-9]+:\\)$" . ((lambda (tag)
+                                         (svg-tag-make (upcase tag) :beg 2 :end -1))))
+          ("\\(:@[A-Za-z]+:\\)" . ((lambda (tag) (svg-tag-make (upcase tag) :beg 2 :end -1))))
+          ("\\(#.transclude: .*\\)" . ((lambda (tag) (svg-tag-make tag :beg 57 :end -2))
+                                       (lambda () (interactive) (org-transclusion-add))))
+          ("\\[#[A-Z]\\]" . ( (lambda (tag)
+                              (svg-tag-make tag :face 'org-priority 
+                                            :beg 2 :end -1 :margin 0))))
+          ("TODO" . ((lambda (tag) (svg-tag-make "TODO" :face 'org-todo :inverse t :margin 0))))
+          ("NEXT" . ((lambda (tag) (svg-tag-make "NEXT" :face 'org-todo :inverse t :margin 0))))
+          ("BACKLOG" . ((lambda (tag) (svg-tag-make "BACKLOG" :face 'org-todo :inverse t :margin 0))))
+          ("REVIEW" . ((lambda (tag) (svg-tag-make "REVIEW" :face 'org-todo :inverse t :margin 0))))
+          ("IN-PROGRESS" . ((lambda (tag) (svg-tag-make "IN-PROGRESS" :face 'org-todo :inverse t :margin 0))))
+          ("WAITING" . ((lambda (tag) (svg-tag-make "WAITING" :face 'org-todo :inverse t :margin 0))))
+          ("DONE" . ((lambda (tag) (svg-tag-make "DONE" :face 'org-done :margin 0))))
+          ("ABANDONED" . ((lambda (tag) (svg-tag-make "ABANDONED" :face 'org-done :margin 0))))
+          ("COMPLETE" . ((lambda (tag) (svg-tag-make "COMPLETE" :face 'org-done :margin 0))))
+          ))
+
+#+end_src
+
+#+RESULTS:
+| \(:@[A-Za-z0-9]+\)   | (lambda (tag) (svg-tag-make (upcase tag) :beg 2))                              |                                                   |
+| \(:@[A-Za-z0-9]+:\)$ | (lambda (tag) (svg-tag-make (upcase tag) :beg 2 :end -1))                      |                                                   |
+| \(:@[A-Za-z]+:\)     | (lambda (tag) (svg-tag-make (upcase tag) :beg 2 :end -1))                      |                                                   |
+| \(#.transclude: .*\) | (lambda (tag) (svg-tag-make tag :beg 57 :end -2))                              | (lambda nil (interactive) (org-transclusion-add)) |
+| \[#[A-Z]\]           | (lambda (tag) (svg-tag-make tag :face 'org-priority :beg 2 :end -1 :margin 0)) |                                                   |
+| TODO                 | (lambda (tag) (svg-tag-make TODO :face 'org-todo :inverse t :margin 0))        |                                                   |
+| NEXT                 | (lambda (tag) (svg-tag-make NEXT :face 'org-todo :inverse t :margin 0))        |                                                   |
+| BACKLOG              | (lambda (tag) (svg-tag-make BACKLOG :face 'org-todo :inverse t :margin 0))     |                                                   |
+| REVIEW               | (lambda (tag) (svg-tag-make REVIEW :face 'org-todo :inverse t :margin 0))      |                                                   |
+| IN-PROGRESS          | (lambda (tag) (svg-tag-make IN-PROGRESS :face 'org-todo :inverse t :margin 0)) |                                                   |
+| WAITING              | (lambda (tag) (svg-tag-make WAITING :face 'org-todo :inverse t :margin 0))     |                                                   |
+| DONE                 | (lambda (tag) (svg-tag-make DONE :face 'org-done :margin 0))                   |                                                   |
+| ABANDONED            | (lambda (tag) (svg-tag-make ABANDONED :face 'org-done :margin 0))              |                                                   |
+| COMPLETE             | (lambda (tag) (svg-tag-make COMPLETE :face 'org-done :margin 0))               |                                                   |
 
 ** =org-cdlatex=
 A biblioteca =org-cdlatex= adiciona algumas opções para agilizar a
@@ -655,11 +807,24 @@ escrita matemática em documentos =org=.
               (add-to-list 'cdlatex-math-symbol-alist '(42 ("\\times" "\\otimes")))
               (add-to-list 'cdlatex-math-symbol-alist '(100 ("\\delta" "\\partial" "^{\\dag}")))
               (add-to-list 'cdlatex-math-symbol-alist '(46 ("\\cdot" "\\odot")))
+              (add-to-list 'cdlatex-math-symbol-alist '(126 ("\\approx" "\\simeq" "\\propto")))
               (cdlatex-reset-mode))
 #+end_src
 
 * aparência
 Aqui vou definir as coisas importantes para a aparência. 
+
+** COMMENT NANO emacs
+Versão bonitinha do emacs. Vou testar.
+
+#+begin_src emacs-lisp :tangle init.el
+  (straight-use-package
+   '(nano :type git :host github :repo "rougier/nano-emacs"))
+  (setq nano-font-family-monospaced "Ligamonacop")
+  (setq nano-font-size 12)
+  (require 'nano)
+#+end_src
+
 ** fonte
 
 #+begin_src emacs-lisp :tangle init.el 
@@ -670,25 +835,15 @@ Aqui vou definir as coisas importantes para a aparência.
 
 #+RESULTS:
 : ((font . Ligamonacop 14))
-** variable pitch
-Adiciona o modo =variable pitch=, permitindo a fonte variar no buffer
-de org. Contudo, configuro algumas das fontes para permanecer monospaced.
-#+begin_src emacs-lisp :tangle init.el
-  (variable-pitch-mode 1)
-  (set-face-attribute 'org-table nil :family "Ligamonacop")
-  (set-face-attribute 'org-block nil :family "Ligamonacop")
-#+end_src
-
-#+RESULTS:
 ** prettify lambda
 Para escrever \lambda ao invés de lambda no =elisp=, mas sem perder o texto correto.
 #+begin_src emacs-lisp :tangle init.el
-  (defun my-pretty-lambda ()
-    "make some word or string show as pretty Unicode symbols"
-    (setq prettify-symbols-alist '(
-            ("lambda" . 955))))
-  (add-hook 'emacs-lisp-hook 'my-pretty-lambda)
-  (global-prettify-symbols-mode 1)
+  ;; (defun my-pretty-lambda ()
+  ;;   "make some word or string show as pretty Unicode symbols"
+  ;;   (setq prettify-symbols-alist '(
+  ;;           ("lambda" . 955))))
+  ;; (add-hook 'emacs-lisp-hook 'my-pretty-lambda)
+  ;; (global-prettify-symbols-mode 1)
 #+end_src
 
 #+RESULTS:
@@ -708,22 +863,23 @@ Para escrever \lambda ao invés de lambda no =elisp=, mas sem perder o texto cor
 Instalando alguns temas pra poder escolher.
 
 #+begin_src emacs-lisp :tangle init.el 
-  (use-package base16-theme)
-  (use-package doom-themes)
-  (use-package modus-themes
-    :straight (:host gitlab :repo "protesilaos/modus-themes" :branch "main"))
-  (defvar my/theme 'doom-laserwave) ;;anterior: doom-material-dark
-  (load-theme my/theme t nil)
+    (use-package base16-theme)
+    (use-package doom-themes)
+    (use-package modus-themes
+      :straight (:host gitlab :repo "protesilaos/modus-themes" :branch "main"))
+    (defvar my/theme 'base16-catppuccin-latte) ;;anterior: 'doom-tokyo-night
+    (load-theme my/theme t nil)
 #+end_src
 
 #+RESULTS:
 : t
 
 ** outras coisas menores
-#+begin_src emacs-lisp :tangle init.el 
+#+begin_src emacs-lisp :tangle init.el
   (global-hl-line-mode t)
   (setq font-latex-fontify-script nil)
   (scroll-bar-mode -1)
+  (whitespace-mode)
   (set-fringe-mode 10)
   (setq visual-bell t)
   (show-paren-mode t)
@@ -734,6 +890,9 @@ Instalando alguns temas pra poder escolher.
   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
   ;; (add-hook 'text-mode-hook 'display-line-numbers-mode)
 #+end_src
+
+#+RESULTS:
+| rainbow-delimiters-mode | company-mode | copilot-mode | hs-minor-mode | display-line-numbers-mode |
 
 ** ligature
 
@@ -801,6 +960,11 @@ geralmente não faz diferença.
  (setq make-backup-files nil)
  (setq auto-save-default nil)
 #+end_src
+** duplicate line
+Duplica a linha abaixo. Simples e eficaz.
+#+begin_src emacs-lisp :tangle init.el
+  (keymap-global-set "C-," 'duplicate-line)
+#+end_src
 ** scratch buffer
 Mexendo um pouco no buffer =*scratch*=. Quero mantê-lo sempre aberto.
 #+begin_src emacs-lisp :tangle init.el 
@@ -858,6 +1022,17 @@ Keybind para refrescar a janela.
 #+begin_src emacs-lisp :tangle init.el 
   (setq fill-column 72)
 #+end_src
+** Uso de hyper
+Com o teclado que tenho utilizado, a tecla hyper se tornou muito mais
+prática de ser pressionada. Portanto, posso adicionar algumas coisas
+nela.
+#+begin_src emacs-lisp :tangle init.el
+   (keymap-global-set "C-M-s-<iso-lefttab>" 'other-window)
+#+end_src
+
+#+RESULTS:
+: other-window
+
 ** =abbrev-mode=
 O =abbrev= funciona como o =yasnippet=, mas para pequenos termos:
 serve para corrigir typos, abreviar expressões com siglas, entre
@@ -885,6 +1060,7 @@ palava, frase, parágrafo, etc.
     :bind ("C-=" . er/expand-region)
     )
 #+end_src
+
 ** =hide-show-mode=
 Permite ocultar blocos dentro de códigos. Acessível pelos comandos
 diretos do =vim=: =zr= (show-all), =zm= (fold-all), =zo= (show-this) e
@@ -966,9 +1142,12 @@ caractere/linha com combinações de caracteres, e =ivy= é importante pro
 : avy-goto-line
 
 #+begin_src emacs-lisp :tangle init.el
-  ;; (use-package ivy
-  ;;   :config (ivy-mode 1) )
+  (use-package ivy
+    :init (progn (ivy-mode 1)
+                 (ivy-mode -1)))
 #+end_src
+
+#+RESULTS:
 
 *** =consult=
 =consult= estende alguns comandos padrões do =emacs=.
@@ -1093,7 +1272,15 @@ caractere/linha com combinações de caracteres, e =ivy= é importante pro
     )
 #+end_src
 
-*** COMMENT =embark=
+*** =eldoc-box=
+Mostra um popup do eldoc ao invés de buffer dedicado.
+#+begin_src emacs-lisp :tangle init.el
+(use-package eldoc-box)
+#+end_src
+
+#+RESULTS:
+
+*** =embark=
 
 =embark= adiciona um dwim helper no =C-.=
 #+begin_src emacs-lisp :tangle init.el
@@ -1130,7 +1317,7 @@ caractere/linha com combinações de caracteres, e =ivy= é importante pro
 #+end_src
 
 #+RESULTS:
-| consult-preview-at-point-mode |
+| embark-consult--upgrade-markers | consult-preview-at-point-mode |
 
 *** =marginalia=
 =marginalia= adiciona informação no minibuffer.
@@ -1166,6 +1353,7 @@ caractere/linha com combinações de caracteres, e =ivy= é importante pro
                   completion-ignore-case t))
 #+end_src
 
+
 ** =transpose-frame=
 Rotaciona as janelas do frame, útil se ele particionou errado.
 #+begin_src emacs-lisp :tangle init.el
@@ -1196,27 +1384,43 @@ terminal. Vou usar direto no =emacs= mesmo, pelo menos lá dá menos problema.
 ** =vterm=
 O melhor terminal dentro do =emacs=, de disparada.
 #+begin_src emacs-lisp :tangle init.el 
-  (use-package vterm
-    :after multi-vterm
-    :init (setq vterm-shell "zsh")
+    (use-package vterm
+      :after multi-vterm
+      :init (setq vterm-shell "zsh")
 
-    ;; deixar o vterm na parte de baixo da tela
-    :config (add-to-list 'display-buffer-alist
-                         '("\*vterm\*"
-                           (display-buffer-in-side-window)
-                           (window-height . 0.25)
-                           (side . bottom)
-                           (slot . 0))))
-    (use-package vterm-toggle
-      :bind ("s-t" . vterm-toggle))
+      ;; deixar o vterm na parte de baixo da tela
+      :config (add-to-list 'display-buffer-alist
+                           '("\*vterm\*"
+                             (display-buffer-in-side-window)
+                             (window-height . 0.25)
+                             (side . bottom)
+                             (slot . 0))))
+      ;; (use-package vterm-toggle
+      ;;   :bind ("s-t" . vterm-toggle))
+    (use-package toggle-term
+      :bind (("C-`" . toggle-term-toggle)
+             ("C-~" . toggle-term-find)
+             ;;("M-o t" . toggle-term-term)
+             ("M-o v" . toggle-term-vterm)
+             ;; ("M-o a" . toggle-term-eat)
+             ;; ("M-o s" . toggle-term-shell)
+             ;; ("M-o e" . toggle-term-eshell)
+             ;; ("M-o i" . toggle-term-ielm)
+             ;; ("M-o o" . toggle-term-toggle)
+             )
+      :config
+      (setq toggle-term-init-toggle '("my-terminal" . "vterm"))
+      (setq toggle-term-size 25)
+      (setq toggle-term-switch-upon-toggle t))
+
   #+end_src
 
 #+RESULTS:
-: vterm-toggle
+: toggle-term-vterm
 
 Tem até como usar como multiplexer com o =multi-vterm=.
 #+begin_src emacs-lisp :tangle init.el
-  (use-package multi-vterm)
+  ;; (use-package multi-vterm)
 #+end_src
 
 #+RESULTS:
@@ -1265,6 +1469,41 @@ toda essa diferença.
 #+RESULTS:
 : centaur-tabs-backward
 
+** zoom-window
+Modo zoom - similar ao =<leader> z= do tmux.
+#+begin_src emacs-lisp :tangle init.el
+  (defvar zoom-register ?z
+     "the register to store the window configuration for zooming/unzooming.")
+
+   (defvar zoomed-in-p nil
+     "a flag to track if the window is currently zoomed in.")
+
+   (defun toggle-zoom-window ()
+     "toggle zooming the current window: maximize or restore."
+     (interactive)
+     (if zoomed-in-p
+         (restore-window-configuration-from-zoom-register)
+       (save-window-configuration-to-zoom-register)
+       (delete-other-windows))
+     (setq zoomed-in-p (not zoomed-in-p)))
+
+   (defun save-window-configuration-to-zoom-register ()
+     "save the current window configuration to a register for zooming/unzooming."
+     (window-configuration-to-register zoom-register)
+     (message "Window configuration saved for zooming."))
+
+   (defun restore-window-configuration-from-zoom-register ()
+     "restore the window configuration from the zoom register."
+     (jump-to-register zoom-register)
+     (message "Window configuration restored."))
+
+  (global-set-key (kbd "M-z") 'toggle-zoom-window)
+#+end_src
+
+#+RESULTS:
+: toggle-zoom-window
+
+
 * features
 ** COMMENT =dashboard=
 Cria um dashboard das informações recentes relevantes.
@@ -1292,21 +1531,26 @@ Cria um dashboard das informações recentes relevantes.
 
 #+RESULTS:
 : t
-** =copilot=
+** COMMENT =copilot=
 Podemos configurar o uso do copilot, do github, aqui no emacs. Para
 isso, preciso do login do github da BlackGenn.
 #+begin_src emacs-lisp :tangle init.el
-  (use-package copilot
-    :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
-    :hook (prog-mode . copilot-mode)
-    :bind (:map copilot-completion-map ("<tab>" . copilot-accept-completion)
-                                 ("TAB" . copilot-accept-completion))
-    :init (copilot-install-server)
-    :ensure t)
+    (use-package copilot
+      :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+      :hook (prog-mode . copilot-mode)
+      :bind (:map copilot-completion-map ("<tab>" . copilot-accept-completion)
+                                   ("TAB" . copilot-accept-completion))
+      :init (copilot-install-server)
+      :ensure t)
+    (use-package shell-maker
+      :straight (:host github :repo "xenodium/shell-maker" :files ("*.el")))
+    (use-package copilot-chat
+      :straight (:host github :repo "chep/copilot-chat.el" :files ("*.el"))
+      :after (request org markdown-mode)
+      :ensure shell-maker)
 #+end_src
 
 #+RESULTS:
-: copilot-accept-completion
 
 ** =corfu=
 Autocompletion.
@@ -1317,12 +1561,15 @@ Autocompletion.
 
 ** =company=
 #+begin_src emacs-lisp :tangle init.el
-    (use-package company
-      :hook (prog-mode . company-mode))
+  (use-package company
+    :config (setq company-idle-delay 0
+                  company-minimum-prefix-length 1
+                  company-tooltip-align-annotations t)
+    :hook (prog-mode . company-mode))
 #+end_src
 
 #+RESULTS:
-| company-mode | rainbow-delimiters-mode | copilot-mode | hs-minor-mode | display-line-numbers-mode |
+| global-company-mode | x-wm-set-size-hint | org-roam-db-autosync-mode | org-persist-load-all | debian-ispell-set-default-dictionary | debian-ispell-set-startup-menu | tramp-register-archive-autoload-file-name-handler | table--make-cell-map | magit-maybe-define-global-key-bindings |
 
 ** =dired=
 Um pouco de customização e extensão do =dired= não faz mal nenhum.
@@ -1339,7 +1586,7 @@ Um pouco de customização e extensão do =dired= não faz mal nenhum.
 imagem.
 #+begin_src emacs-lisp :tangle init.el 
   (use-package dired-preview
-    :init (dired-preview-global-mode 1)
+    :init (dired-preview-global-mode 0)
     :config (setq dired-preview-delay 0.7)
     (setq dired-preview-ignored-extensions-regexp
   	(concat "\\."
@@ -1361,6 +1608,227 @@ coerência entre os arquivos do mesmo.
 
   (use-package ibuffer-projectile) ;; agrupa buffers do mesmo projeto
 #+end_src
+** custom: =harpoon=
+Copiando o harpoon do neovim.
+#+begin_src emacs-lisp :tangle init.el
+  (load-file "~/.config/emacs/custom/harpoon.el")
+  (global-set-key (kbd "C-M-s-SPC") 'harpoon-add-buffer-to-register)
+  (global-set-key (kbd "C-M-s-<return>") 'harpoon-show-menu)
+  (global-set-key (kbd "C-M-s-<escape>") 'harpoon-remove-buffer-from-register)
+#+end_src
+
+#+begin_src emacs-lisp :tangle custom/harpoon.el
+      (defvar harpoon-registers '(?p ?f ?w ?q ?g ?l ?u ?y ?j))
+      (defvar harpoon-register-alist nil
+        "Alist mapping register characters to buffer/file paths.")
+
+      (defun harpoon-add-buffer-to-register ()
+        "Add current buffer/file to first available harpoon register.
+          If all registers are used, prompt user to remove one."
+        (interactive)
+        (let* ((buffer-file (or (buffer-file-name) (buffer-name)))
+               (existing-reg (car (rassoc buffer-file harpoon-register-alist)))
+               (available-reg (cl-set-difference harpoon-registers
+                                                 (mapcar #'car harpoon-register-alist))))
+          (cond
+           (existing-reg
+            (message "Buffer/file already in register %c" existing-reg))
+           (available-reg
+            (let ((reg (car available-reg)))
+              (push (cons reg buffer-file) harpoon-register-alist)
+              (message "Added to register %c" reg)))
+           (t
+            (when (y-or-n-p "All registers used. Remove one? ")
+              (let* ((choices (mapcar (lambda (x)
+                                        (format "%c: %s" (car x) (cdr x)))
+                                      harpoon-register-alist))
+                     (selected (completing-read "Remove register: " choices nil t))
+                     (reg-char (string-to-char selected)))
+                (setq harpoon-register-alist
+                      (assq-delete-all reg-char harpoon-register-alist))
+                (push (cons reg-char buffer-file) harpoon-register-alist)
+                (message "Replaced register %c" reg-char)))))))
+
+      (defun harpoon-remove-buffer-from-register ()
+        "Remove current buffer/file from its harpoon register."
+        (interactive)
+        (let* ((buffer-file (or (buffer-file-name) (buffer-name)))
+               (existing-reg (car (rassoc buffer-file harpoon-register-alist))))
+          (if existing-reg
+              (progn
+                (setq harpoon-register-alist
+                      (assq-delete-all existing-reg harpoon-register-alist))
+                (message "Removed from register %c" existing-reg))
+            (message "Buffer/file not in any register"))))
+
+      (defun harpoon-show-menu ()
+        "Show an interactive menu of harpoon registers."
+        (interactive)
+        (let ((choices (mapcar (lambda (r)
+                                 (cons (format "%c: %s" r (or (cdr (assq r harpoon-register-alist)) "[empty]")) r))
+                               harpoon-registers)))
+          (let ((selection (completing-read "Jump to register: " choices nil t)))
+            (when selection
+              (let ((reg (cdr (assoc selection choices))))
+                (call-interactively (intern (format "harpoon-jump-%c" reg))))))))
+#+end_src
+
+#+begin_src emacs-lisp :tangle custom/harpoon.el
+(defun harpoon-show-list-and-jump ()
+  "Show harpoon registers and jump to selected one."
+  (interactive)
+  (let ((buffer (get-buffer-create "*Harpoon Registers*")))
+    ;; Display the list in a help buffer
+    (with-help-window buffer
+      (with-current-buffer buffer
+        (insert "Harpoon Registers - press key to jump:\n\n")
+        (dolist (reg harpoon-registers)
+          (let ((target (cdr (assq reg harpoon-register-alist))))
+            (insert (format "%c: %s\n" reg 
+                          (if target
+                              (abbreviate-file-name
+                               (if (stringp target) target (buffer-name target)))
+                            "[empty]")))))))
+    
+    ;; Prompt for register key
+    (let ((reg (read-char "Jump to register: ")))
+      (when (memq reg harpoon-registers)
+        (let ((target (cdr (assq reg harpoon-register-alist))))
+          (cond
+           ((not target)
+            (message "Register %c is empty" reg))
+           ((file-exists-p target)
+            (find-file target))
+           ((get-buffer target)
+            (switch-to-buffer target))
+           (t
+            (message "Target no longer exists")))))
+      (when (get-buffer "*Harpoon Registers*")
+        (kill-buffer "*Harpoon Registers*")))))
+#+end_src
+
+#+RESULTS:
+: harpoon-show-menu
+
+#+begin_src emacs-lisp :tangle custom/harpoon.el
+(defun harpoon-create-jump-functions ()
+  "Create direct jump functions for all harpoon registers."
+  (dolist (reg harpoon-registers)
+    (fset (intern (format "harpoon-jump-%c" reg))
+          `(lambda ()
+             (interactive)
+             (let ((buffer-file (cdr (assq ',reg harpoon-register-alist))))
+               (cond
+                ((not buffer-file)
+                 (message "Register %c is empty" ',reg))
+                ((file-exists-p buffer-file)
+                 (find-file buffer-file))
+                ((get-buffer buffer-file)
+                 (switch-to-buffer buffer-file))
+                (t
+                 (message "Buffer/file %s no longer exists" buffer-file)))))))
+
+  ;; Create keybindings
+  (dolist (reg harpoon-registers)
+    (define-key global-map (kbd (format "C-M-S-s-%c" reg))
+              (intern (format "harpoon-jump-%c" reg)))))
+
+  (harpoon-create-jump-functions)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src emacs-lisp :tangle no
+(require 'projectile)  ; Or use your preferred project management system
+
+(defun harpoon-get-project-r5ot ()
+  "Get current project root directory."
+  (when (fboundp 'projectile-project-root)
+    (projectile-project-root)))
+
+(defun harpoon-get-storage-file ()
+  "Get path to harpoon storage file for current project."
+  (let ((root (harpoon-get-project-root)))
+    (when root
+      (expand-file-name ".harpoon" root))))
+
+(defun harpoon-save-registers ()
+  "Save harpoon registers to project-specific file."
+  (interactive)
+  (let ((file (harpoon-get-storage-file)))
+    (when file
+      (make-directory (file-name-directory file) t)
+      (with-temp-file file
+        (prin1 harpoon-register-alist (current-buffer))))))
+
+(defun harpoon-load-registers ()
+  "Load harpoon registers from project-specific file."
+  (interactive)
+  (let ((file (harpoon-get-storage-file)))
+    (when (and file (file-exists-p file))
+      (with-temp-buffer
+        (insert-file-contents file)
+        (setq harpoon-register-alist (read (current-buffer)))))))
+
+;; Automatically load/save when changing buffers
+(add-hook 'find-file-hook 'harpoon-load-registers)
+(add-hook 'kill-buffer-hook 'harpoon-save-registers)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(defun harpoon-switch-project ()
+  "Switch projects and load corresponding harpoon registers."
+  (interactive)
+  (call-interactively 'projectile-switch-project)
+  (harpoon-load-registers))
+
+(define-key projectile-mode-map (kbd "C-c p h") 'harpoon-switch-project)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(defun harpoon-get-global-storage-file ()
+  "Get path to global harpoon storage file."
+  (expand-file-name "~/.config/emacs/custom/harpoon-global"))
+
+(defun harpoon-save-global-registers ()
+  "Save registers to global storage."
+  (interactive)
+  (let ((file (harpoon-get-global-storage-file)))
+    (with-temp-file file
+      (prin1 harpoon-register-alist (current-buffer)))))
+
+(defun harpoon-load-global-registers ()
+  "Load registers from global storage."
+  (interactive)
+  (let ((file (harpoon-get-global-storage-file)))
+    (when (file-exists-p file)
+      (with-temp-buffer
+        (insert-file-contents file)
+        (setq harpoon-register-alist (read (current-buffer)))))))
+
+;; Add to emacs startup
+(add-hook 'after-init-hook 'harpoon-load-global-registers)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(defun harpoon-load-registers ()
+  "Load registers from project or global storage."
+  (let ((project-file (harpoon-get-storage-file)))
+    (cond
+     ((and project-file (file-exists-p project-file))
+      (with-temp-buffer
+        (insert-file-contents project-file)
+        (setq harpoon-register-alist (read (current-buffer)))))
+     (t
+      (harpoon-load-global-registers)))))
+
+(defun harpoon-save-registers ()
+  "Save registers to appropriate storage."
+  (if (harpoon-get-project-root)
+      (harpoon-save-registers)
+    (harpoon-save-global-registers)))
+#+end_src
+
 ** =magit=
 Uma porcelana =git= que é realmente de outro mundo.
 #+begin_src emacs-lisp :tangle init.el 
@@ -1369,6 +1837,38 @@ Uma porcelana =git= que é realmente de outro mundo.
   (use-package magit
     :bind ("C-x g" . magit-status))
 #+end_src
+
+Adiciona um processo para utilizar o PYTHONPATH, permitindo testes e
+precommit direto do magit.
+#+begin_src emacs-lisp :tangle init.el 
+  (add-hook 'projectile-after-switch-project-hook
+            (lambda ()
+              (let* ((project-root (projectile-project-root))
+                     (venv-path (concat project-root ".venv")))
+                (setq python-shell-extra-pythonpaths (list project-root))
+                (if (file-directory-p venv-path)
+                    (progn
+                      (pyvenv-activate venv-path)
+                      (message "Activated virtualenv: %s" venv-path))
+                  (progn
+                    (pyvenv-deactivate)
+                    (message "No virtualenv found in project; deactivated any existing virtualenv."))))))
+
+  (add-hook 'projectile-after-switch-project-hook
+            (lambda ()
+              (let ((project-root (projectile-project-root)))
+                (setenv "PYTHONPATH" ":bin:src")
+                (add-to-list 'process-environment (concat "PYTHONPATH=" (getenv "PYTHONPATH")))
+                (message "Set PYTHONPATH to: %s" (getenv "PYTHONPATH")))))
+
+#+end_src
+
+#+RESULTS:
+| lambda | nil | (let ((project-root (projectile-project-root))) (setenv PYTHONPATH :bin:src) (add-to-list 'process-environment (concat PYTHONPATH= (getenv PYTHONPATH))) (message Set PYTHONPATH to: %s (getenv PYTHONPATH)))                                                                                                                                                                                                      |
+| lambda | nil | (let* ((project-root (projectile-project-root)) (venv-path (concat project-root .venv))) (setq python-shell-extra-pythonpaths (list project-root)) (if (file-directory-p venv-path) (progn (pyvenv-activate venv-path) (message Activated virtualenv: %s venv-path)) (progn (pyvenv-deactivate) (message No virtualenv found in project; deactivated any existing virtualenv.))))                                  |
+| lambda | nil | (let ((project-root (projectile-project-root))) (setenv PYTHONPATH (expand-file-name bin project-root)) (add-to-list 'process-environment (concat PYTHONPATH= (getenv PYTHONPATH))) (message Set PYTHONPATH to: %s (getenv PYTHONPATH)))                                                                                                                                                                           |
+| lambda | nil | (let* ((project-root (projectile-project-root)) (venv-path (concat project-root .venv))) (setenv PYTHONPATH project-root) (setq python-shell-extra-pythonpaths (list project-root)) (if (file-directory-p venv-path) (progn (pyvenv-activate venv-path) (message Activated virtualenv: %s venv-path)) (progn (pyvenv-deactivate) (message No virtualenv found in project; deactivated any existing virtualenv.)))) |
+
 ** =forge=
 Interação com GitHub, com pull request, issues etc.
 #+begin_src emacs-lisp :tangle init.el
@@ -1381,7 +1881,7 @@ Interação com GitHub, com pull request, issues etc.
 =treemacs= é uma sidebar de árvore de arquivos.
 #+begin_src emacs-lisp :tangle init.el 
   (use-package treemacs
-    :bind ("C-c j" . treemacs))
+    :bind ("C-'" . treemacs))
   (use-package treemacs-magit)
   (use-package treemacs-projectile)
   (use-package treemacs-evil)
@@ -1426,20 +1926,23 @@ Vou implementar o =evil-mode= como utilizado pelo =doom-emacs=, e
 preciso configurar o mapa.
 #+begin_src emacs-lisp :tangle init.el
   (use-package evil
-   :init (setq evil-want-C-i-jump nil)
-         (setq evil-want-C-u-scroll t)
-         (evil-mode)
-   :hook (delve-mode . turn-off-evil-mode))
+    :init (setq evil-want-C-i-jump nil)
+    (setq evil-want-C-u-scroll t)
+    (evil-mode)
+    :hook (delve-mode . turn-off-evil-mode))
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'vterm-mode 'emacs)
   (evil-set-initial-state 'delve-mode 'emacs)
-  (use-package evil-surround
-    :hook (evil-mode . evil-surround-mode))
+
+  (use-package evil-numbers
+    :bind (:map evil-normal-state-map
+                ("C-c +" . evil-numbers/inc-at-pt)
+                ("C-c -" . evil-numbers/dec-at-pt)))
   ;; (display-line-numbers-mode 1)
 #+end_src
 
 #+RESULTS:
-| evil-surround-mode |
+: evil-numbers/dec-at-pt
 
 Para gerar o =keymap= com leader, posso usar o =general.el=
 #+begin_src emacs-lisp :tangle init.el
@@ -1449,6 +1952,8 @@ Para gerar o =keymap= com leader, posso usar o =general.el=
       :keymaps '(normal visual)
       :prefix "SPC"))
 #+end_src
+
+#+RESULTS:
 
 #+begin_src emacs-lisp :tangle init.el
   (my/leader-keys
@@ -1462,6 +1967,7 @@ Para gerar o =keymap= com leader, posso usar o =general.el=
     "bl" 'next-buffer
     "bh" 'previous-buffer
     "." 'dired
+    "z" 'toggle-zoom-window
 
     ;; commands
     "x" 'execute-extended-command
@@ -1504,7 +2010,6 @@ Para gerar o =keymap= com leader, posso usar o =general.el=
     ;; open general
     "om" 'notmuch
     "on" 'treemacs
-    "ot" 'multi-vterm
     "of" 'find-file-other-window
     "o," 'consult-buffer-other-window
 
@@ -1515,12 +2020,15 @@ Para gerar o =keymap= com leader, posso usar o =general.el=
     "p4f" 'projectile-find-file-other-window
     "pc" 'projectile-compile-project
     "pp" 'projectile-switch-project
+    "p," 'projectile-switch-to-buffer
+    "pk" 'projectile-kill-buffers
 
     ;; help
     "hf" 'describe-function
     "hk" 'describe-key
     "hv" 'describe-variable
     "hd" 'eldoc
+    "h." 'eldoc-box-help-at-point
 
     ;; register
     "rs" 'consult-register-store
@@ -1537,6 +2045,7 @@ Para gerar o =keymap= com leader, posso usar o =general.el=
     "r]" 'org-roam-ref-find
     "rd" 'org-roam-dailies-goto-today
     "rg" 'org-roam-dailies-find-date
+    "rt" 'org-transclusion-add
 
     ;; consult
     "cd" 'consult-find
@@ -1547,6 +2056,7 @@ Para gerar o =keymap= com leader, posso usar o =general.el=
     "cl" 'consult-line
 
     ;; org ref
+    "[" 'ivy-bibtex
     "]" 'org-ref-insert-link
     ")" 'org-ref-insert-ref-link
 
@@ -1583,13 +2093,29 @@ Para gerar o =keymap= com leader, posso usar o =general.el=
     ;; elfeed
     "ee" 'elfeed
 
+    ;; dape
+    "dd" 'dape
+    "di" 'dape-info
+    "dk" 'dape-kill
+    "dn" 'dape-next
+    "dr" 'dape-restart
+    "db" 'dape-breakpoint-toggle
+    "dl" 'dape-breakpoint-log
+    "dh" 'dape-breakpoint-hits
+    "de" 'dape-breakpoint-expression
+    "dB" 'dape-breakpoint-remove-all
+    "dq" 'dape-quit
+    "dR" 'dape-repl
+    "dc" 'dape-continue
+    "dw" 'dape-watch-dwim
+    "dx" 'dape-evaluate-expression
+    
     ;; org-babel
     "cc" 'org-ctrl-c-ctrl-c
 
     ;; other commands
     "ie" 'emoji-search
     "ip" 'paste-image
-    "zz" 'zzz-to-char
     "ev" 'org-babel-tangle
     "ex" 'org-export-dispatch)
  #+end_src
@@ -1619,14 +2145,14 @@ deixar de usar. Tenho que atualizar o feed se quiser voltar.
   (use-package elfeed-org
     :straight (:host github :repo "remyhonig/elfeed-org" :branch "master"))
   (elfeed-org)
-  (setq rmh-elfeed-org-files (list "~/.config/emacs/private/org/elfeed.org"))
+  (setq rmh-elfeed-org-files (list "~/Documents/org/elfeed.org"))
 #+end_src
 
 #+RESULTS:
 | ~/.config/emacs/private/org/elfeed.org |
 
 
-** =multiple-cursors=
+** COMMENT =multiple-cursors=
 Múltiplos cursores!
 #+begin_src emacs-lisp :tangle init.el 
   (use-package multiple-cursors
@@ -1639,6 +2165,35 @@ Múltiplos cursores!
            ("C-c C-<" . mc/mark-all-like-this)) ;;  add cursor at all ocurrences of selection on buffer
     :config (setq mc/cmds-to-run-once '()))
 #+end_src
+
+** =evil-mc=
+Para funcionar com o evil, temos o =evil-mc=
+#+begin_src emacs-lisp :tangle init.el
+  (use-package evil-mc
+    :after evil
+    (global-evil-mc-mode t))
+#+end_src
+
+#+RESULTS:
+
+** =gptel=
+Uso de gptel para integrar o ChatGPT na programação. Talvez até
+incluí-lo em RAG.
+#+begin_src emacs-lisp :tangle init.el
+    (use-package gptel)
+#+end_src
+** =mise.el=
+Para fazer o manager de binários e versionamento, podemos utilizar o
+=mise-en-place=.
+#+begin_src emacs-lisp :tangle init.el
+    (use-package mise
+      :init (mise-mode)
+  	:hook (clojure-mode . mise-mode))
+#+end_src
+
+#+RESULTS:
+| mise-mode | cider-mode | #[nil ((set (make-local-variable 'sesman-system) 'CIDER)) (t)] | clojure--check-wrong-major-mode |
+
 ** COMMENT =obsidian.el= 
 Com esse pacote, consigo acessar arquivos do obsidian direto do emacs
 com maior integração. O ByMyCell armazena toda a documentação deles em obsidian.
@@ -1673,30 +2228,49 @@ com maior integração. O ByMyCell armazena toda a documentação deles em obsid
 
 #+RESULTS:
 : obsidian-insert-wikilink
+
 ** =paste-image=
 Com ajuda do ChatGPT, fiz uma breve extensão que salva uma imagem do
 clipboard em um diretório do workdir, e insere o link a ela tanto em
 org quanto em \(\LaTeX\).
+
 #+begin_src emacs-lisp :tangle init.el
-  (defun paste-image ()
-    "Paste an image from the clipboard, save it in the current working directory, and insert a link to it in the buffer.
-  The link format depends on the current major mode: Org-mode or LaTeX."
-    (interactive)
-    (let* ((directory default-directory)
-           (filename (concat (make-temp-name (concat directory "img/")) ".png"))
-           (command (concat "xclip -selection clipboard -t image/png -o | convert - " filename)))
-      (shell-command command)
-      (if (file-exists-p filename)
-          (cond
-           ((derived-mode-p 'org-mode)
-            (insert (concat "[[file:" filename "]]"))
-            (message "Saved image to %s and inserted Org link" filename))
-           ((derived-mode-p 'latex-mode)
-            (insert (format "\\begin{figure}[h]\n\\centering\n\\includegraphics[width=\\linewidth]{%s}\n\\caption{}\n\\label{fig:}\n\\end{figure}" filename))
-            (message "Saved image to %s and inserted LaTeX figure" filename))
-           (t
-            (message "Current mode is neither Org-mode nor LaTeX-mode, saved image to %s" filename)))
-        (message "Failed to save image"))))
+(defun paste-image ()
+  "Paste an image from the clipboard, let the user choose a directory to save it,
+and insert a link to it in the buffer. Supports Org-mode and LaTeX."
+  (interactive)
+  (let* ((session (getenv "XDG_SESSION_TYPE"))
+         (command-header (cond
+                          ((string= session "x11")
+                           "xclip -selection clipboard -t image/png -o")
+                          ((string= session "wayland")
+                           "wl-paste --type image/png")
+                          (t (error "Unknown session type: %s" session))))
+         ;; permite escolher o diretório de destino
+         (base-dir (read-directory-name
+                    "Escolha o diretório para salvar a imagem: "
+                    default-directory nil nil "img/"))
+         (_ (make-directory base-dir t))
+         (filename (concat (make-temp-name
+                            (expand-file-name "img-" base-dir)) ".png"))
+         (command (concat command-header " | convert - " (shell-quote-argument filename))))
+
+    (shell-command command)
+    (if (file-exists-p filename)
+        (cond
+         ((derived-mode-p 'org-mode)
+          (insert (concat "[[file:" (file-relative-name filename default-directory) "]]"))
+          (message "Imagem salva em %s e link inserido (Org-mode)"
+                   (file-relative-name filename default-directory)))
+         ((derived-mode-p 'latex-mode)
+          (insert (format "\\begin{figure}[h]\n\\centering\n\\includegraphics[width=\\linewidth]{%s}\n\\caption{}\n\\label{fig:}\n\\end{figure}"
+                          (file-relative-name filename default-directory)))
+          (message "Imagem salva em %s e figura LaTeX inserida"
+                   (file-relative-name filename default-directory)))
+         (t
+          (message "Modo atual não é Org nem LaTeX; imagem salva em %s" filename)))
+      (message "Falha ao salvar a imagem"))))
+
 #+end_src
 
 #+RESULTS:
@@ -1762,13 +2336,6 @@ Snippets para acelerar a escrita!
   (use-package yasnippet-snippets)
   ;; (use-package ivy-yasnippet)
 #+end_src
-** =zzz-to-char=
-/Zaps to ace-char/.
-#+begin_src emacs-lisp :tangle init.el 
-  (use-package zzz-to-char
-    :bind (("M-z" . zzz-to-char)))
-#+end_src
-
 * language specifics
 ** LaTeX
 Aqui vou colocar algumas coisas de LaTeX e mudar para outro lugar
@@ -1854,6 +2421,24 @@ sintaxe de =org-mode=. Pode precisar de conserto.
     :hook ((LaTeX-mode . lazytab-mode) (LaTeX-math-mode . orgtbl-mode)))
 #+end_src
 
+** =clojure=
+Modo de programação em ~clojure~.
+#+begin_src emacs-lisp :tangle init.el
+  (use-package clojure-ts-mode)
+#+end_src
+
+#+RESULTS:
+
+O ~cider~ é um modo iterativo de clojure em emacs, permitindo executar
+expressão a expressão.
+#+begin_src emacs-lisp :tangle init.el
+  (use-package cider)
+
+#+end_src
+
+#+RESULTS:
+
+
 ** =julia=
 #+begin_src emacs-lisp :tangle init.el
   (use-package julia-repl)
@@ -1900,19 +2485,20 @@ reprodutível.
 #+begin_src emacs-lisp :tangle init.el
   (use-package groovy-mode) ;; requisito
   (use-package nextflow-mode
-    :mode "\\.nf\\'" 
-    :straight (:host github
-  		   :repo "edmundmiller/nextflow-mode"
-  		   :branch "master"))
+    :straight (:host github :repo "edmundmiller/nextflow-mode" :branch "master")
+    :config
+    (with-eval-after-load 'eglot
+      (add-to-list 'eglot-server-programs
+                   '(nextflow-mode . ("nextflow-language-server")))))
 #+end_src
 
 #+RESULTS:
-: ((\.py\' . python-mode) (\nextflow.config\' . nextflow-mode) (\.nextflow\' . nextflow-mode) (\.nf.test\' . nextflow-mode) (\.nf\' . nextflow-mode) (\.\(?:nf\)?patterns\' . nextflow-mode) (/Jenkinsfile\' . groovy-mode) (\.g\(?:ant\|roovy\|radle\)\' . groovy-mode) (\.ledger\' . ledger-mode) (\.jl\' . julia-mode) (\.hva\' . latex-mode) (\.[pP][dD][fF]\' closure ((args nil nil nil nil)) nil (apply #'pdf-loader--load args)) (/git-rebase-todo\' . git-rebase-mode) (\.editorconfig\' . editorconfig-conf-mode) (\.odc\' . archive-mode) (\.odf\' . archive-mode) (\.odi\' . archive-mode) (\.otp\' . archive-mode) (\.odp\' . archive-mode) (\.otg\' . archive-mode) (\.odg\' . archive-mode) (\.ots\' . archive-mode) (\.ods\' . archive-mode) (\.odm\' . archive-mode) (\.ott\' . archive-mode) (\.odt\' . archive-mode) (\.at\' . autotest-mode) (\.ipynb\' . ein:ipynb-mode) (\.\(?:md\|markdown\|mkd\|mdown\|mkdn\|mdwn\)\' . markdown-mode) (\.gpg\(~\|\.~[0-9]+~\)?\' nil epa-file) (\.elc\' . elisp-byte-code-mode) (\.zst\' nil jka-compr) (\.dz\' nil jka-compr) (\.xz\' nil jka-compr) (\.lzma\' nil jka-compr) (\.lz\' nil jka-compr) (\.g?z\' nil jka-compr) (\.bz2\' nil jka-compr) (\.Z\' nil jka-compr) (\.vr[hi]?\' . vera-mode) (\(?:\.\(?:rbw?\|ru\|rake\|thor\|jbuilder\|rabl\|gemspec\|podspec\)\|/\(?:Gem\|Rake\|Cap\|Thor\|Puppet\|Berks\|Brew\|Vagrant\|Guard\|Pod\)file\)\' . ruby-mode) (\.re?st\' . rst-mode) (\.py[iw]?\' . python-mode) (\.m\' . octave-maybe-mode) (\.less\' . less-css-mode) (\.scss\' . scss-mode) (\.cs\' . csharp-mode) (\.awk\' . awk-mode) (\.\(u?lpc\|pike\|pmod\(\.in\)?\)\' . pike-mode) (\.idl\' . idl-mode) (\.java\' . java-mode) (\.m\' . objc-mode) (\.ii\' . c++-mode) (\.i\' . c-mode) (\.lex\' . c-mode) (\.y\(acc\)?\' . c-mode) (\.h\' . c-or-c++-mode) (\.c\' . c-mode) (\.\(CC?\|HH?\)\' . c++-mode) (\.[ch]\(pp\|xx\|\+\+\)\' . c++-mode) (\.\(cc\|hh\)\' . c++-mode) (\.\(bat\|cmd\)\' . bat-mode) (\.[sx]?html?\(\.[a-zA-Z_]+\)?\' . mhtml-mode) (\.svgz?\' . image-mode) (\.svgz?\' . xml-mode) (\.x[bp]m\' . image-mode) (\.x[bp]m\' . c-mode) (\.p[bpgn]m\' . image-mode) (\.tiff?\' . image-mode) (\.gif\' . image-mode) (\.png\' . image-mode) (\.jpe?g\' . image-mode) (\.webp\' . image-mode) (\.te?xt\' . text-mode) (\.[tT]e[xX]\' . tex-mode) (\.ins\' . tex-mode) (\.ltx\' . latex-mode) (\.dtx\' . doctex-mode) (\.org\' . org-mode) (\.dir-locals\(?:-2\)?\.el\' . lisp-data-mode) (\.eld\' . lisp-data-mode) (eww-bookmarks\' . lisp-data-mode) (tramp\' . lisp-data-mode) (/archive-contents\' . lisp-data-mode) (places\' . lisp-data-mode) (\.emacs-places\' . lisp-data-mode) (\.el\' . emacs-lisp-mode) (Project\.ede\' . emacs-lisp-mode) (\.\(scm\|sls\|sld\|stk\|ss\|sch\)\' . scheme-mode) (\.l\' . lisp-mode) (\.li?sp\' . lisp-mode) (\.[fF]\' . fortran-mode) (\.for\' . fortran-mode) (\.p\' . pascal-mode) (\.pas\' . pascal-mode) (\.\(dpr\|DPR\)\' . delphi-mode) (\.\([pP]\([Llm]\|erl\|od\)\|al\)\' . perl-mode) (Imakefile\' . makefile-imake-mode) (Makeppfile\(?:\.mk\)?\' . makefile-makepp-mode) (\.makepp\' . makefile-makepp-mode) (\.mk\' . makefile-gmake-mode) (\.make\' . makefile-gmake-mode) ([Mm]akefile\' . makefile-gmake-mode) (\.am\' . makefile-automake-mode) (\.texinfo\' . texinfo-mode) (\.te?xi\' . texinfo-mode) (\.[sS]\' . asm-mode) (\.asm\' . asm-mode) (\.css\' . css-mode) (\.mixal\' . mixal-mode) (\.gcov\' . compilation-mode) (/\.[a-z0-9-]*gdbinit . gdb-script-mode) (-gdb\.gdb . gdb-script-mode) ([cC]hange\.?[lL]og?\' . change-log-mode) ([cC]hange[lL]og[-.][0-9]+\' . change-log-mode) (\$CHANGE_LOG\$\.TXT . change-log-mode) (\.scm\.[0-9]*\' . scheme-mode) (\.[ckz]?sh\'\|\.shar\'\|/\.z?profile\' . sh-mode) (\.bash\' . sh-mode) (/PKGBUILD\' . sh-mode) (\(/\|\`\)\.\(bash_\(profile\|history\|log\(in\|out\)\)\|z?log\(in\|out\)\)\' . sh-mode) (\(/\|\`\)\.\(shrc\|zshrc\|m?kshrc\|bashrc\|t?cshrc\|esrc\)\' . sh-mode) (\(/\|\`\)\.\([kz]shenv\|xinitrc\|startxrc\|xsession\)\' . sh-mode) (\.m?spec\' . sh-mode) (\.m[mes]\' . nroff-mode) (\.man\' . nroff-mode) (\.sty\' . latex-mode) (\.cl[so]\' . latex-mode) (\.bbl\' . latex-mode) (\.bib\' . bibtex-mode) (\.bst\' . bibtex-style-mode) (\.sql\' . sql-mode) (\(acinclude\|aclocal\|acsite\)\.m4\' . autoconf-mode) (\.m[4c]\' . m4-mode) (\.mf\' . metafont-mode) (\.mp\' . metapost-mode) (\.vhdl?\' . vhdl-mode) (\.article\' . text-mode) (\.letter\' . text-mode) (\.i?tcl\' . tcl-mode) (\.exp\' . tcl-mode) (\.itk\' . tcl-mode) (\.icn\' . icon-mode) (\.sim\' . simula-mode) (\.mss\' . scribe-mode) (\.f9[05]\' . f90-mode) (\.f0[38]\' . f90-mode) (\.indent\.pro\' . fundamental-mode) (\.\(pro\|PRO\)\' . idlwave-mode) (\.srt\' . srecode-template-mode) (\.prolog\' . prolog-mode) (\.tar\' . tar-mode) (\.\(arc\|zip\|lzh\|lha\|zoo\|[jew]ar\|xpi\|rar\|cbr\|7z\|squashfs\|ARC\|ZIP\|LZH\|LHA\|ZOO\|[JEW]AR\|XPI\|RAR\|CBR\|7Z\|SQUASHFS\)\' . archive-mode) (\.oxt\' . archive-mode) (\.\(deb\|[oi]pk\)\' . archive-mode) (\`/tmp/Re . text-mode) (/Message[0-9]*\' . text-mode) (\`/tmp/fol/ . text-mode) (\.oak\' . scheme-mode) (\.sgml?\' . sgml-mode) (\.x[ms]l\' . xml-mode) (\.dbk\' . xml-mode) (\.dtd\' . sgml-mode) (\.ds\(ss\)?l\' . dsssl-mode) (\.js[mx]?\' . javascript-mode) (\.har\' . javascript-mode) (\.json\' . js-json-mode) (\.[ds]?va?h?\' . verilog-mode) (\.by\' . bovine-grammar-mode) (\.wy\' . wisent-grammar-mode) (\.erts\' . erts-mode) ([:/\]\..*\(emacs\|gnus\|viper\)\' . emacs-lisp-mode) (\`\..*emacs\' . emacs-lisp-mode) ([:/]_emacs\' . emacs-lisp-mode) (/crontab\.X*[0-9]+\' . shell-script-mode) (\.ml\' . lisp-mode) (\.ld[si]?\' . ld-script-mode) (ld\.?script\' . ld-script-mode) (\.xs\' . c-mode) (\.x[abdsru]?[cnw]?\' . ld-script-mode) (\.zone\' . dns-mode) (\.soa\' . dns-mode) (\.asd\' . lisp-mode) (\.\(asn\|mib\|smi\)\' . snmp-mode) (\.\(as\|mi\|sm\)2\' . snmpv2-mode) (\.\(diffs?\|patch\|rej\)\' . diff-mode) (\.\(dif\|pat\)\' . diff-mode) (\.[eE]?[pP][sS]\' . ps-mode) (\.\(?:PDF\|EPUB\|CBZ\|FB2\|O?XPS\|DVI\|OD[FGPST]\|DOCX\|XLSX?\|PPTX?\|pdf\|epub\|cbz\|fb2\|o?xps\|djvu\|dvi\|od[fgpst]\|docx\|xlsx?\|pptx?\)\' . doc-view-mode-maybe) (configure\.\(ac\|in\)\' . autoconf-mode) (\.s\(v\|iv\|ieve\)\' . sieve-mode) (BROWSE\' . ebrowse-tree-mode) (\.ebrowse\' . ebrowse-tree-mode) (#\*mail\* . mail-mode) (\.g\' . antlr-mode) (\.mod\' . m2-mode) (\.ses\' . ses-mode) (\.docbook\' . sgml-mode) (\.com\' . dcl-mode) (/config\.\(?:bat\|log\)\' . fundamental-mode) (/\.\(authinfo\|netrc\)\' . authinfo-mode) (\.\(?:[iI][nN][iI]\|[lL][sS][tT]\|[rR][eE][gG]\|[sS][yY][sS]\)\' . conf-mode) (\.la\' . conf-unix-mode) (\.ppd\' . conf-ppd-mode) (java.+\.conf\' . conf-javaprop-mode) (\.properties\(?:\.[a-zA-Z0-9._-]+\)?\' . conf-javaprop-mode) (\.toml\' . conf-toml-mode) (\.desktop\' . conf-desktop-mode) (/\.redshift\.conf\' . conf-windows-mode) (\`/etc/\(?:DIR_COLORS\|ethers\|.?fstab\|.*hosts\|lesskey\|login\.?de\(?:fs\|vperm\)\|magic\|mtab\|pam\.d/.*\|permissions\(?:\.d/.+\)?\|protocols\|rpc\|services\)\' . conf-space-mode) (\`/etc/\(?:acpid?/.+\|aliases\(?:\.d/.+\)?\|default/.+\|group-?\|hosts\..+\|inittab\|ksysguarddrc\|opera6rc\|passwd-?\|shadow-?\|sysconfig/.+\)\' . conf-mode) ([cC]hange[lL]og[-.][-0-9a-z]+\' . change-log-mode) (/\.?\(?:gitconfig\|gnokiirc\|hgrc\|kde.*rc\|mime\.types\|wgetrc\)\' . conf-mode) (/\.mailmap\' . conf-unix-mode) (/\.\(?:asound\|enigma\|fetchmail\|gltron\|gtk\|hxplayer\|mairix\|mbsync\|msmtp\|net\|neverball\|nvidia-settings-\|offlineimap\|qt/.+\|realplayer\|reportbug\|rtorrent\.\|screen\|scummvm\|sversion\|sylpheed/.+\|xmp\)rc\' . conf-mode) (/\.\(?:gdbtkinit\|grip\|mpdconf\|notmuch-config\|orbital/.+txt\|rhosts\|tuxracer/options\)\' . conf-mode) (/\.?X\(?:default\|resource\|re\)s\> . conf-xdefaults-mode) (/X11.+app-defaults/\|\.ad\' . conf-xdefaults-mode) (/X11.+locale/.+/Compose\' . conf-colon-mode) (/X11.+locale/compose\.dir\' . conf-javaprop-mode) (\.~?[0-9]+\.[0-9][-.0-9]*~?\' nil t) (\.\(?:orig\|in\|[bB][aA][kK]\)\' nil t) ([/.]c\(?:on\)?f\(?:i?g\)?\(?:\.[a-zA-Z0-9._-]+\)?\' . conf-mode-maybe) (\.[1-9]\' . nroff-mode) (\.art\' . image-mode) (\.avs\' . image-mode) (\.bmp\' . image-mode) (\.cmyk\' . image-mode) (\.cmyka\' . image-mode) (\.crw\' . image-mode) (\.dcr\' . image-mode) (\.dcx\' . image-mode) (\.dng\' . image-mode) (\.dpx\' . image-mode) (\.fax\' . image-mode) (\.heic\' . image-mode) (\.hrz\' . image-mode) (\.icb\' . image-mode) (\.icc\' . image-mode) (\.icm\' . image-mode) (\.ico\' . image-mode) (\.icon\' . image-mode) (\.jbg\' . image-mode) (\.jbig\' . image-mode) (\.jng\' . image-mode) (\.jnx\' . image-mode) (\.miff\' . image-mode) (\.mng\' . image-mode) (\.mvg\' . image-mode) (\.otb\' . image-mode) (\.p7\' . image-mode) (\.pcx\' . image-mode) (\.pdb\' . image-mode) (\.pfa\' . image-mode) (\.pfb\' . image-mode) (\.picon\' . image-mode) (\.pict\' . image-mode) (\.rgb\' . image-mode) (\.rgba\' . image-mode) (\.tga\' . image-mode) (\.wbmp\' . image-mode) (\.webp\' . image-mode) (\.wmf\' . image-mode) (\.wpg\' . image-mode) (\.xcf\' . image-mode) (\.xmp\' . image-mode) (\.xwd\' . image-mode) (\.yuv\' . image-mode) (\.tgz\' . tar-mode) (\.tbz2?\' . tar-mode) (\.txz\' . tar-mode) (\.tzst\' . tar-mode) (\.drv\' . latex-mode))
 
 ** =notmuch=
 Cliente de email.
 #+begin_src emacs-lisp :tangle init.el 
   (use-package notmuch
+    :config (setq notmuch-search-oldest-first nil)
     :bind ("C-c m" . notmuch))
 #+end_src
 
@@ -1977,6 +2563,18 @@ Para pegar links de email e jogar pro =org=, é só digitar =c i=.
 (provide 'org-notmuch)
 #+end_src
 
+Alias de alguns emails da UFSCar.
+#+begin_src emacs-lisp :tangle init.el
+  (setq message-alias-alist
+        '(("91103A" . "brunofarias@estudante.ufscar.br,davimerenda@estudante.ufscar.br,erick.cordeiro@estudante.ufscar.br,gabrielsoares@estudante.ufscar.br,giovanacardoso@estudante.ufscar.br,julianopadua@estudante.ufscar.br,luisqueiroz@estudante.ufscar.br,marcoscavalcante@estudante.ufscar.br,murilolc@estudante.ufscar.br,rafael.bissoli@estudante.ufscar.br,vinicius.catoia@estudante.ufscar.br,wadrimabreu@estudante.ufscar.br,alvaroqueiroz@estudante.ufscar.br")
+          ("91103F" . "alinecarvalho@estudante.ufscar.br,andreburatini@estudante.ufscar.br,arthurferreira@estudante.ufscar.br,clarissapires@estudante.ufscar.br,danielss@estudante.ufscar.br,dkmurakami@estudante.ufscar.br,campanhadiego@estudante.ufscar.br,felipe.lima@estudante.ufscar.br,grace.rendelmann@estudante.ufscar.br,gustavonogueira@estudante.ufscar.br,joaobrabo@estudante.ufscar.br,jmzgarcia@estudante.ufscar.br,kristinchristianini@estudante.ufscar.br,lana.lemes@estudante.ufscar.br,lucasjora@estudante.ufscar.br,lucasrotiroti@estudante.ufscar.br,lucasminatogawa@estudante.ufscar.br,matteo.calicchio@estudante.ufscar.br,michelle.almeida@estudante.ufscar.br,nicolemessias@estudante.ufscar.br,patriksantosrigon@estudante.ufscar.br,pedropetenon@estudante.ufscar.br,rafaelcouto@estudante.ufscar.br,rafaelleal@estudante.ufscar.br,sophialeoncio@estudante.ufscar.br")
+          ("eumesmo" . "nicolas.morazotti@gmail.com")
+          ("91103NA" . "eliezerneto@estudante.ufscar.br, julia.mori@estudante.ufscar.br, lucas.mangiaterra@estudante.ufscar.br, matheo@estudante.ufscar.br, mirlenegb@estudante.ufscar.br, pedrobotelho@estudante.ufscar.br, isis.pfeifer@estudante.ufscar.br")))
+          #+end_src
+
+#+RESULTS:
+: ((91103A . brunofarias@estudante.ufscar.br,davimerenda@estudante.ufscar.br,erick.cordeiro@estudante.ufscar.br,gabrielsoares@estudante.ufscar.br,giovanacardoso@estudante.ufscar.br,julianopadua@estudante.ufscar.br,luisqueiroz@estudante.ufscar.br,marcoscavalcante@estudante.ufscar.br,murilolc@estudante.ufscar.br,rafael.bissoli@estudante.ufscar.br,vinicius.catoia@estudante.ufscar.br,wadrimabreu@estudante.ufscar.br,alvaroqueiroz@estudante.ufscar.br) (91103F . alinecarvalho@estudante.ufscar.br,andreburatini@estudante.ufscar.br,arthurferreira@estudante.ufscar.br,clarissapires@estudante.ufscar.br,danielss@estudante.ufscar.br,dkmurakami@estudante.ufscar.br,campanhadiego@estudante.ufscar.br,felipe.lima@estudante.ufscar.br,grace.rendelmann@estudante.ufscar.br,gustavonogueira@estudante.ufscar.br,joaobrabo@estudante.ufscar.br,jmzgarcia@estudante.ufscar.br,kristinchristianini@estudante.ufscar.br,lana.lemes@estudante.ufscar.br,lucasjora@estudante.ufscar.br,lucasrotiroti@estudante.ufscar.br,lucasminatogawa@estudante.ufscar.br,matteo.calicchio@estudante.ufscar.br,michelle.almeida@estudante.ufscar.br,nicolemessias@estudante.ufscar.br,patriksantosrigon@estudante.ufscar.br,pedropetenon@estudante.ufscar.br,rafaelcouto@estudante.ufscar.br,rafaelleal@estudante.ufscar.br,sophialeoncio@estudante.ufscar.br) (eumesmo . nicolas.morazotti@gmail.com) (91103NA . eliezerneto@estudante.ufscar.br, julia.mori@estudante.ufscar.br, lucas.mangiaterra@estudante.ufscar.br, matheo@estudante.ufscar.br, mirlenegb@estudante.ufscar.br, pedrobotelho@estudante.ufscar.br, isis.pfeifer@estudante.ufscar.br))
+
 ** =python=
 Para utilizar o interpretador correto, adicionamos isso aqui.
 #+begin_src emacs-lisp :tangle init.el
@@ -1995,17 +2593,17 @@ Vamos utilizar também o modo de ambiente virtual do python, =pyvenv=.
 #+begin_src emacs-lisp :tangle init.el
   ;; check if pyvenv is enabled
   ;; create a y/n question to use pyvenv whenever opening python files 
-  (defun use-pyvenv ()
-    (interactive)
-    (unless (bound-and-true-p pyvenv-virtual-env)
-        (if (y-or-n-p "Use pyvenv? ")
-            (pyvenv-activate (read-directory-name "Enter virtualenv directory: " "~/.anaconda3/envs/" nil nil)))))
+  ;; (defun use-pyvenv ()
+  ;;   (interactive)
+  ;;   (unless (bound-and-true-p pyvenv-virtual-env)
+  ;;       (if (y-or-n-p "Use pyvenv? ")
+  ;;           (pyvenv-activate (read-directory-name "Enter virtualenv directory: " "~/.anaconda3/envs/" nil nil)))))
 
   (use-package pyvenv
     :hook (python-mode . pyvenv-mode)
-    :hook (python-mode . use-pyvenv)
+    ;; :hook (python-mode . use-pyvenv)
     )
 #+end_src
 
 #+RESULTS:
-| my-prompt-auto-activate-pyvenv | use-pyvenv | pyvenv-mode | eglot-ensure | doom-modeline-env-setup-python |
+| pyvenv-mode | eglot-ensure | doom-modeline-env-setup-python |

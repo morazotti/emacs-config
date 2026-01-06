@@ -1,0 +1,11 @@
+*~undo-tree~*
+.cache
+auto-save-list/
+eln-cache/
+straight/
+recentf
+projectile-bookmarks.eld
+elpa/
+transient/
+url/
+image-dired/
