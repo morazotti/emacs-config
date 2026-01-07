@@ -1,2 +1,0 @@
-private/org/*.org filter=git-crypt diff=git-crypt
-private/gastos.ledger filter=git-crypt diff=git-crypt
