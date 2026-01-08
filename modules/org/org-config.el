@@ -1,0 +1,10 @@
+(require 'org-core-config)
+(require 'org-ui-config)
+(require 'org-babel-config)
+(require 'org-link-config)
+(require 'org-agenda-config)
+(require 'org-roam-config)
+(require 'org-capture-config)
+(require 'org-latex-config)
+
+(provide 'org-config)
