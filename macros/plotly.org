@@ -1,0 +1,2 @@
+#+HTML_HEAD: <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+#+MACRO: plotly @@html:<div id="$1"></div><script> fetch("$2")  .then(r => r.json())  .then(fig => Plotly.newPlot("$1", fig.data, fig.layout, {frames: fig.frames || []}));  </script>@@

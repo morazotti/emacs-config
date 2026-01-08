@@ -1,0 +1,6 @@
+#+MACRO: color @@html:<font color="$1">$2</font>@@
+#+MACRO: yellow @@html:<font color="Yellow">$1</font>@@
+#+MACRO: magenta @@html:<font color="Magenta">$1</font>@@
+#+MACRO: cyan @@html:<font color="Cyan">$1</font>@@
+#+MACRO: green @@html:<font color="LightGreen">$1</font>@@
+#+MACRO: blood @@html:<font color="#aa2233">$1</font>@@

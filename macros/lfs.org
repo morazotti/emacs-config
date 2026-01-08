@@ -1,0 +1,2 @@
+#+MACRO: lfs-iframe @@html:<section> <video controls width="1080" height="360"> <source src="https://github.com/morazotti/$1/blob/master/$2?raw=true" type="video/mp4"> Your browser does not support the video tag. </video> </section>@@
+
