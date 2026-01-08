@@ -1,11 +1,9 @@
 ;; better parenthesis
 (use-package smartparens
-  :hook ((org-mode latex-mode C-mode julia-mode python-mode) .
-	 smartparens-mode))
+  :hook ((org-mode latex-mode C-mode julia-mode python-mode) . smartparens-mode))
 
 (use-package paredit
-  :hook ((lisp-mode lisp-interaction-mode clojure-mode emacs-lisp-mode) .
-	 paredit-mode))
+  :hook ((lisp-mode lisp-interaction-mode clojure-mode emacs-lisp-mode) . paredit-mode))
 
 (use-package rainbow-delimiters
   :hook ((prog-mode LaTeX-mode latex-mode org-mode) . rainbow-delimiters-mode))
@@ -22,5 +20,10 @@
 (use-package yasnippet
   :init (yas-global-mode))
 (use-package yasnippet-snippets)
+
+;; remap -mode to -ts-mode
+(add-to-list 'major-mode-remap-alist '(clojure-mode . clojure-ts-mode))
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+
 
 (provide 'langs-utils-config)

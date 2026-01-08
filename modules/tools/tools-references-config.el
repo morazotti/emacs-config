@@ -51,4 +51,7 @@
 ;; useful to look for papers, never really used it
 ;; (use-package biblio)
 
+;; bibliography tool
+;; (use-package ebib)
+
 (provide 'tools-references-config)

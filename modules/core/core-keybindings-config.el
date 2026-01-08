@@ -5,7 +5,6 @@
   :init
   (setq evil-want-C-i-jump nil)
   (setq evil-want-C-u-scroll t)
-  (evil-mode)
 
   :config
   (define-key evil-visual-state-map (kbd "=") 'er/expand-region)
@@ -13,7 +12,7 @@
 
   :hook
   (delve-mode . turn-off-evil-mode))
-
+(evil-mode)
 (evil-set-initial-state 'dired-mode 'emacs)
 (evil-set-initial-state 'vterm-mode 'emacs)
 (evil-set-initial-state 'delve-mode 'emacs)

@@ -65,8 +65,8 @@
 ;; doom modeline
 (use-package doom-modeline
   :straight (:host github :repo "seagle0128/doom-modeline" :branch "master")
-  :config (setq doom-modeline-buffer-file-name-style 'buffer-name)
-  (setq doom-modeline-buffer-encoding nil)
+  :custom ((doom-modeline-buffer-file-name-style 'buffer-name)
+	   (doom-modeline-buffer-encoding nil))
   :config (add-hook 'after-make-frame-functions (lambda (frame)
                                                   (setq doom-modeline-icon t))))
 (doom-modeline-mode)
