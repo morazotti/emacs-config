@@ -98,7 +98,7 @@
          ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)
          ("M-s r" . consult-ripgrep)
-         ("M-s l" . consult-line)
+         ("C-s" . consult-line)
          ("M-s L" . consult-line-multi)
          ("M-s k" . consult-keep-lines)
          ("M-s u" . consult-focus-lines)
@@ -147,7 +147,7 @@
   ;; For some commands and buffer sources it is useful to configure the
   ;; :preview-key on a per-command basis using the `consult-customize' macro.
   (consult-customize
-   consult-theme :preview-key "M-."
+   consult-theme :preview-key '(:debounce 0.4 any)
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
    consult--source-bookmark consult--source-file-register
@@ -207,7 +207,6 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
-
 ;; vertico - marginalia - orderless: minibuffer framework
 (use-package vertico
   :init
@@ -218,9 +217,9 @@
   (add-to-list 'vertico-multiform-categories '(embark-keybinding grid))
   :straight (:files (:defaults "extensions/*"))
   :bind (:map vertico-map
-          ("RET" . vertico-directory-enter)
-          ("DEL" . vertico-directory-delete-char)
-          ("M-DEL" . vertico-directory-delete-word))
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
   :config (setq read-file-name-completion-ignore-case t
                 read-buffer-completion-ignore-case t
@@ -233,5 +232,9 @@
     :custom
     (completion-styles '(orderless basic flex))
     (completion-category-overrides '((file (styles basic partial-completion)))))
+
+;; wgrep - allows changing grep buffers
+(use-package wgrep)
+(require 'wgrep)
 
 (provide 'core-utils-config)

@@ -22,7 +22,13 @@
 (setq use-package-always-defer t)
 (setq use-package-always-ensure t)
 
+
 (use-package emacs
+  :config
+  ;; font
+
+  (set-face-attribute 'default nil :font "Ligamonacop" :height 120)
+
   :custom
   (tab-always-indent 'complete)
   (read-extended-command-predicate #'command-completion-default-include-p))

@@ -3,8 +3,7 @@
     :config (org-roam-db-autosync-mode)
     :init (setq org-roam-v2-ack t)
 
-    :custom ((org-roam-directory (file-name-concat home "Documents" "roam"))
-	     (org-roam-dailies-directory (file-name-concat org-roam-directory "projeto-pessoal"))
+    :custom ((org-roam-dailies-directory (file-name-concat org-roam-directory "projeto-pessoal"))
 	     (org-roam-graph-link-hidden-types ("files" "https" "ref" "fuzzy")))
 
     :bind (("C-c r f" . org-roam-node-find)
@@ -21,7 +20,8 @@
      "%?"
      :if-new
      (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                "#+title: ${title}\n#+roam_key: ${ref}\n")
+                "#+title: ${citar-title}\n#+roam_key: ${citar-citekey}\n")
+     :node-properties (:ROAM_ALIASES "${citar-citekey}")
      :unnarrowed t)))
 
 (provide 'org-roam-config)

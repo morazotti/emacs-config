@@ -12,10 +12,17 @@
 
   :hook
   (delve-mode . turn-off-evil-mode))
+
 (evil-mode)
 (evil-set-initial-state 'dired-mode 'emacs)
 (evil-set-initial-state 'vterm-mode 'emacs)
 (evil-set-initial-state 'delve-mode 'emacs)
+(evil-set-initial-state 'ebib-log-mode 'emacs)
+(evil-set-initial-state 'ebib-index-mode 'emacs)
+(evil-set-initial-state 'ebib-entry-mode 'emacs)
+(evil-set-initial-state 'ebib-strings-mode 'emacs)
+(evil-set-initial-state 'ebib-multiline-mode 'emacs)
+
 
 (use-package evil-numbers
   :bind (:map evil-normal-state-map
@@ -53,7 +60,6 @@
   ;; movement
   "TAB" 'other-window
   "s" 'avy-goto-char
-  "/" 'consult-line
 
   ;; ispell
   "t." 'flyspell-auto-correct-word
@@ -97,6 +103,7 @@
   "p!" 'project-shell-command
 
   ;; help
+  "ha" 'apropos-command
   "hf" 'describe-function
   "hk" 'describe-key
   "hv" 'describe-variable
@@ -121,14 +128,12 @@
   "rt" 'org-transclusion-add
 
   ;; consult
+  "/" 'consult-ripgrep
   "cd" 'consult-find
-  ;; "cD" 'consult-locate
-  "cg" 'consult-grep
   "cG" 'consult-git-grep
-  "cr" 'consult-ripgrep
 
   ;; org ref
-  ;; "[" 'ivy-bibtex
+  "[" 'citar-open
   ;; "]" 'org-ref-insert-link
   ;; ")" 'org-ref-insert-ref-link
 

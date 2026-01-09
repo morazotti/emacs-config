@@ -3,9 +3,37 @@
       show-paren-mode t)
 (set-fringe-mode 10)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(defvar my/fixed-font "Ligamonacop")
+(defvar my/variable-font "CMU Serif")
 
-;; font
-(set-face-attribute 'default nil :font "Ligamonacop" :height 120)
+(defun my/set-fixed-font (frame)
+  (with-selected-frame frame
+    (when (display-graphic-p)
+      (set-face-attribute 'default nil
+                          :font my/fixed-font
+                          :height 120))))
+
+(defun my/set-variable-font (frame)
+  (with-selected-frame frame
+    (when (display-graphic-p)
+      (progn
+	(set-face-attribute 'variable-pitch nil
+                          :font my/variable-font
+                          :height 140)
+	(setq mixed-pitch-set-height t)))))
+
+(add-hook 'after-make-frame-functions #'my/set-fixed-font)
+(add-hook 'after-make-frame-functions #'my/set-variable-font)
+
+(when (display-graphic-p)
+  (set-face-attribute 'default nil
+                      :font my/fixed-font
+                      :height 120))
+
+(when (display-graphic-p)
+  (set-face-attribute 'variable-pitch nil
+                      :font my/variable-font
+                      :height 140))
 
 ;; old
 ;; (setq default-font "Ligamonacop 12")
@@ -59,8 +87,8 @@
                                        ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
                                        "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
                                        "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-                                       "?=" "?." "??" ";;" "/*" "/=" "/>" "__" "~~" "(*" "*)"))
-  :config (global-ligature-mode))
+                                       "?=" "?." "??" ";;" "/*" "/=" "/>" "__" "~~" "(*" "*)")))
+(global-ligature-mode)
 
 ;; doom modeline
 (use-package doom-modeline

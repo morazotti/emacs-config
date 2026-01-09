@@ -73,8 +73,7 @@
 
 ;; pdf-tools
 (use-package pdf-tools
-  :hook ((pdf-view-mode . blink-cursor-mode)
-	 (pdf-view-mode . auto-revert-mode))
+  :hook (pdf-view-mode . blink-cursor-mode)
   
   :config
   (define-key pdf-view-mode-map (kbd ":") 'pdf-view-goto-page)
@@ -96,7 +95,7 @@
   (pdf-loader-install)
 
   :custom (pdf-view-midnight-colors '("#FFBB33" . "#222222")))
-
+(add-hook 'pdf-view-mode-hook 'auto-revert-mode)
 ;; terminal
 ;; I was using ~toggle-term~ too access popup terminal, but it was kinda clunky
 ;; apparently there's a 'popper' thingy to recover such behavior

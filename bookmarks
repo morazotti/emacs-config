@@ -3,11 +3,17 @@
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
- (filename . "~/.config/emacs/private/org/tasks.org")
- (front-context-string . "** TODO testar o")
- (rear-context-string . "r minhas notas.\n")
- (position . 2428)
- (last-modified 26397 33787 96436 120000))
+ (filename . "~/Documents/roam/20260108175701-rossmann_wulf_lie_groups_an_introduction_through_linear_groups.org")
+ (front-context-string)
+ (rear-context-string . "ssmann_lie_2002\n")
+ (position . 192)
+ (last-modified 26976 6693 901915 827000))
+("gast"
+ (filename . "~/repos/emacs/bookmarks")
+ (front-context-string . "/gastos.ledger\")")
+ (rear-context-string . "cuments/expenses")
+ (position . 661)
+ (last-modified 26976 5284 312455 97000))
 ("blackgenn"
  (filename . "~/.config/emacs/private/org/blackgenn.org")
  (front-context-string . "#+TITLE: BlackGe")
@@ -15,11 +21,11 @@
  (position . 1)
  (last-modified 26214 56934 489952 744000))
 ("info"
- (filename . "~/.config/emacs/private/org/info.org")
+ (filename . "~/Documents/org/info.org")
  (front-context-string . "#+TITLE: Informa")
  (rear-context-string)
  (position . 1)
- (last-modified 25818 29363 31159 986000))
+ (last-modified 26976 5171 818308 930000))
 ("finances"
  (filename . "~/.config/emacs/private/gastos.ledger")
  (front-context-string . ";; A titulo de c")
@@ -37,10 +43,11 @@
  (position . 1)
  (last-modified 25818 30371 61311 42000))
 ("init"
- (filename . "~/.config/emacs/README.org")
+ (filename . "~/.config/emacs/init.el")
  (front-context-string . "#+TITLE: emacs o")
  (rear-context-string)
- (position . 1))
+ (position . 1)
+ (last-modified 26976 4350 604420 523000))
 ("notes"
  (filename . "~/.config/emacs/private/org/notes.org")
  (front-context-string . "#+EMAIL: nicolas")

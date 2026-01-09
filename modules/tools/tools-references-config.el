@@ -38,9 +38,10 @@
   (citar-library-paths (list my/pdf-library)))
 
 ;; not sure if this should be on
-;; (use-package citar-org-roam
-;;   :after (citar org-roam)
-;;   :config (citar-org-roam-mode))
+(use-package citar-org-roam
+  :after (citar org-roam)
+  :custom (citar-org-roam-capture-template-key "r"))
+(citar-org-roam-mode)
 
 (use-package bibtex-completion
   :custom
@@ -49,9 +50,21 @@
   (bibtex-completion-library-path my/pdf-library))
 
 ;; useful to look for papers, never really used it
-;; (use-package biblio)
+(use-package biblio
+  :demand t)
 
 ;; bibliography tool
-;; (use-package ebib)
+(use-package ebib
+  :after biblio
+  :custom ((ebib-default-directory my/pdf-library)
+	   (ebib-bib-search-dirs (file-name-concat home "Dropbox"))
+	   (ebib-preload-bib-files `(,my/bibliography-file))
+	   (ebib-reading-list-file (file-name-concat ebib-default-directory "reading-list.org")))
+  :config
+  (require 'ebib-biblio)
+  (define-key ebib-index-mode-map (kbd "B") #'ebib-biblio-import-doi)
+  (define-key biblio-selection-mode-map (kbd "e") #'ebib-biblio-selection-import)
+
+)
 
 (provide 'tools-references-config)
