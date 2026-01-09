@@ -1,6 +1,29 @@
 ;; autoload org package
 (use-package org
-  :straight (:type built-in)
+  :straight `(org
+              :fork (:host nil
+			   :repo "https://git.tecosaur.net/tec/org-mode.git"
+			   :branch "dev"
+			   :remote "tecosaur")
+              :files (:defaults "etc")
+              :build t
+              :pre-build
+              (with-temp-file "org-version.el"
+		(require 'lisp-mnt)
+		(let ((version
+                       (with-temp-buffer
+                         (insert-file-contents "lisp/org.el")
+                         (lm-header "version")))
+                      (git-version
+                       (string-trim
+			(with-temp-buffer
+                          (call-process "git" nil t nil "rev-parse" "--short" "HEAD")
+                          (buffer-string)))))
+                  (insert
+                   (format "(defun org-release () \"The release version of Org.\" %S)\n" version)
+                   (format "(defun org-git-version () \"The truncate git commit hash of Org mode.\" %S)\n" git-version)
+                   "(provide 'org-version)\n")))
+              :pin nil)
   :demand t
   :init
   (setq org-directory (file-name-concat home "Documents" "org"))
@@ -17,21 +40,23 @@
 
 	   ;; LaTeX
 	   (org-latex-listings 'minted)
-           (org-latex-packages-alist '(("" "physics" t)
+           (org-latex-packages-alist '(("AUTO" "babel" t)
+				       ("" "physics" t)
 				       ("" "tikz" t)))
            (org-latex-pdf-process '("latexmk -shell-escape -bibtex -interaction=nonstopmode -f -pdfxe -8bit %f"))
            (org-latex-prefer-user-labels t)
 	   (org-format-latex-options
 	    '(:foreground default
-	      :background default
-	      :scale 2.0
-	      :html-foreground "Black"
-	      :html-background "Transparent"
-	      :html-scale 1.0
-	      :matchers ("begin" "$1" "$" "$$" "\\(" "\\[" )))
+			  :background default
+			  :scale 2.0
+			  :html-foreground "Black"
+			  :html-background "Transparent"
+			  :html-scale 1.0
+			  :matchers ("begin" "$1" "$" "$$" "\\(" "\\[" )))
 
 	   (org-preview-latex-image-directory
-	    (file-name-concat home ".cache" "ltximg")))
+	    (file-name-concat home ".cache" "ltximg"))
+	   )
 
   :hook ((org-babel-after-execute . display-ansi-colors)
 	 (org-mode . org-indent-mode)
