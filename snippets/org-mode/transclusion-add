@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: transclusion
+# key: trns 
+# type: command
+# binding: C-c t i
+# --
+(progn (insert "#+transclude: ") (org-roam-node-insert))
