@@ -2,6 +2,7 @@
 (setq-default abbrev-mode t)
 (setq my/bibliography-file (file-name-concat home "Dropbox" "referencias.bib")
       my/pdf-library (file-name-concat home "Documents" "my_lib" "pdfs")
+      warning-minimum-level :emergency
       org-roam-directory (file-name-concat home "Documents" "roam")
       ispell-dictionary "pt_BR"
       make-backup-files nil

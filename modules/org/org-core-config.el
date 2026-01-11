@@ -43,7 +43,7 @@
            (org-latex-packages-alist '(("AUTO" "babel" t)
 				       ("" "physics" t)
 				       ("" "tikz" t)))
-           (org-latex-pdf-process '("latexmk -shell-escape -bibtex -interaction=nonstopmode -f -pdfxe -8bit %f"))
+           (org-latex-pdf-process '("latexmk -shell-escape -bibtex -interaction=nonstopmode -pdf -f -8bit %f"))
            (org-latex-prefer-user-labels t)
 	   (org-format-latex-options
 	    '(:foreground default
@@ -60,6 +60,7 @@
 
   :hook ((org-babel-after-execute . display-ansi-colors)
 	 (org-mode . org-indent-mode)
+	 (org-mode . org-latex-preview-mode)
 	 (org-mode . auto-fill-mode)
 	 (org-mode . org-toggle-pretty-entities))
   :bind (("C-c l" . org-store-link)
