@@ -8,7 +8,6 @@
 ;;  [[subfig:img2.png][Subcaption 2 >(scale=0.6)]]
 ;;  [[subfig:img3.png][Subcaption 3 >(scale=0.6)]]
 ;;  #+end_figure
-
 (with-eval-after-load 'org
   (org-link-set-parameters
    "subfig"
@@ -67,5 +66,8 @@ and insert a link to it in the buffer. Supports Org-mode and LaTeX."
          (t
           (message "Not in org-mode or LaTeX-mode" filename)))
       (message "Failed to save image"))))
+
+;; add ~framed~ to C-c C-x s // C-c C-,
+(add-to-list 'org-structure-template-alist '("f" . "framed"))
 
 (provide 'org-link-config)

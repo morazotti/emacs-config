@@ -42,6 +42,7 @@
 	   (org-latex-listings 'minted)
            (org-latex-packages-alist '(("AUTO" "babel" t)
 				       ("" "physics" t)
+				       ("" "framed" t)
 				       ("" "tikz" t)))
            (org-latex-pdf-process '("latexmk -shell-escape -bibtex -interaction=nonstopmode -pdf -f -8bit %f"))
            (org-latex-prefer-user-labels t)
