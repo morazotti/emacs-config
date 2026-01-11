@@ -178,6 +178,10 @@
   ;; (setq consult-project-function nil)
   )
 
+(use-package consult-reftex
+  :after consult
+  :straight (:host github :repo "karthink/consult-reftex" :branch "master"))
+
 (use-package embark
     :bind
     (("C-." . embark-act)         ;; pick some comfortable binding
@@ -235,6 +239,6 @@
 
 ;; wgrep - allows changing grep buffers
 (use-package wgrep)
-(require 'wgrep)
+;;(require 'wgrep)
 
 (provide 'core-utils-config)
