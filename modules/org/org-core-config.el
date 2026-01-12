@@ -62,7 +62,7 @@
   :hook ((org-babel-after-execute . display-ansi-colors)
 	 (org-mode . org-indent-mode)
 	 (org-mode . org-latex-preview-mode)
-	 (org-mode . auto-fill-mode)
+	 (org-mode . visual-line-mode)
 	 (org-mode . org-toggle-pretty-entities))
   :bind (("C-c l" . org-store-link)
 	 (:map org-mode-map ("<f7>" . (lambda () (interactive) (org-export-dispatch 1))))))

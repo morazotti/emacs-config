@@ -3,6 +3,7 @@
 ;; vim-keybindings
 (use-package evil
   :init
+  (setq evil-respect-visual-line-mode t)
   (setq evil-want-C-i-jump nil)
   (setq evil-want-C-u-scroll t)
 
@@ -61,10 +62,9 @@
   "TAB" 'other-window
   "s" 'avy-goto-char
 
-  ;; ispell
-  "t." 'flyspell-auto-correct-word
-  "tb" 'ispell-buffer
-  "tw" 'ispell-word
+  ;; jinx
+  "tb" 'jinx-correct-all
+  "tw" 'jinx-correct-nearest
 
   ;; ;; windows
   ;; "w0" 'delete-window

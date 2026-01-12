@@ -1,7 +1,7 @@
 ;; box instead of dedicated buffer
 (use-package eldoc-box)
 
-;; expand-region increases region by semantical expressions
+;; expand-region increases region by semantic expressions
 (use-package expand-region
     :bind ("C-=" . er/expand-region))
 
@@ -25,6 +25,15 @@
 
 ;; gptel
 (use-package gptel)
+
+;;jinx - spell checker (does it need flyspell tho?)
+(use-package jinx
+  :hook (emacs-startup . global-jinx-mode)
+  :config ((add-to-list 'vertico-multiform-categories
+               '(jinx grid (vertico-grid-annotate . 20) (vertico-count . 4))))
+  :custom (jinx-languages "en_US pt_BR")
+  :bind (("M-$" . jinx-correct)
+         ("C-M-$" . jinx-languages)))
 
 ;;ledger
 (use-package ledger-mode
@@ -96,6 +105,7 @@
 
   :custom (pdf-view-midnight-colors '("#FFBB33" . "#222222")))
 (add-hook 'pdf-view-mode-hook 'auto-revert-mode)
+
 ;; terminal
 ;; I was using ~toggle-term~ too access popup terminal, but it was kinda clunky
 ;; apparently there's a 'popper' thingy to recover such behavior
