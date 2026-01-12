@@ -25,7 +25,11 @@
 
 ;; gptel
 (use-package gptel)
-(require 'gptel-commit)
+(use-package gptel-commit
+  :straight (:host github :repo "morazotti/gptel-commit")
+  :after (gptel magit)
+  :bind (:map git-commit-mode-map
+         ("C-c C-g" . gptel-commit)))
 
 ;;jinx - spell checker (does it need flyspell tho?)
 (use-package jinx
