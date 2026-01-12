@@ -31,7 +31,7 @@
   :bind (:map git-commit-mode-map
          ("C-c C-g" . gptel-commit)))
 
-;;jinx - spell checker (does it need flyspell tho?)
+;;jinx
 (use-package jinx
   :hook (emacs-startup . global-jinx-mode)
   :init (setq jinx-languages "en_US pt_BR")
