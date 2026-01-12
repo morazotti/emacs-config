@@ -25,6 +25,7 @@
 
 ;; gptel
 (use-package gptel)
+(require 'gptel-commit)
 
 ;;jinx - spell checker (does it need flyspell tho?)
 (use-package jinx
