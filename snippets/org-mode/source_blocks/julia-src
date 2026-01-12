@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: julia source block
-# key: julia_
+# key: src_
 # --
 #+BEGIN_SRC jupyter-julia :session ${1:jl} :exports ${2:both} :results ${3:raw drawer} ${4::eval never-export} ${5::async yes} 
 $0

@@ -29,12 +29,11 @@
 ;;jinx - spell checker (does it need flyspell tho?)
 (use-package jinx
   :hook (emacs-startup . global-jinx-mode)
-  :config ((add-to-list 'vertico-multiform-categories
-               '(jinx grid (vertico-grid-annotate . 20) (vertico-count . 4))))
-  :custom (jinx-languages "en_US pt_BR")
+  :init (setq jinx-languages "en_US pt_BR")
   :bind (("M-$" . jinx-correct)
          ("C-M-$" . jinx-languages)))
-
+(add-to-list 'vertico-multiform-categories
+               '(jinx grid (vertico-grid-annotate . 20) (vertico-count . 4)))
 ;;ledger
 (use-package ledger-mode
   :custom

@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: jupyter source block
-# key: jupyter_
-# --
-#+BEGIN_SRC jupyter-python :session ${1:py} :exports ${2:both} :results ${3:raw drawer} ${4::eval never-export} ${5::async yes} 
-$0
-#+END_SRC

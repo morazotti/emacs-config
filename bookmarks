@@ -3,11 +3,11 @@
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
- (filename . "~/Documents/roam/20260108175701-rossmann_wulf_lie_groups_an_introduction_through_linear_groups.org")
- (front-context-string)
- (rear-context-string . "ssmann_lie_2002\n")
- (position . 192)
- (last-modified 26976 6693 901915 827000))
+ (filename . "~/Documents/roam/20260111171252-spes_non_confundit.org")
+ (front-context-string . "No ano passado, ")
+ (rear-context-string . " non confundit\n\n")
+ (position . 97)
+ (last-modified 26980 1097 38793 322000))
 ("gast"
  (filename . "~/repos/emacs/bookmarks")
  (front-context-string . "/gastos.ledger\")")

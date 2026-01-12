@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: jupyter
-# key: jupyter_
+# name: jupyter source block
+# key: src_
 # --
 #+begin_src jupyter-python :session ${1:py} :exports ${2:both} :results ${3:none} :eval ${4:never-export} :async yes 
 $0

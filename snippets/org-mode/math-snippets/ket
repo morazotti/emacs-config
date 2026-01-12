@@ -1,5 +1,6 @@
 # -*- mode: snippet -*-
 # name: ket
 # key: ket
+# condition: (org-inside-LaTeX-fragment-p)
 # --
-| $0 \rangle
+\ket{$0}

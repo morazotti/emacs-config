@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: melem
+# key: melem
+# condition: (org-inside-LaTeX-fragment-p)
+# --
+\mel{$1}{$2}{$0}

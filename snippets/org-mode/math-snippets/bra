@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: bra
+# key: bra
+# condition: (org-inside-LaTeX-fragment-p)
+# --
+\bra{$0}

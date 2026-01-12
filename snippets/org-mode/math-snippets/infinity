@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: infinity
+# key: oo
+# condition: (org-inside-LaTeX-fragment-p)
+# --
+\infty
