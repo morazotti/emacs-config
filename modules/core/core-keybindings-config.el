@@ -128,14 +128,14 @@
   "rt" 'org-transclusion-add
 
   ;; consult
-  "/" 'consult-ripgrep
+  "/"  'consult-ripgrep
   "cd" 'consult-find
   "cG" 'consult-git-grep
 
   ;; org ref
   "[" 'citar-open
   "]" 'org-cite-insert
-  ")" 'consult-reftex-insert-reference
+  ")" 'my/insert-ref-via-xref
 
   ;; snippets
   "yi" 'yas-insert-snippet
@@ -164,7 +164,7 @@
   "nd" 'narrow-to-defun
   "nw" 'widen
 
-  ;; undo-tree
+  ;; vundo
   "u" 'vundo
 
   ;; elfeed
