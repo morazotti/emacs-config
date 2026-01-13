@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: mathrm{d}
+# key: dd
+# condition: (org-inside-LaTeX-fragment-p)
+# --
+\dd{$1}$0

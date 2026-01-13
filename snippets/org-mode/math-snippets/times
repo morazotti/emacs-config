@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: times
+# key: xx
+# condition: (org-inside-LaTeX-fragment-p)
+# --
+\times $0

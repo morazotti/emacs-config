@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: outer product
+# key: op
+# condition: (org-inside-LaTeX-fragment-p)
+# --
+\op{$1}{$2}$0

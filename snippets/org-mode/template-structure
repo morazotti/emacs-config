@@ -1,0 +1,6 @@
+# key: <be
+# name: structure-template
+# --
+#+begin_${1:`(completing-read "Choose structure:" (mapcar 'cdr org-structure-template-alist))`}
+$0
+#+end_$1

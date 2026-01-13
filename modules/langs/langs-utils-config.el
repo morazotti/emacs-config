@@ -19,6 +19,7 @@
 ;;              (file-name-concat user-emacs-directory "plugins" "yasnippet"))
 (use-package yasnippet
   :init (yas-global-mode))
+
 (use-package yasnippet-snippets)
 
 ;; remap -mode to -ts-mode
