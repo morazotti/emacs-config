@@ -135,7 +135,7 @@
   ;; org ref
   "[" 'citar-open
   "]" 'org-cite-insert
-  ")" 'my/insert-ref-via-xref
+  ")" 'consult-reftex-insert-reference
 
   ;; snippets
   "yi" 'yas-insert-snippet

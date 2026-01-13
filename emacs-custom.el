@@ -9,7 +9,8 @@
 		 "Black" :html-background "Transparent" :html-scale
 		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")) nil nil "Customized with use-package org")
  '(org-latex-src-block-backend 'minted nil nil "Customized with use-package org")
- '(org-use-sub-superscripts '{}))
+ '(org-use-sub-superscripts '{})
+ '(org-hide-emphasis-markers t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -44,7 +44,7 @@
 				       ("" "physics" t)
 				       ("" "framed" t)
 				       ("" "tikz" t)))
-           (org-latex-pdf-process '("latexmk -shell-escape -bibtex -interaction=nonstopmode -pdf -f -8bit %f"))
+           (org-latex-pdf-process '("latexmk -synctex=1 -shell-escape -bibtex -interaction=nonstopmode -pdf -f -8bit %f"))
            (org-latex-prefer-user-labels t)
 	   (org-format-latex-options
 	    '(:foreground default
