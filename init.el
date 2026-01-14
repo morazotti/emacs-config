@@ -1,4 +1,5 @@
-(setq custom-file (file-name-concat user-emacs-directory "emacs-custom.el"))
+(setq custom-file (expand-file-name "emacs-custom.el" user-emacs-directory))
+(when (file-exists-p custom-file) (load custom-file))
 
 (add-to-list 'load-path (expand-file-name "modules/core"  user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "modules/org"  user-emacs-directory))

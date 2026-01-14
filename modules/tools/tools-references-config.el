@@ -56,8 +56,8 @@
 ;; bibliography tool
 (use-package ebib
   :after biblio
-  :custom ((ebib-default-directory my/pdf-library)
-	   (ebib-bib-search-dirs (file-name-concat home "Dropbox"))
+  :custom ((ebib-default-directory my/library-directory)
+	   (ebib-bib-search-dirs my/library-directory)
 	   (ebib-preload-bib-files `(,my/bibliography-file))
 	   (ebib-reading-list-file (file-name-concat ebib-default-directory "reading-list.org")))
   :config

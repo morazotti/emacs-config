@@ -10,6 +10,7 @@
 		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")) nil nil "Customized with use-package org")
  '(org-latex-src-block-backend 'minted nil nil "Customized with use-package org")
  '(org-use-sub-superscripts '{})
+ '(org-pretty-entities-include-sub-superscripts nil)
  '(org-hide-emphasis-markers t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

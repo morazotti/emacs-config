@@ -1,7 +1,8 @@
 (defconst home (expand-file-name "~"))
 (setq-default abbrev-mode t)
-(setq my/bibliography-file (file-name-concat home "Dropbox" "referencias.bib")
-      my/pdf-library (file-name-concat home "Documents" "my_lib" "pdfs")
+(setq my/library-directory (file-name-concat home "Dropbox" "my_library")
+      my/bibliography-file (file-name-concat my/library-directory "referencias.bib")
+      my/pdf-library (file-name-concat my/library-directory  "pdfs")
       warning-minimum-level :emergency
       org-roam-directory (file-name-concat home "Documents" "roam")
       ispell-dictionary "pt_BR"
