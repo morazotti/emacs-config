@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
-# name: melem
-# key: melem
+# name: leq
+# key: leq
 # group: math
 # condition: (and (org-inside-LaTeX-fragment-p) 'auto)
 # --
-\mel{$1}{$2}{$0}
+\leq

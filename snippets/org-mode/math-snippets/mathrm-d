@@ -1,6 +1,7 @@
 # -*- mode: snippet -*-
-# name: mathrm{d}
+# name: integral dx
 # key: dd
-# condition: (org-inside-LaTeX-fragment-p)
+# group: math
+# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
 # --
-\dd{$1}$0
+\dd{$0}

@@ -1,4 +1,5 @@
-# key: mi
 # name: inline math expression
+# key: mt
+# group: math
 # --
 \\($0\\)

@@ -1,7 +1,8 @@
 # -*- mode: snippet -*-
-# name: melem
-# key: melem
+# name: indefinite integral
+# key: int
 # group: math
+# type: snippet
 # condition: (and (org-inside-LaTeX-fragment-p) 'auto)
 # --
-\mel{$1}{$2}{$0}
+\\int \\dd\{$0\}

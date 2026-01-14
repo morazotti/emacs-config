@@ -1,0 +1,8 @@
+# name: square
+# key: sr
+# group: math
+# type: command
+# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
+# --
+(delete-horizontal-space t)
+(insert "^2")

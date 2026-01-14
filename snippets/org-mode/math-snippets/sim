@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
-# name: melem
-# key: melem
+# name: sim
+# key: ~~
 # group: math
 # condition: (and (org-inside-LaTeX-fragment-p) 'auto)
 # --
-\mel{$1}{$2}{$0}
+\sim

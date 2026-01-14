@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
-# name: melem
-# key: melem
+# name: implies
+# key: =>
 # group: math
 # condition: (and (org-inside-LaTeX-fragment-p) 'auto)
 # --
-\mel{$1}{$2}{$0}
+\implies$0

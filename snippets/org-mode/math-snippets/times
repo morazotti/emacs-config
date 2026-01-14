@@ -1,6 +1,7 @@
 # -*- mode: snippet -*-
 # name: times
 # key: xx
-# condition: (org-inside-LaTeX-fragment-p)
+# group: math
+# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
 # --
 \times $0

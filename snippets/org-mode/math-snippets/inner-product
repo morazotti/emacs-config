@@ -1,6 +1,7 @@
 # -*- mode: snippet -*-
 # name: inner product
 # key: ip
+# group: math
 # condition: (org-inside-LaTeX-fragment-p)
 # --
 \braket{$1}{$2}$0

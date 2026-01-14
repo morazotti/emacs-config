@@ -1,7 +1,8 @@
 # -*- mode: snippet -*-
-# name: melem
-# key: melem
+# name: bar
+# key: bar
 # group: math
+# type: command
 # condition: (and (org-inside-LaTeX-fragment-p) 'auto)
 # --
-\mel{$1}{$2}{$0}
+(my/yas-math-modify-accent "bar")

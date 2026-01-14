@@ -1,0 +1,5 @@
+# key: qt
+# name: quotation mark
+# condition: (not (org-inside-LaTeX-fragment-p))
+# --
+\`\`$0''

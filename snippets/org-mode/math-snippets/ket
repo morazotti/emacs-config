@@ -1,6 +1,7 @@
 # -*- mode: snippet -*-
 # name: ket
 # key: ket
-# condition: (org-inside-LaTeX-fragment-p)
+# group: math
+# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
 # --
 \ket{$0}

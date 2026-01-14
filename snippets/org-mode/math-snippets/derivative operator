@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: derivative operator
+# key: ddt
+# --
+\dv{$0}
