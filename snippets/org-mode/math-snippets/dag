@@ -1,9 +1,0 @@
-# -*- mode: snippet -*-
-# name: dag
-# key: dag
-# group: math
-# type: command
-# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
-# --
-(delete-horizontal-space t)
-(insert "^{\\dag}")

@@ -1,7 +1,0 @@
-# name: to-the-power
-# key: pw
-# group: math
-# type: snippet
-# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
-# --
-^\{$0\}

@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: cdot
-# key: x.
-# group: math
-# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
-# --
-\cdot

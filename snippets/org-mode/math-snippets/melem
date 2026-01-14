@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: melem
-# key: melem
-# group: math
-# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
-# --
-\mel{$1}{$2}{$0}

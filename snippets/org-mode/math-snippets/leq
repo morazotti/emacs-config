@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: leq
-# key: leq
-# group: math
-# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
-# --
-\leq

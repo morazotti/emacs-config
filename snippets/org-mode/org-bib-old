@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: org-bib-old
-# key: org-bib
-# --
-#+latex_header: \usepackage[style=numeric,backend=bibtex]{biblatex}
-#+latex_header: \addbibresource{/home/nicolas/Dropbox/referencias.bib}

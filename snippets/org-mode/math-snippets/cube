@@ -1,8 +1,0 @@
-# name: cube
-# key: cb 
-# group: math
-# type: command 
-# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
-# --
-(delete-horizontal-space t)
-(insert "^3")

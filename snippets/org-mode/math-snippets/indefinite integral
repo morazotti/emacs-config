@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: indefinite integral
-# key: int
-# group: math
-# type: snippet
-# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
-# --
-\\int \\dd\{$0\}

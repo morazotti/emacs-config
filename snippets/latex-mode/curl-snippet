@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: curl	    
-# key: curl	    
-# --
- \hat{x}\left(\frac{\partial}{\partial y}{$1}_z-\frac{\partial}{\partial z}{$1}_y\right)
-+\hat{y}\left(\frac{\partial}{\partial z}{$1}_x-\frac{\partial}{\partial x}{$1}_z\right)
-+\hat{z}\left(\frac{\partial}{\partial x}{$1}_y-\frac{\partial}{\partial y}{$1}_x\right)
-$0

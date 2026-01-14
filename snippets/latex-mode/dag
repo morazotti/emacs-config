@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: dag
-# key: dag
-# expand-env: ((argument (quote t)))
-# condition: (and (texmathp) 'auto)
-# group: math
-# --
-`(condition-case nil (progn (backward-sexp) (kill-sexp) (delete-char 1)) (error (setq argument 'nil)))`\\dag{`(if argument (current-kill 0))`}$0

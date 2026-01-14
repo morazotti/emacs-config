@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: infinity
-# key: oo
-# group: math
-# condition: (and (org-inside-LaTeX-fragment-p) 'auto) 
-# --
-\infty

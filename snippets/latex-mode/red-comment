@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: pdf red comment
-# key: redc
-# --
-\textcolor{red}{${1:comment}}

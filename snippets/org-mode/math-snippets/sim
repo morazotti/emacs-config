@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: sim
-# key: ~~
-# group: math
-# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
-# --
-\sim

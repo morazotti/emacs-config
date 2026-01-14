@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: ddot
-# key: ddot
-# group: math
-# type: command
-# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
-# --
-(my/yas-math-modify-accent "ddot")

@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: indefinite sum
-# key: sum
-# group: math
-# type: snippet
-# condition: (and (org-inside-LaTeX-fragment-p) 'auto)
-# --
-\\sum $0

@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: Feynman slash
-# key: slsh
-# --
-\slashed{$1}

@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: scipy
-# key: sp
-# --
-import scipy as sp
