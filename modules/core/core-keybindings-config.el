@@ -170,6 +170,10 @@
   ;; elfeed
   "ee" 'elfeed
 
+  ;; terminal
+  "tt" 'vterm
+  "et" 'eshell
+
   ;; dape
   "dd" 'dape
   "di" 'dape-info

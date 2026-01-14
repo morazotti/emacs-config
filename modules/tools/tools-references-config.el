@@ -53,6 +53,11 @@
 (use-package biblio
   :demand t)
 
+(use-package biblio-openlibrary
+  :straight (:host github :repo "fabcontigiani/biblio-openlibrary" :branch "master"))
+(use-package biblio-gbooks
+  :straight (:host github :repo "jrasband/biblio-gbooks" :branch "main"))
+
 ;; bibliography tool
 (use-package ebib
   :after biblio
@@ -65,6 +70,6 @@
   (define-key ebib-index-mode-map (kbd "B") #'ebib-biblio-import-doi)
   (define-key biblio-selection-mode-map (kbd "e") #'ebib-biblio-selection-import)
 
-)
+  )
 
 (provide 'tools-references-config)
