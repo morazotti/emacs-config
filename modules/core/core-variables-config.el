@@ -25,6 +25,7 @@
       undo-outer-limit  120000000
       undo-auto-save-history t
       undo-directory-alist `(("." . "~/.cache/emacs/undo")))
+
 (put 'narrow-to-region 'disabled nil)
 (with-current-buffer "*scratch*"
   (emacs-lock-mode 'kill))
