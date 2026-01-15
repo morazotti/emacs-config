@@ -1,0 +1,15 @@
+(setq custom-file (expand-file-name "emacs-custom.el" user-emacs-directory))
+(when (file-exists-p custom-file) (load custom-file))
+
+(add-to-list 'load-path (expand-file-name "modules/core"  user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "modules/org"  user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "modules/tools"  user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "modules/langs"  user-emacs-directory))
+
+(require 'core-packages-config)
+(require 'core-variables-config)
+(require 'org-core-config)
+(require 'org-babel-config)
+(require 'org-link-config)
+(require 'org-ox-reveal-config)
+(require 'langs-latex-config)

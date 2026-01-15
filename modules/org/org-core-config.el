@@ -57,6 +57,9 @@
 
 	   (org-preview-latex-image-directory
 	    (file-name-concat home ".cache" "ltximg"))
+
+	   ;; ox
+	   (org-export-async-init-file (expand-file-name "init-async.el" user-emacs-directory))
 	   )
 
   :hook ((org-babel-after-execute . display-ansi-colors)
