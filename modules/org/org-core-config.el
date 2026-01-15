@@ -67,7 +67,11 @@
 	 (org-mode . org-latex-preview-mode)
 	 (org-mode . visual-line-mode)
 	 (org-mode . org-toggle-pretty-entities)
-	 (after-save . my/org-export-run-on-save))
+	 (org-mode . (lambda ()
+		       (add-hook
+			'after-save-hook
+			'my/org-export-run-on-save
+			nil 'make-it-local))))
   :bind (("C-c l" . org-store-link)
 	 (:map org-mode-map ("<f7>" . my/org-export-and-set-async-hook))))
 
