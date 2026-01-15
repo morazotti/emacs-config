@@ -6,5 +6,6 @@
 (require 'org-roam-config)
 (require 'org-capture-config)
 (require 'org-latex-config)
+(require 'org-ox-reveal-config)
 
 (provide 'org-config)
