@@ -66,9 +66,10 @@
 	 (org-mode . org-indent-mode)
 	 (org-mode . org-latex-preview-mode)
 	 (org-mode . visual-line-mode)
-	 (org-mode . org-toggle-pretty-entities))
+	 (org-mode . org-toggle-pretty-entities)
+	 (after-save . my/org-export-run-on-save))
   :bind (("C-c l" . org-store-link)
-	 (:map org-mode-map ("<f7>" . (lambda () (interactive) (org-export-dispatch 1))))))
+	 (:map org-mode-map ("<f7>" . my/org-export-and-set-async-hook))))
 
 ;; some extra configs to org and org-export
 (use-package org-contrib)
