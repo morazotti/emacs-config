@@ -35,13 +35,21 @@
   :custom
   (citar-bibliography (list my/bibliography-file))
   (citar-notes-paths (list org-roam-directory))
-  (citar-library-paths (list my/pdf-library)))
+  (citar-library-paths (list my/pdf-library))
+  :hook ((LaTeX-mode . citar-capf-setup)
+	 (org-mode . citar-capf-setup)))
 
 ;; not sure if this should be on
 (use-package citar-org-roam
   :after (citar org-roam)
   :custom (citar-org-roam-capture-template-key "r"))
+
 (citar-org-roam-mode)
+
+(use-package citar-embark
+  :after (citar embark)
+  :no-require
+  :config (citar-embark-mode))
 
 (use-package bibtex-completion
   :custom
