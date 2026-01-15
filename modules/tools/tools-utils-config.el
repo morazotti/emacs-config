@@ -107,11 +107,14 @@
   (define-key pdf-view-mode-map (kbd "a") 'pdf-view-fit-page-to-window)
   (pdf-loader-install)
 
+  :mode ("\\.pdf" . pdf-view-mode)
+
   :custom (pdf-view-midnight-colors '("#FFBB33" . "#222222")))
+
 (add-hook 'pdf-view-mode-hook 'auto-revert-mode)
 
 ;; terminal
-;; I was using ~toggle-term~ too access popup terminal, but it was kinda clunky
+;; I was using ~toggle-term~ to access popup terminal, but it was kinda clunky
 ;; apparently there's a 'popper' thingy to recover such behavior
 (use-package popper
   :demand t
