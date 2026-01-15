@@ -19,4 +19,5 @@
  '(italic ((t (:slant italic))))
  '(jinx-misspelled ((t (:underline (:color "red" :style wave :position nil)))))
  '(org-document-title ((t (:foreground "#fe640b" :weight bold))))
- '(org-drawer ((t (:foreground "Blue1" :family "Ligamonacop")))))
+ '(org-drawer ((t (:foreground "Blue1" :family "Ligamonacop"))))
+ '(visual-shorthands-face ((t (:inherit font-lock-keyword-face :extend nil :background "#e0e0e0")))))
