@@ -1,4 +1,6 @@
 (global-set-key (kbd "<f5>") 'revert-buffer)
+(global-set-key (kbd "C-x 2") 'my/split-and-follow-horizontally)
+(global-set-key (kbd "C-x 3") 'my/split-and-follow-vertically)
 
 ;; vim-keybindings
 (use-package evil
@@ -66,16 +68,16 @@
   "tb" 'jinx-correct-all
   "tw" 'jinx-correct-nearest
 
-  ;; ;; windows
-  ;; "w0" 'delete-window
-  ;; "w1" 'delete-other-windows
-  ;; "w2" 'split-and-follow-horizontally
-  ;; "w3" 'split-and-follow-vertically
-  ;; "wp" 'winner-undo
-  ;; "wn" 'winner-redo
-  ;; "w=" 'balance-windows
+  ;; windows
+  "wk" 'delete-window
+  "ww" 'delete-other-windows
+  "wh" 'my/split-and-follow-horizontally
+  "wv" 'my/split-and-follow-vertically
+  "wn" 'winner-undo
+  "we" 'winner-redo
+  "w-" 'balance-windows
   ;; "wt" 'transpose-frame
-  ;; "w TAB" 'ace-window
+  "wo" 'ace-window
 
   ;; magit
   "gg" 'magit-status

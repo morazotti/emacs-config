@@ -153,6 +153,23 @@
              (c      "https://github.com/tree-sitter/tree-sitter-c")
              (cpp    "https://github.com/tree-sitter/tree-sitter-cpp"))))
 
+;; split and follow window
+(defun my/split-and-follow (direction)
+  (interactive "c")
+  (catch 'my-tag
+    (cond ((= direction ?h) (split-window-below))
+  	((= direction ?v) (split-window-right))
+  	(t (throw 'my-tag "no correct character pressed")))
+    (other-window 1)))
+
+(defun my/split-and-follow-horizontally ()
+  (interactive)
+  (my/split-and-follow ?h))
+
+(defun my/split-and-follow-vertically ()
+  (interactive)
+  (my/split-and-follow ?v))
+
 ;; zoom-window, just like <leader>-z on tmux
 (use-package zoom-window
   :bind (("M-z" . zoom-window-zoom)
