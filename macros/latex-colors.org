@@ -1,0 +1,9 @@
+#+latex_header: \usepackage{xcolor}
+#+latex_header: \definecolor{blood}{HTML}{#aa2233}
+#+MACRO: color \textcolor{$1}{$2}
+#+MACRO: red \textcolor{red}{$1}
+#+MACRO: yellow \textcolor{yellow}{$1}
+#+MACRO: magenta \textcolor{magenta}{$1}
+#+MACRO: cyan \textcolor{cyan}{$1}
+#+MACRO: green \textcolor{lightgreen}{$1}
+#+MACRO: blood \textcolor{#aa2233}{$1}

@@ -26,7 +26,6 @@
 (evil-set-initial-state 'ebib-strings-mode 'emacs)
 (evil-set-initial-state 'ebib-multiline-mode 'emacs)
 
-
 (use-package evil-numbers
   :bind (:map evil-normal-state-map
               ("C-c +" . evil-numbers/inc-at-pt)
