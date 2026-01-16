@@ -152,6 +152,10 @@
   "ls" 'org-store-link
   "li" 'org-insert-link
 
+  ;; smart-parens
+  "(k" 'sp-unwrap-sexp
+  "((" 'sp-rewrap-sexp
+
   ;; ;; multiple cursors
   ;; "@" 'evil-multiedit-toggle-marker-here
   ;; "m@" 'evil-multiedit-match-all

@@ -1,5 +1,5 @@
-#+latex_header: \usepackage{xcolor}
-#+latex_header: \definecolor{blood}{HTML}{#aa2233}
+# #+latex_header: \usepackage{xcolor}
+# #+latex_header: \definecolor{blood}{HTML}{#aa2233}
 #+MACRO: color \textcolor{$1}{$2}
 #+MACRO: red \textcolor{red}{$1}
 #+MACRO: yellow \textcolor{yellow}{$1}
