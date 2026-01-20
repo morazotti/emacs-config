@@ -72,8 +72,8 @@
   "ww" 'delete-other-windows
   "wh" 'my/split-and-follow-horizontally
   "wv" 'my/split-and-follow-vertically
-  "wn" 'winner-undo
-  "we" 'winner-redo
+  "wp" 'winner-undo
+  "wn" 'winner-redo
   "w-" 'balance-windows
   ;; "wt" 'transpose-frame
   "wo" 'ace-window
