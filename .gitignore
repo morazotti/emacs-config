@@ -2,7 +2,7 @@
 .cache
 auto-save-list/
 eln-cache/
-straight/
+straight/{build,repos,build-cache.el,modified}
 recentf
 projectile-bookmarks.eld
 elpa/
