@@ -26,6 +26,7 @@
       undo-auto-save-history t
       undo-directory-alist `(("." . "~/.cache/emacs/undo")))
 
+(setenv "SSH_AUTH_SOCK" (format "%s/ssh-agent.socket" (getenv "XDG_RUNTIME_DIR")))
 (put 'narrow-to-region 'disabled nil)
 (with-current-buffer "*scratch*"
   (emacs-lock-mode 'kill))
