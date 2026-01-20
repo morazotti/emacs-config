@@ -8,18 +8,6 @@
  (rear-context-string . " non confundit\n\n")
  (position . 97)
  (last-modified 26980 1097 38793 322000))
-("gast"
- (filename . "~/repos/emacs/bookmarks")
- (front-context-string . "/gastos.ledger\")")
- (rear-context-string . "cuments/expenses")
- (position . 661)
- (last-modified 26976 5284 312455 97000))
-("blackgenn"
- (filename . "~/.config/emacs/private/org/blackgenn.org")
- (front-context-string . "#+TITLE: BlackGe")
- (rear-context-string)
- (position . 1)
- (last-modified 26214 56934 489952 744000))
 ("info"
  (filename . "~/Documents/org/info.org")
  (front-context-string . "#+TITLE: Informa")

@@ -8,7 +8,7 @@
 		user-emacs-directory)))
 
 ;; if we ever need to M-x straight-freeze-versions, we need to uncomment the following line before
-(load (expand-file-name "modules/core/core-packages-config.el" user-emacs-directory))
+;; (load (expand-file-name "modules/core/core-packages-config.el" user-emacs-directory))
 
 (require 'core-config)
 (require 'org-config)
