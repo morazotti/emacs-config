@@ -175,6 +175,9 @@
   ;; elfeed
   "ee" 'elfeed
 
+  ;; ebib
+  "eb" 'ebib
+
   ;; terminal
   "tt" 'vterm
   "et" 'eshell

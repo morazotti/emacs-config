@@ -70,7 +70,7 @@
 (use-package ebib
   :after biblio
   :custom ((ebib-default-directory my/library-directory)
-	   (ebib-bib-search-dirs my/library-directory)
+	   (ebib-bib-search-dirs (file-name-concat my/library-directory "pdfs"))
 	   (ebib-preload-bib-files `(,my/bibliography-file))
 	   (ebib-reading-list-file (file-name-concat ebib-default-directory "reading-list.org")))
   :config
