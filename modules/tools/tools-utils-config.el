@@ -23,14 +23,6 @@
   :config (elfeed-org)
   :custom (rmh-elfeed-org-files (list (file-name-concat org-directory "elfeed.org"))))
 
-;; gptel
-(use-package gptel)
-(use-package gptel-commit
-  :straight (:host github :repo "lakkiy/gptel-commit")
-  :after (gptel magit)
-  :bind (:map git-commit-mode-map
-         ("C-c C-g" . gptel-commit)))
-
 ;;jinx
 (use-package jinx
   :hook (emacs-startup . global-jinx-mode)
