@@ -25,8 +25,14 @@
 
   :hook
   (delve-mode . turn-off-evil-mode))
-
 (evil-mode)
+
+(use-package evil-collection
+  :after evil
+  :config
+  (setq evil-collection-mode-list (remove 'dired evil-collection-mode-list))
+  (evil-collection-init))
+
 (evil-set-initial-state 'dired-mode 'emacs)
 (evil-set-initial-state 'vterm-mode 'emacs)
 (evil-set-initial-state 'delve-mode 'emacs)
