@@ -1,12 +1,9 @@
 (defun my/duplicate-line ()
   (interactive)
-  (save-excursion
-    (goto-char (line-beginning-position))
-    (kill-line)
-    (yank)
-    (goto-char (line-end-position))
-    (newline)
-    (yank)))
+  (let ((line (buffer-substring (line-beginning-position) (line-end-position))))
+    (save-excursion
+      (end-of-line)
+      (insert "\n" line))))
 
 (global-set-key (kbd "<f5>") 'revert-buffer)
 (global-set-key (kbd "C-x 2") 'my/split-and-follow-horizontally)
@@ -16,6 +13,8 @@
 ;; vim-keybindings
 (use-package evil
   :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
   (setq evil-respect-visual-line-mode t)
   (setq evil-want-C-i-jump nil)
   (setq evil-want-C-u-scroll t)

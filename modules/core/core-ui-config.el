@@ -3,27 +3,26 @@
       show-paren-mode t)
 (set-fringe-mode 10)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
 (defvar my/fixed-font "Ligamonacop")
 (defvar my/variable-font "CMU Serif")
+(defvar my/fixed-font-height 120)
+(defvar my/variable-font-height 140)
 
-(defun my/set-fixed-font (frame)
-  (with-selected-frame frame
+(defun my/setup-fonts (&optional frame)
+  "Configure default and variable-pitch faces for the given FRAME."
+  (with-selected-frame (or frame (selected-frame))
     (when (display-graphic-p)
       (set-face-attribute 'default nil
                           :font my/fixed-font
-                          :height 120))))
-
-(defun my/set-variable-font (frame)
-  (with-selected-frame frame
-    (when (display-graphic-p)
-      (progn
-	(set-face-attribute 'variable-pitch nil
+                          :height my/fixed-font-height)
+      (set-face-attribute 'variable-pitch nil
                           :font my/variable-font
-                          :height 140)
-	(setq mixed-pitch-set-height t)))))
+                          :height my/variable-font-height)
+      (setq mixed-pitch-set-height t))))
 
-(add-hook 'after-make-frame-functions #'my/set-fixed-font)
-(add-hook 'after-make-frame-functions #'my/set-variable-font)
+(add-hook 'after-make-frame-functions #'my/setup-fonts)
+(my/setup-fonts)
 
 (when (display-graphic-p)
   (set-face-attribute 'default nil

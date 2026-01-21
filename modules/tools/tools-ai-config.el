@@ -1,6 +1,6 @@
 ;; gptel
 (use-package gptel
-  :config (gptel-agent-update)
+
   :init (gptel-make-gemini "Gemini"
 	  :key (lambda ()
 		 (auth-source-pick-first-password
@@ -21,12 +21,14 @@
   :bind (:map git-commit-mode-map
               ("C-c C-g" . gptel-commit)))
 
-(use-package gptel-agent)
+(use-package gptel-agent
+:config (gptel-agent-update))
+
 (use-package gptel-org-tools
   :straight (:host codeberg :repo "bajsicki/gptel-got" :branch "main"))
 
 (use-package ragmacs
-   :ensure (:host github :repo "positron-solutions/ragmacs")
+   :straight (:host github :repo "positron-solutions/ragmacs":branch "master")
    :after gptel)
 
 (use-package llm-tool-collection
