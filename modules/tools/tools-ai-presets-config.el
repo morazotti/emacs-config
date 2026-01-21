@@ -103,4 +103,4 @@
  </formatting>"
   :tools '("introspection"))
 
-(provide 'tools-ai-preset-config)
+(provide 'tools-ai-presets-config)

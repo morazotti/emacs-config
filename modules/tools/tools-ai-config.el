@@ -6,6 +6,9 @@
 	   (gptel-use-tools t)
 	   (gptel-model "gpt-5.2")))
 
+(with-eval-after-load 'gptel
+  (require 'tools-ai-presets-config))
+
 (use-package gptel-commit
   :straight (:host github :repo "lakkiy/gptel-commit")
   :after (gptel magit)
@@ -25,5 +28,4 @@
   :config (mapcar (apply-partially #'apply #'gptel-make-tool)
 		  (llm-tool-collection-get-all)))
 
-(require 'tools-ai-preset-config)
 (provide 'tools-ai-config)
