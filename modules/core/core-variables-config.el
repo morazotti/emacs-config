@@ -8,6 +8,9 @@
       ispell-dictionary "pt_BR"
       fill-column 72
 
+      ;; authinfo
+      auth-sources '("~/.authinfo.gpg" "~/.authinfo")
+
       make-backup-files t
       backup-by-copying t              ; evita problemas com links/permissões
       version-control t

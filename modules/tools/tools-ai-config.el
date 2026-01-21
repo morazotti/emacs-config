@@ -1,10 +1,16 @@
 ;; gptel
 (use-package gptel
   :config (gptel-agent-update)
+  :init (gptel-make-gemini "Gemini"
+	  :key (lambda ()
+		 (auth-source-pick-first-password
+		  :host "generativelanguage.googleapis.com"
+		  :user "apikey"))
+	  :stream t)
   :custom ((gptel-default-mode #'org-mode)
 	   (gptel-track-media t)
 	   (gptel-use-tools t)
-	   (gptel-model "gpt-5.2")))
+	   (gptel-model 'gemini-flash-latest)))
 
 (with-eval-after-load 'gptel
   (require 'tools-ai-presets-config))

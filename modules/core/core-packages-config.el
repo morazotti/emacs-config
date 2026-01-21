@@ -22,6 +22,9 @@
 (setq use-package-always-defer t)
 (setq use-package-always-ensure t)
 
+(use-package project
+  :straight t
+  :ensure t)
 
 (use-package emacs
   :config

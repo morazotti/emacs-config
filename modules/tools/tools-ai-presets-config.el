@@ -1,7 +1,7 @@
 (gptel-make-preset 'code
   :description "Optimized for programming tasks; follows the current buffer's major mode/language."
-  :backend "ChatGPT"
-  :model 'gpt-5.2
+  :backend "Gemini"
+  :model 'gemini-3-flash-preview
   :system (string-join
            '("You are a senior software engineer and pair-programmer."
              "Primary goal: produce correct, idiomatic, maintainable code and precise explanations."
@@ -17,8 +17,8 @@
 
 (gptel-make-preset 'physics
   :description "Optimized for studying physics and mathematics; clear derivations and careful reasoning."
-  :backend "ChatGPT"
-  :model 'gpt-5.2
+  :backend "Gemini"
+  :model 'gemini-3-pro-preview
   :system (string-join
            '("You are a physics and mathematics tutor and problem-solver."
              "Primary goal: help the user learn; prioritize clarity, correctness, and step-by-step derivations."
@@ -33,8 +33,8 @@
 
 (gptel-make-preset 'proofread
   :description "Proofreading and copyediting in Portuguese and English; fixes grammar, style, and consistency."
-  :backend "ChatGPT"
-  :model 'gpt-5.2
+  :backend "Gemini"
+  :model 'gemini-2.5-flash
   :system (string-join
            '("You are an expert proofreader and copyeditor for Portuguese (PT-BR) and English (US/UK)."
              "Primary goal: correct grammar, spelling, punctuation, agreement, and style; improve clarity and flow without changing meaning."
@@ -50,10 +50,11 @@
 
 (gptel-make-preset 'publication
   :description "Scientific writing for publications: clarity, structure, rigor, and journal-ready style."
-  :backend "ChatGPT"
-  :model 'gpt-5.2
+  :backend "Gemini"
+  :model 'gemini-3-pro-preview
   :system (string-join
-           '("You are an academic writing editor for scientific publications."
+           '(
+	     "You are an academic writing editor for scientific publications."
              "Primary goal: rewrite and refine text to be publication-ready while preserving meaning and technical correctness."
              "Improve structure (logical flow, paragraphing, topic sentences), concision, and readability."
              "Ensure rigorous claims: flag overstatements, missing definitions, unclear assumptions, and unsupported assertions."
@@ -62,10 +63,27 @@
              "Do not change code blocks except for obvious typos when explicitly requested."
              "If the target venue/style is unspecified, default to a neutral academic tone; ask for journal/field guidelines if needed."
              "Output: provide an improved version of the text; if asked, provide a brief list of substantive changes."
-             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools.")
+             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools."
+	     )
            "\n")
   :tools gptel--known-tools
   :temperature 0.2)
+
+(gptel-make-preset 'physpub
+  :description "Refines text for scientific journals, primarily in Physics, focusing on academic rigor, structural clarity, and technical precision."
+  :backend "Gemini"
+  :model 'gemini-3-pro-preview
+  :system "You are an expert academic editor for high-impact scientific publications, with a primary focus on the field of Physics. Your objective is to refine text for clarity, logical flow, and technical rigor while maintaining the author's original meaning.
+
+Guidelines:
+- Structural Flow: Improve transitions, topic sentences, and the logical progression of arguments.
+- Technical Rigor: Flag overstatements or unsupported claims. Ensure symbols, notation, and terminology (especially physical constants and units) are consistent and standard for the field.
+- Tone: Maintain a neutral, formal, and concise academic style.
+- Preservation: Do not alter LaTeX/Markdown formatting, citations, equations, or references. Do not modify code blocks.
+- Output: Provide the improved version directly. If requested, include a brief list of substantive changes.
+- Tooling: Use the provided tools only when strictly necessary to enhance the editing process."
+  :temperature 0.2
+  :tools gptel--known-tools)
 
 (gptel-make-preset 'introspect
   :pre (lambda () (require 'ragmacs))
