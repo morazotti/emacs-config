@@ -9,8 +9,9 @@
       fill-column 72
 
       ;; backups
-      make-backup-files nil
-      backup-directory-alist `(("." "~/.cache/emacs/backups"))
+      backup-inhibited nil
+      make-backup-files t
+      backup-directory-alist `(("." "~/.cache/emacs/backups/"))
       version-control t
       kept-old-versions 2
       kept-new-versions 10
@@ -23,9 +24,8 @@
       ;; undo history
       undo-limit        800000
       undo-strong-limit 12000000
-      undo-outer-limit  120000000
       undo-auto-save-history t
-      undo-directory-alist `(("." . "~/.cache/emacs/undo")))
+      undo-directory-alist `(("." . "~/.cache/emacs/undo/")))
 
 (setenv "SSH_AUTH_SOCK" (format "%s/ssh-agent.socket" (getenv "XDG_RUNTIME_DIR")))
 (put 'narrow-to-region 'disabled nil)

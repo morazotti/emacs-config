@@ -47,6 +47,7 @@
   ;; :custom (resnippets-expand-env
   ;; 	   '((smartparens-mode . nil)
   ;; 	     (cdlatex-mode . nil)))
+  :hook (org-mode . resnippets-mode)
   :config
   (resnippets-define
    "math-mode"
