@@ -18,7 +18,7 @@
       backup-inhibited nil
 
       ;; autosaves
-      auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.cache/emacs/autosaves/") t)))
+      auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.cache/emacs/autosaves/") t))
       auto-save-default t
 
       ;; undo history
