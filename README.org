@@ -1,24 +1,94 @@
-#+title: Emacs init
+#+title: Emacs Configuration
 #+author: nmorazotti
 #+email: nicolas.morazotti@protonmail.ch
 #+STARTUP: overview
+#+OPTIONS: toc:nil
 
-Hello! This is another overhaul of my init system in emacs, making use
-of distinct files for each configuration part. In this setup, I'm
-going to use the following structure to separate each file:
+This is a modular Emacs configuration designed for performance, scientific writing, and a hybrid Vim/Emacs workflow. The setup is divided into functional modules to maintain clarity and ease of maintenance.
 
-- ~modules/core~ contains the necessary parts of the system, such as
-  package managing and general configurations.
-- ~modules/org~ contains all the configuration for ~org-mode~, which I
-  use daily.
+* Initialization
+The startup process begins with the early-init file to optimize the UI and memory management, followed by the main init file which orchestrates the loading of all sub-modules.
 
-* ~core~
-- ~core.el~ loads the necessary files.
+- ~early-init.el~ :: Configures the frame UI before it's created and maximizes garbage collection thresholds for a faster startup.
+#+include: "early-init.el"  :src elisp
 
-#+transclude: [[file:modules/core/core.el]]  :src elisp
+- ~init.el~ :: The main entry point. It sets up the load paths, initializes modules, and restores editor performance settings after startup.
+#+include: "init.el"  :src elisp
 
-- ~packages.el~ bootstraps ~straight.el~ and sets up ~use-package~ as
-  package manager.
+- ~emacs-custom.el~ :: Stores variables and faces generated through the Emacs Customization UI, kept separate to prevent cluttering the main configuration.
+#+include: "emacs-custom.el"  :src elisp
 
-  #+transclude: [[file:modules/core/packages.el]]  :src elisp
+* Core Configuration
+These modules define the fundamental editor experience, from package management to the visual theme and keybinding philosophy.
 
+- ~core-packages-config.el~ :: Bootstraps ~straight.el~ as the package manager and sets up ~use-package~ for declarative configuration.
+#+include: "modules/core/core-packages-config.el"  :src elisp
+
+- ~core-variables-config.el~ :: Centralizes global settings, directory paths for backups/undo history, and environment variables.
+#+include: "modules/core/core-variables-config.el"  :src elisp
+
+- ~core-ui-config.el~ :: Configures the visual interface, including the theme, fonts for both fixed and variable pitch, ligatures, and the modeline.
+#+include: "modules/core/core-ui-config.el"  :src elisp
+
+- ~core-keybindings-config.el~ :: Implements ~evil-mode~ for Vim emulation and defines a central leader-key system using ~general.el~.
+#+include: "modules/core/core-keybindings-config.el"  :src elisp
+
+- ~core-utils-config.el~ :: Manages the completion stack (Vertico, Marginalia, Orderless) and essential navigation tools like Consult and Embark.
+#+include: "modules/core/core-utils-config.el"  :src elisp
+
+* Org Mode
+Org-mode is the heart of this configuration, tailored for academic research, note-taking, and scientific publishing.
+
+- ~org-core-config.el~ :: Sets up the base Org-mode environment, utilizing a specific development branch for enhanced LaTeX previews.
+#+include: "modules/org/org-core-config.el"  :src elisp
+
+- ~org-agenda-config.el~ :: Manages task lists and custom agenda views for project tracking and personal organization.
+#+include: "modules/org/org-agenda-config.el"  :src elisp
+
+- ~org-roam-config.el~ :: Implements a Zettelkasten system for interconnected note-taking, featuring a visual graph and database sync.
+#+include: "modules/org/org-roam-config.el"  :src elisp
+
+- ~org-capture-config.el~ :: Defines templates for quickly capturing notes, tasks, and inbox items without breaking focus.
+#+include: "modules/org/org-capture-config.el"  :src elisp
+
+- ~org-babel-config.el~ :: Configures literate programming environments, allowing code execution within Org files for various languages.
+#+include: "modules/org/org-babel-config.el"  :src elisp
+
+- ~org-latex-config.el~ :: Provides specialized tools for mathematical writing, including ~cdlatex~ for fast snippet expansion.
+#+include: "modules/org/org-latex-config.el"  :src elisp
+
+- ~org-link-config.el~ :: Customizes link behaviors for transclusion, subfigures in LaTeX, and integrated image pasting.
+#+include: "modules/org/org-link-config.el"  :src elisp
+
+- ~org-ox-config.el~ :: Manages the export engine for converting Org files into LaTeX, Reveal.js presentations, and other formats.
+#+include: "modules/org/org-ox-config.el"  :src elisp
+
+* Tools
+General-purpose tools that integrate external applications and services directly into the Emacs workflow.
+
+- ~tools-ai-config.el~ :: Integrates Large Language Models via ~gptel~, with custom presets for coding, physics, and proofreading.
+#+include: "modules/tools/tools-ai-config.el"  :src elisp
+
+- ~tools-completion-config.el~ :: Configures ~corfu~ for modern in-buffer completion and ~eglot~ for Language Server Protocol (LSP) support.
+#+include: "modules/tools/tools-completion-config.el"  :src elisp
+
+- ~tools-references-config.el~ :: Manages academic bibliographies with ~citar~ and ~ebib~, integrating PDFs and citations into the workflow.
+#+include: "modules/tools/tools-references-config.el"  :src elisp
+
+- ~tools-utils-config.el~ :: Houses essential utilities like Magit for Git, PDF-Tools for document viewing, and Jinx for spellchecking.
+#+include: "modules/tools/tools-utils-config.el"  :src elisp
+
+* Programming Languages
+Language-specific configurations that provide specialized editing features, REPLs, and formatting tools.
+
+- ~langs-python-config.el~ :: Python setup including virtual environment management and black formatting.
+#+include: "modules/langs/langs-python-config.el"  :src elisp
+
+- ~langs-julia-config.el~ :: Comprehensive Julia support with an integrated REPL and specialized keybindings.
+#+include: "modules/langs/langs-julia-config.el"  :src elisp
+
+- ~langs-latex-config.el~ :: Full LaTeX environment using AUCTeX, Synctex, and mathematical calculation helpers.
+#+include: "modules/langs/langs-latex-config.el"  :src elisp
+
+- ~langs-clojure-config.el~ :: Clojure development tools utilizing Tree-sitter and the CIDER environment.
+#+include: "modules/langs/langs-clojure-config.el"  :src elisp
