@@ -8,17 +8,17 @@
       ispell-dictionary "pt_BR"
       fill-column 72
 
-      ;; backups
-      backup-inhibited nil
       make-backup-files t
-      backup-directory-alist `(("." "~/.cache/emacs/backups/"))
+      backup-by-copying t              ; evita problemas com links/permissões
       version-control t
+      delete-old-versions t
       kept-old-versions 2
       kept-new-versions 10
-      delete-old-versions t
+      backup-directory-alist `(("." . ,(expand-file-name "~/.cache/emacs/backups/")))
+      backup-inhibited nil
 
       ;; autosaves
-      auto-save-file-name-transforms `((".*" "~/.cache/emacs/autosaves/" t))
+      auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.cache/emacs/autosaves/") t)))
       auto-save-default t
 
       ;; undo history

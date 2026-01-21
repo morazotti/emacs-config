@@ -66,9 +66,26 @@
 (use-package biblio-gbooks
   :straight (:host github :repo "jrasband/biblio-gbooks" :branch "main"))
 
+(defun my/ebib-reading-list-add-org-cite ()
+  "Add an Org-cite citation to the newly created Ebib reading-list item."
+  (let ((key (ebib--get-key-at-point)))
+    (with-current-buffer (find-file-noselect ebib-reading-list-file)
+      ;; Ebib deixa point no item recém-criado neste buffer.
+      ;; Então inserimos uma linha de citação logo após o heading/properties.
+      (save-excursion
+        (org-back-to-heading t)
+        ;; pula drawer de PROPERTIES, se existir
+        (forward-line 1)
+        (when (looking-at-p ":PROPERTIES:")
+          (re-search-forward "^:END:[ \t]*$" nil t)
+          (forward-line 1))
+        (insert (format "- [cite:@%s]\n" key)))
+      (save-buffer))))
+
 ;; bibliography tool
 (use-package ebib
   :after biblio
+
   :custom ((ebib-default-directory my/library-directory)
 	   (ebib-bib-search-dirs (file-name-concat my/library-directory "pdfs"))
 	   (ebib-preload-bib-files `(,my/bibliography-file))
@@ -76,8 +93,8 @@
   :config
   (require 'ebib-biblio)
   (define-key ebib-index-mode-map (kbd "B") #'ebib-biblio-import-doi)
-  (define-key biblio-selection-mode-map (kbd "e") #'ebib-biblio-selection-import)
+  (define-key biblio-selection-mode-map (kbd "e") #'ebib-biblio-selection-import))
 
-  )
+(add-hook 'ebib-reading-list-new-item-hook #'my/ebib-reading-list-add-org-cite)
 
 (provide 'tools-references-config)

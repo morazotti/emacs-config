@@ -59,6 +59,7 @@
   "SPC" 'find-file 
   "RET" 'consult-bookmark
   "," 'consult-buffer
+  "be" 'eval-buffer
   "bb" 'ibuffer
   "bk" 'kill-buffer
   "bs" 'save-buffer
