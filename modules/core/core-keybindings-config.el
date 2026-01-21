@@ -1,6 +1,17 @@
+(defun my/duplicate-line ()
+  (interactive)
+  (save-excursion
+    (goto-char (line-beginning-position))
+    (kill-line)
+    (yank)
+    (goto-char (line-end-position))
+    (newline)
+    (yank)))
+
 (global-set-key (kbd "<f5>") 'revert-buffer)
 (global-set-key (kbd "C-x 2") 'my/split-and-follow-horizontally)
 (global-set-key (kbd "C-x 3") 'my/split-and-follow-vertically)
+(global-set-key (kbd "C-,") 'my/duplicate-line)
 
 ;; vim-keybindings
 (use-package evil
@@ -58,6 +69,7 @@
   "x" 'execute-extended-command
   ":" 'eval-expression
   ";" 'avy-goto-line
+  "j" 'my/duplicate-line
 
   ;; movement
   "TAB" 'other-window
