@@ -291,7 +291,7 @@ management to the visual theme and keybinding philosophy.
                                        "?=" "?." "??" ";;" "/*" "/=" "/>" "__" "~~" "(*" "*)")))
 (global-ligature-mode)
 
-doom modeline
+;; doom modeline
 (use-package doom-modeline
   :straight (:host github :repo "seagle0128/doom-modeline" :branch "master")
   :custom ((doom-modeline-buffer-file-name-style 'buffer-name)
@@ -387,6 +387,16 @@ doom modeline
   "TAB" 'other-window
   "s" 'avy-goto-char
 
+  ;; gptel
+  "gg" 'gptel
+  "ga" 'gptel-add
+  "gm" 'gptel-menu
+  "gr" 'gptel-rewrite
+  "gs" 'gptel-send
+  "gb" 'gptel-buffer
+  "gq" 'gptel-abort
+  "gc" 'gptel-commit
+
   ;; jinx
   "tb" 'jinx-correct-all
   "tw" 'jinx-correct-nearest
@@ -401,17 +411,6 @@ doom modeline
   "w-" 'balance-windows
   ;; "wt" 'transpose-frame
   "wo" 'ace-window
-
-  ;; magit
-  "gg" 'magit-status
-  ;; "gb" 'magit-blame
-  "gc" 'magit-commit
-  "gC" 'magit-clone
-  "gp" 'magit-push
-  "gR" 'magit-revert
-  "gs" 'magit-stage 
-  "gx" 'magit-reset
-  "gz" 'magit-stash
 
   ;; open - general
   "om" 'notmuch
@@ -792,6 +791,19 @@ doom modeline
 (provide 'core-utils-config)
 ```
 
+`core-config.el`
+:   Aggregates all core modules.
+
+``` elisp
+(require 'core-packages-config)
+(require 'core-variables-config)
+(require 'core-utils-config)
+(require 'core-keybindings-config)
+(require 'core-ui-config)
+
+(provide 'core-config)
+```
+
 # Org Mode
 
 Org-mode is the heart of this configuration, tailored for academic
@@ -886,6 +898,55 @@ research, note-taking, and scientific publishing.
   :config (ox-extras-activate '(latex-header-blocks ignore-headlines)))
 
 (provide 'org-core-config)
+```
+
+`org-ui-config.el`
+:   Improves Org buffer visuals (e.g., org-modern, mixed-pitch).
+
+``` elisp
+(defun display-ansi-colors ()
+  (ansi-color-apply-on-region (point-min) (point-max)))
+
+(use-package org-modern
+  :after org
+  :straight (:host github :repo "minad/org-modern" :branch "main")
+  :custom ((org-modern-table nil)
+	   (org-modern-label-border nil))
+  :hook ((org-mode . org-modern-mode)
+	 (org-mode . variable-pitch-mode)))
+
+(use-package mixed-pitch
+  :hook (org-mode . mixed-pitch-mode))
+
+;; svg-tags: create buttons with svg
+;; (use-package svg-lib)
+;; (use-package svg-tag
+;;   :ensure svg-lib
+;;   :straight (:host github :repo "rougier/svg-tag-mode" :branch "main")
+;;   :hook (org-mode . svg-tag-mode))
+;; (setq svg-tag-tags
+;;       '(("\\(:@[A-Za-z0-9]+\\)" . ((lambda (tag)
+;;                                      (svg-tag-make (upcase tag) :beg 2))))
+;;         ("\\(:@[A-Za-z0-9]+:\\)$" . ((lambda (tag)
+;;                                        (svg-tag-make (upcase tag) :beg 2 :end -1))))
+;;         ("\\(:@[A-Za-z]+:\\)" . ((lambda (tag) (svg-tag-make (upcase tag) :beg 2 :end -1))))
+;;         ("\\(#.transclude: .*\\)" . ((lambda (tag) (svg-tag-make tag :beg 57 :end -2))
+;;                                      (lambda () (interactive) (org-transclusion-add))))
+;;         ("\\[#[A-Z]\\]" . ( (lambda (tag)
+;;                               (svg-tag-make tag :face 'org-priority
+;;                                             :beg 2 :end -1 :margin 1))))
+;;         ("TODO" . ((lambda (tag) (svg-tag-make "TODO" :face 'org-todo :inverse t :margin 1))))
+;;         ("NEXT" . ((lambda (tag) (svg-tag-make "NEXT" :face 'org-todo :inverse t :margin 1))))
+;;         ("BACKLOG" . ((lambda (tag) (svg-tag-make "BACKLOG" :face 'org-todo :inverse t :margin 1))))
+;;         ("REVIEW" . ((lambda (tag) (svg-tag-make "REVIEW" :face 'org-todo :inverse t :margin 1))))
+;;         ("IN-PROGRESS" . ((lambda (tag) (svg-tag-make "IN-PROGRESS" :face 'org-todo :inverse t :margin 1))))
+;;         ("WAITING" . ((lambda (tag) (svg-tag-make "WAITING" :face 'org-todo :inverse t :margin 1))))
+;;         ("DONE" . ((lambda (tag) (svg-tag-make "DONE" :face 'org-done :margin 1))))
+;;         ("ABANDONED" . ((lambda (tag) (svg-tag-make "ABANDONED" :face 'org-done :margin 1))))
+;;         ("COMPLETE" . ((lambda (tag) (svg-tag-make "COMPLETE" :face 'org-done :margin 1))))
+;;         ))
+
+(provide 'org-ui-config)
 ```
 
 `org-agenda-config.el`
@@ -1042,6 +1103,121 @@ research, note-taking, and scientific publishing.
 (provide 'org-babel-config)
 ```
 
+`org-ob-jupyter-config.el`
+:   Adds Jupyter-backed Org Babel execution and helpers for connecting
+    to existing kernels.
+
+``` elisp
+(use-package jupyter
+  :straight
+  (:host github
+         :repo "emacs-jupyter/jupyter"
+         :branch "master"
+         :commit "f97f4b5d8c83e0b901020f835183dde8a2bf649e")
+  :bind ("C-M-s-h" . jupyter-org-hydra/body))
+
+
+;; manage ssh servers
+;; we can set :session as
+;; [/ssh:[USER@]HOST:]~/.local/share/jupyter/runtime/kernel-<PID>.json
+;; if we name a session, otherwise, it launches a local ipykernel3
+;; useful if we want to launch local uv venvs
+
+(defun my/choose-ssh-host (ssh-config-file)
+  "Read SSH config file and allow the user to choose a host.
+    If the chosen host is not 'localhost', prefix it with '/ssh:<chosen-host>:'."
+  (let ((hosts '("localhost"))
+    	(kern-dir "~/.local/share/jupyter/runtime/"))  ;; Add the "local" option to the hosts list
+    ;; Read the SSH config file
+    (with-temp-buffer
+      (insert-file-contents ssh-config-file)
+      ;; Use regex to find "Host" definitions
+      (while (re-search-forward "^Host\\s-+\\(.*\\)" nil t)
+        (push (match-string 1) hosts)))
+    ;; Use completing-read to select a host
+    (let ((chosen-host (completing-read "Choose SSH host: " (reverse hosts))))
+      (if (string= chosen-host "localhost")
+          (message kern-dir)
+        (message (concat "/ssh:" chosen-host ":" kern-dir))))))
+
+(defun my/jupyter-runtime-folder ()
+  (interactive)
+  (expand-file-name (my/choose-ssh-host "~/.ssh/config"))) 
+
+(defun my/get-open-ports ()
+  (mapcar
+   #'string-to-number
+   (split-string (shell-command-to-string "ss -tulpnH | awk '{print $5}' | sed -e 's/.*://'") "\n")))
+
+(defun my/list-jupyter-kernel-files ()
+  (interactive)
+  (mapcar
+   (lambda (file) (cons (car file) (cdr (assq 'shell_port (json-read-file (car file))))))
+   (sort
+    (directory-files-and-attributes (my/jupyter-runtime-folder) t ".*kernel")
+    (lambda (x y) (not (time-less-p (nth 6 x) (nth 6 y)))))))
+
+(defun my/select-jupyter-kernel ()
+  (let ((ports (my/get-open-ports))
+        (files (my/list-jupyter-kernel-files)))
+    (completing-read
+     "Jupyter kernels: " files)))
+;; (seq-filter
+;;  (lambda (file)
+;;    (member (cdr file) ports))
+;;  files))))
+
+(defun my/insert-jupyter-kernel ()
+  "Insert a path to an active Jupyter kernel into the buffer"
+  (interactive)
+  (insert (my/select-jupyter-kernel)))
+
+(defun my/jupyter-connect-repl ()
+  "Open emacs-jupyter REPL, connected to a Jupyter kernel"
+  (interactive)
+  (jupyter-connect-repl (my/select-jupyter-kernel) nil nil nil t))
+
+(defun my/jupyter-qtconsole ()
+  "Open Jupyter QtConsole, connected to a Jupyter kernel"
+  (interactive)
+  (start-process "jupyter-qtconsole" nil "setsid" "jupyter" "qtconsole" "--existing"
+                 (file-name-nondirectory (my/select-jupyter-kernel))))
+
+(defun my/jupyter-cleanup-kernels ()
+  (interactive)
+  (let* ((ports (my/get-open-ports))
+         (files (my/list-jupyter-kernel-files))
+         (to-delete (seq-filter
+		     (lambda (file)
+		       (not (member (cdr file) ports)))
+		     files)))
+    (when (and (length> to-delete 0)
+	       (y-or-n-p (format "Delete %d files?" (length to-delete))))
+      (dolist (file to-delete)
+        (delete-file (car file))))))
+
+(defun my/jupyter-launch-local-kernel ()
+  (interactive)
+  (let* ((venv (concat (getenv "VIRTUAL_ENV") ".venv/" ))
+	 (process-environment process-environment)
+	 (venv-string (concat "VIRTUAL_ENV=" venv))
+	 (jupyter-bin (format "%sbin/jupyter" venv))
+	 (cmd-kernelspec-list (format "%s %s kernelspec list" venv-string jupyter-bin))
+	 (kernel-and-location
+	  (completing-read "Choose kernel: "
+			   (seq-remove #'string-empty-p (mapcar 'string-trim-left (cdr (split-string (shell-command-to-string cmd-kernelspec-list) "\n"))))
+			   nil t))
+	 (kernel
+	  (when (string-match "\\([a-zA-Z0-9\-.]+\\) *\\(.*\\)" kernel-and-location)
+	    (match-string 1 kernel-and-location)))
+	 (command `(,jupyter-bin "kernel" "--kernel" ,kernel)))
+    (make-process :name "virtual-jupyter"
+		  :buffer "*Jupyter Kernel*"
+		  :command command)))
+
+(provide 'org-ob-jupyter-config)
+```
+
 `org-latex-config.el`
 :   Provides specialized tools for mathematical writing, including
     `cdlatex` for fast snippet expansion.
@@ -1173,6 +1349,23 @@ and insert a link to it in the buffer. Supports Org-mode and LaTeX."
 (load-library "ox-reveal")
 
 (provide 'org-ox-config)
+```
+
+`org-config.el`
+:   Aggregates all Org-related modules.
+
+``` elisp
+(require 'org-core-config)
+(require 'org-ui-config)
+(require 'org-babel-config)
+(require 'org-link-config)
+(require 'org-agenda-config)
+(require 'org-roam-config)
+(require 'org-capture-config)
+(require 'org-latex-config)
+(require 'org-ox-config)
+
+(provide 'org-config)
 ```
 
 # Tools
@@ -1565,6 +1758,158 @@ directly into the Emacs workflow.
 (provide 'tools-utils-config)
 ```
 
+`tools-debug-config.el`
+:   Debugger integration.
+
+``` elisp
+(use-package dape)
+(provide 'tools-debug-config)
+```
+
+`tools-ai-presets-config.el`
+:   Defines custom gptel presets
+    (code/physics/proofread/publication/etc.).
+
+``` elisp
+(gptel-make-preset 'code
+  :description "Optimized for programming tasks; follows the current buffer's major mode/language."
+  :backend "Gemini"
+  :model 'gemini-3-flash-preview
+  :system (string-join
+           '("You are a senior software engineer and pair-programmer."
+             "Primary goal: produce correct, idiomatic, maintainable code and precise explanations."
+             "IMPORTANT: Always adapt to the language and conventions of the current buffer, inferred from its Emacs major mode and surrounding code."
+             "Before changing anything, quickly read the relevant buffer region for context."
+             "Ask clarifying questions when requirements are ambiguous; otherwise proceed."
+             "When editing: make minimal, well-scoped changes; preserve style, formatting, and existing architecture."
+             "When proposing code: include tests or usage examples when appropriate, and note edge cases."
+             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools (e.g., do not use spell_check for code tasks unless explicitly requested)."
+             "When unsure, state assumptions and provide alternatives.")
+           "\n")
+  :tools gptel--known-tools)
+
+(gptel-make-preset 'physics
+  :description "Optimized for studying physics and mathematics; clear derivations and careful reasoning."
+  :backend "Gemini"
+  :model 'gemini-3-pro-preview
+  :system (string-join
+           '("You are a physics and mathematics tutor and problem-solver."
+             "Primary goal: help the user learn; prioritize clarity, correctness, and step-by-step derivations."
+             "Use consistent notation; define variables and assumptions."
+             "Check dimensional consistency and limiting cases when relevant."
+             "Offer multiple solution paths (analytic, geometric, computational) when helpful."
+             "If the user provides a problem statement in the buffer, read it and keep their notation."
+             "When appropriate, summarize the key idea and common pitfalls at the end."
+             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools.")
+           "\n")
+  :tools gptel--known-tools)
+
+(gptel-make-preset 'proofread
+  :description "Proofreading and copyediting in Portuguese and English; fixes grammar, style, and consistency."
+  :backend "Gemini"
+  :model 'gemini-2.5-flash
+  :system (string-join
+           '("You are an expert proofreader and copyeditor for Portuguese (PT-BR) and English (US/UK)."
+             "Primary goal: correct grammar, spelling, punctuation, agreement, and style; improve clarity and flow without changing meaning."
+             "Respect the author's voice; avoid unnecessary rewrites."
+             "Detect and fix inconsistencies (tense, register, terminology, hyphenation, capitalization, citations)."
+             "If the target variant is not specified, infer from the text and keep it consistent; ask if ambiguous."
+             "When editing, keep formatting (Markdown/LaTeX/code blocks) intact; do not 'correct' code."
+             "Provide corrected text; optionally list key changes if asked."
+             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools.")
+           "\n")
+  :tools gptel--known-tools
+  :temperature 0.2)
+
+(gptel-make-preset 'publication
+  :description "Scientific writing for publications: clarity, structure, rigor, and journal-ready style."
+  :backend "Gemini"
+  :model 'gemini-3-pro-preview
+  :system (string-join
+           '(
+	     "You are an academic writing editor for scientific publications."
+             "Primary goal: rewrite and refine text to be publication-ready while preserving meaning and technical correctness."
+             "Improve structure (logical flow, paragraphing, topic sentences), concision, and readability."
+             "Ensure rigorous claims: flag overstatements, missing definitions, unclear assumptions, and unsupported assertions."
+             "Standardize terminology and symbols; keep notation consistent across the document."
+             "Respect domain conventions; maintain LaTeX/Markdown formatting, citations, equations, figure/table references."
+             "Do not change code blocks except for obvious typos when explicitly requested."
+             "If the target venue/style is unspecified, default to a neutral academic tone; ask for journal/field guidelines if needed."
+             "Output: provide an improved version of the text; if asked, provide a brief list of substantive changes."
+             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools."
+	     )
+           "\n")
+  :tools gptel--known-tools
+  :temperature 0.2)
+
+(gptel-make-preset 'physpub
+  :description "Refines text for scientific journals, primarily in Physics, focusing on academic rigor, structural clarity, and technical precision."
+  :backend "Gemini"
+  :model 'gemini-3-pro-preview
+  :system "You are an expert academic editor for high-impact scientific publications, with a primary focus on the field of Physics. Your objective is to refine text for clarity, logical flow, and technical rigor while maintaining the author's original meaning.
+
+Guidelines:
+- Structural Flow: Improve transitions, topic sentences, and the logical progression of arguments.
+- Technical Rigor: Flag overstatements or unsupported claims. Ensure symbols, notation, and terminology (especially physical constants and units) are consistent and standard for the field.
+- Tone: Maintain a neutral, formal, and concise academic style.
+- Preservation: Do not alter LaTeX/Markdown formatting, citations, equations, or references. Do not modify code blocks.
+- Output: Provide the improved version directly. If requested, include a brief list of substantive changes.
+- Tooling: Use the provided tools only when strictly necessary to enhance the editing process."
+  :temperature 0.2
+  :tools gptel--known-tools)
+
+(gptel-make-preset 'introspect
+  :pre (lambda () (require 'ragmacs))
+  :system
+  "You are pair programming with the user in Emacs and on Emacs.
+ 
+ Your job is to dive into Elisp code and understand the APIs and
+ structure of elisp libraries and Emacs.  Use the provided tools to do
+ so, but do not make duplicate tool calls for information already
+ available in the chat.
+ 
+ <tone>
+ 1. Be terse and to the point.  Speak directly.
+ 2. Explain your reasoning.
+ 3. Do NOT hedge or qualify.
+ 4. If you don't know, say you don't know.
+ 5. Do not offer unprompted advice or clarifications.
+ 6. Never apologize.
+ 7. Do NOT summarize your answers.
+ </tone>
+ 
+ <code_generation>
+ When generating code:
+ 1. Always check that functions or variables you use in your code exist.
+ 2. Also check their calling convention and function-arity before you use them.
+ 3. Write code that can be tested by evaluation, and offer to evaluate
+ code using the `elisp_eval` tool.
+ </code_generation>
+ 
+ <formatting>
+ 1. When referring to code symbols (variables, functions, tags etc) enclose them in markdown quotes.
+    Examples: `read_file`, `getResponse(url, callback)`
+    Example: `<details>...</details>`
+ 2. If you use LaTeX notation, enclose math in \( and \), or \[ and \] delimiters.
+ </formatting>"
+  :tools '("introspection"))
+
+(provide 'tools-ai-presets-config)
+```
+
+`tools-config.el`
+:   Aggregates all tools modules.
+
+``` elisp
+(require 'tools-references-config)
+(require 'tools-utils-config)
+(require 'tools-debug-config)
+(require 'tools-completion-config)
+(require 'tools-ai-config)
+
+(provide 'tools-config)
+```
+
 # Programming Languages
 
 Language-specific configurations that provide specialized editing
@@ -1671,4 +2016,125 @@ features, REPLs, and formatting tools.
 
 (use-package cider)
 (provide 'langs-clojure-config)
+```
+
+`langs-utils-config.el`
+:   Shared programming utilities (parens management, snippets, etc.).
+
+``` elisp
+;; better parenthesis
+(use-package smartparens
+  :hook ((org-mode latex-mode C-mode julia-mode python-mode) . smartparens-mode))
+
+(use-package paredit
+  :hook ((snippet-mode lisp-mode lisp-interaction-mode clojure-mode emacs-lisp-mode) . paredit-mode))
+
+(use-package rainbow-delimiters
+  :hook ((prog-mode LaTeX-mode latex-mode org-mode) . rainbow-delimiters-mode))
+
+;; mise
+;; helps with binaries installed with mise
+(use-package mise
+  :config (mise-mode))
+
+;; snippets
+;; actually, I'm checking tempel, and it looks good.
+;; (add-to-list 'load-path
+;;              (file-name-concat user-emacs-directory "plugins" "yasnippet"))
+(use-package yasnippet
+  :init (yas-global-mode))
+
+(use-package yasnippet-snippets)
+
+;; yasnippet auto load
+;; add symbol 'auto on condition
+
+(defun my/yas-try-expanding-auto-snippets ()
+  (when (bound-and-true-p yas/minor-mode)
+      (let ((yas-buffer-local-condition ''(require-snippet-condition . auto)))
+        (yas-expand))))
+
+(add-hook 'post-self-insert-hook #'my/yas-try-expanding-auto-snippets)
+
+(defun my/yas-math-modify-accent (text)
+  (let ((argument t))
+    (condition-case nil
+	(progn
+          (backward-sexp)
+          (kill-sexp)
+          (delete-char 1))
+      (error (setq argument 'nil)))
+    (insert "\\" text "{" (if argument (current-kill 0) "") "}")))
+
+(use-package resnippets
+  :straight (:host github :repo "morazotti/resnippets" :branch "master")
+  ;; :custom (resnippets-expand-env
+  ;;          '((smartparens-mode . nil)
+  ;;            (cdlatex-mode . nil)))
+  :hook (org-mode . resnippets-mode))
+
+(with-eval-after-load 'resnippets
+  (require 'langs-resnippets-config))
+
+
+;; remap -mode to -ts-mode
+(add-to-list 'major-mode-remap-alist '(clojure-mode . clojure-ts-mode))
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+
+
+(provide 'langs-utils-config)
+```
+
+`langs-resnippets-config.el`
+:   Resnippets definitions used by the shared snippets layer.
+
+``` elisp
+(resnippets-define
+   "math-mode"
+   '(:mode (LaTeX-mode org-mode)
+     :condition (or (texmathp) (org-inside-LaTeX-fragment-p)))
+   ("\\([a-zA-Z\\]+\\)hat" '("\\hat{" 1 "}"))
+   ("\\([a-zA-Z\\]+\\)bar" '("\\bar{" 1 "}"))
+   ("\\([a-zA-Z\\]+\\)til" '("\\tilde{" 1 "}"))
+   ("\\([a-zA-Z\\]+\\)vec" '("\\vec{" 1 "}"))
+   ("\\([a-zA-Z\\]+\\)<-" '("\\overleftarrow{" 1 "}"))
+   ("\\([a-zA-Z\\]+\\)cnc" '("\\cancel{" 1 "}"))
+   ("\\([a-zA-Z\\]+\\)dag" '(1 "^{\\dag}"))
+   ("\\([a-zA-Z{\\]+\\)hh" '(1 "\\hbar"))
+   ("\\([a-zA-Z{\\]+\\)ll" '(1 "\\ell"))
+   ("\\([a-zA-Z\\]+\\)conj" '(1 "^{*}"))
+   ("\\([a-zA-Z\\]+\\)trans" '(1 "^{T}"))
+   ("\\([a-zA-Z\\]+\\)inv" '(1 "^{-1}"))
+
+   ("<\\([a-zA-Z0-9_^{}\\\\]+\\)|" '("\\bra{" 1 "}"))
+   ("<\\([a-zA-Z0-9_^{}\\\\]+\\) ?|\\([a-zA-Z0-9_^{}\\\\]+\\) ?>"
+    '("\\braket{" 1 "}{" 2 "}"))
+
+   ("\\([\(]?\\)\\([ ]?\\)//" '(1 "\\frac{" (resnippets-cursor) "{}"))
+   ("\\([a-zA-Z0-9{}\\\\]+\\)/" '("\\frac{" 1 "}{" (resnippets-cursor)))
+   ("\\([a-zA-Z}]\\)\\([0-9]\\)" '(1 "_" 2))
+   ("_\\([0-9][0-9]\\)" '("_{" 1 (resnippets-cursor) "}"))
+
+   ;; fun call
+   ;; any elisp function ~fun~ with a numeric argument
+   ;; can be called by ;fun=argument;
+   (";\\([^=]+\\)=\\([\-0-9.]+\\);"
+    '((number-to-string
+       (funcall (intern (resnippets-group 1))
+                (string-to-number (resnippets-group 2)))))))
+
+(provide 'langs-resnippets-config)
+```
+
+`langs-config.el`
+:   Aggregates all language modules.
+
+``` elisp
+(require 'langs-utils-config)
+(require 'langs-latex-config)
+(require 'langs-python-config)
+(require 'langs-clojure-config)
+(require 'langs-julia-config)
+
+(provide 'langs-config)
 ```
