@@ -8,6 +8,7 @@
  '(org-hide-emphasis-markers t)
  '(org-pretty-entities-include-sub-superscripts nil)
  '(org-safe-remote-resources '("\\`\\[\\[file:early-init\\.el]]\\'"))
+ '(org-startup-with-latex-preview t)
  '(org-use-sub-superscripts nil)
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
