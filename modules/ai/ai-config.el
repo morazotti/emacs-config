@@ -25,7 +25,7 @@
               ("C-c C-g" . gptel-commit)))
 
 (use-package gptel-agent
-:config (gptel-agent-update))
+  :config (gptel-agent-update))
 
 (use-package gptel-org-tools
   :straight (:host codeberg :repo "bajsicki/gptel-got" :branch "main"))
