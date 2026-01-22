@@ -32,4 +32,4 @@
        (funcall (intern (resnippets-group 1))
                 (string-to-number (resnippets-group 2)))))))
 
-(provide 'langs-resnippets-config.el)
+(provide 'langs-resnippets-config)
