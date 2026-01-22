@@ -1,3 +1,6 @@
+	```{=org}
+#+STARTUP: overview
+```
 This is a modular Emacs configuration designed for performance,
 scientific writing, and a hybrid Vim/Emacs workflow. The setup is
 divided into functional modules to maintain clarity and ease of
@@ -9,9 +12,38 @@ The startup process begins with the early-init file to optimize the UI
 and memory management, followed by the main init file which orchestrates
 the loading of all sub-modules.
 
-`early-init.el`  
-Configures the frame UI before it's created and maximizes garbage
-collection thresholds for a faster startup.
+## init-async (silent background org export)
+
+This config includes `init-async.el`, a small helper that can run some
+tasks in the background after startup. In particular, it can export Org
+files **silently** (without popping buffers/windows) so you can, for
+example, regenerate documentation like `README.md` from `README.org`
+without interrupting your session.
+
+-   Config / entry point: `init-async.el`
+
+``` elisp
+(setq custom-file (expand-file-name "emacs-custom.el" user-emacs-directory))
+(when (file-exists-p custom-file) (load custom-file))
+
+(dolist (module '("core" "org" "langs"))
+  (add-to-list 'load-path
+	       (expand-file-name
+		(format "modules/%s" module)
+		user-emacs-directory)))
+
+(require 'core-packages-config)
+(require 'core-variables-config)
+(require 'org-core-config)
+(require 'org-babel-config)
+(require 'org-link-config)
+(require 'org-ox-config)
+(require 'langs-latex-config)
+```
+
+`early-init.el`
+:   Configures the frame UI before it\'s created and maximizes garbage
+    collection thresholds for a faster startup.
 
 ``` elisp
 (setq gc-cons-threshold most-positive-fixnum)
@@ -24,9 +56,9 @@ collection thresholds for a faster startup.
 (scroll-bar-mode -1)
 ```
 
-`init.el`  
-The main entry point. It sets up the load paths, initializes modules,
-and restores editor performance settings after startup.
+`init.el`
+:   The main entry point. It sets up the load paths, initializes
+    modules, and restores editor performance settings after startup.
 
 ``` elisp
 (setq custom-file (expand-file-name "emacs-custom.el" user-emacs-directory))
@@ -45,10 +77,7 @@ and restores editor performance settings after startup.
                  (expand-file-name (format "modules/%s" module)
                                    user-emacs-directory)))
 
-  ;; Add the modules root for non-subdir modules like modules/wip-functions.el.
-  (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
-
-  ;; If we ever need to M-x straight-freeze-versions, we need to uncomment the following line before
+  ;; if we ever need to M-x straight-freeze-versions, we need to uncomment the following line before
   ;; (load (expand-file-name "modules/core/core-packages-config.el" user-emacs-directory))
 
   (require 'core-config)
@@ -66,9 +95,9 @@ and restores editor performance settings after startup.
             (setq gc-cons-threshold (* 16 1024 1024))))
 ```
 
-`emacs-custom.el`  
-Stores variables and faces generated through the Emacs Customization UI,
-kept separate to prevent cluttering the main configuration.
+`emacs-custom.el`
+:   Stores variables and faces generated through the Emacs Customization
+    UI, kept separate to prevent cluttering the main configuration.
 
 ``` elisp
 (custom-set-variables
@@ -104,9 +133,9 @@ kept separate to prevent cluttering the main configuration.
 These modules define the fundamental editor experience, from package
 management to the visual theme and keybinding philosophy.
 
-`core-packages-config.el`  
-Bootstraps `straight.el` as the package manager and sets up
-`use-package` for declarative configuration.
+`core-packages-config.el`
+:   Bootstraps `straight.el` as the package manager and sets up
+    `use-package` for declarative configuration.
 
 ``` elisp
 ;; packages.el
@@ -145,9 +174,9 @@ Bootstraps `straight.el` as the package manager and sets up
 (provide 'core-packages-config)
 ```
 
-`core-variables-config.el`  
-Centralizes global settings, directory paths for backups/undo history,
-and environment variables.
+`core-variables-config.el`
+:   Centralizes global settings, directory paths for backups/undo
+    history, and environment variables.
 
 ``` elisp
 (defconst home (expand-file-name "~"))
@@ -192,9 +221,9 @@ and environment variables.
 (provide 'core-variables-config)
 ```
 
-`core-ui-config.el`  
-Configures the visual interface, including the theme, fonts for both
-fixed and variable pitch, ligatures, and the modeline.
+`core-ui-config.el`
+:   Configures the visual interface, including the theme, fonts for both
+    fixed and variable pitch, ligatures, and the modeline.
 
 ``` elisp
 (setq global-hl-line-mode t
@@ -307,9 +336,9 @@ fixed and variable pitch, ligatures, and the modeline.
 (provide 'core-ui-config)
 ```
 
-`core-keybindings-config.el`  
-Implements `evil-mode` for Vim emulation and defines a central
-leader-key system using `general.el`.
+`core-keybindings-config.el`
+:   Implements `evil-mode` for Vim emulation and defines a central
+    leader-key system using `general.el`.
 
 ``` elisp
 (defun my/duplicate-line ()
@@ -390,16 +419,6 @@ leader-key system using `general.el`.
   ;; movement
   "TAB" 'other-window
   "s" 'avy-goto-char
-
-  ;; gptel
-  "gg" 'gptel
-  "ga" 'gptel-add
-  "gm" 'gptel-menu
-  "gr" 'gptel-rewrite
-  "gs" 'gptel-send
-  "gb" 'gptel-buffer
-  "gq" 'gptel-abort
-  "gc" 'gptel-commit
 
   ;; jinx
   "tb" 'jinx-correct-all
@@ -535,9 +554,9 @@ leader-key system using `general.el`.
 (provide 'core-keybindings-config)
 ```
 
-`core-utils-config.el`  
-Manages the completion stack (Vertico, Marginalia, Orderless) and
-essential navigation tools like Consult and Embark.
+`core-utils-config.el`
+:   Manages the completion stack (Vertico, Marginalia, Orderless) and
+    essential navigation tools like Consult and Embark.
 
 ``` elisp
 ;; Ibuffer
@@ -795,8 +814,8 @@ essential navigation tools like Consult and Embark.
 (provide 'core-utils-config)
 ```
 
-`core-config.el`  
-Aggregates all core modules.
+`core-config.el`
+:   Aggregates all core modules.
 
 ``` elisp
 (require 'core-packages-config)
@@ -813,9 +832,9 @@ Aggregates all core modules.
 Org-mode is the heart of this configuration, tailored for academic
 research, note-taking, and scientific publishing.
 
-`org-core-config.el`  
-Sets up the base Org-mode environment, utilizing a specific development
-branch for enhanced LaTeX previews.
+`org-core-config.el`
+:   Sets up the base Org-mode environment, utilizing a specific
+    development branch for enhanced LaTeX previews.
 
 ``` elisp
 ;; autoload org package
@@ -904,8 +923,8 @@ branch for enhanced LaTeX previews.
 (provide 'org-core-config)
 ```
 
-`org-ui-config.el`  
-Improves Org buffer visuals (e.g., org-modern, mixed-pitch).
+`org-ui-config.el`
+:   Improves Org buffer visuals (e.g., org-modern, mixed-pitch).
 
 ``` elisp
 (defun display-ansi-colors ()
@@ -953,9 +972,9 @@ Improves Org buffer visuals (e.g., org-modern, mixed-pitch).
 (provide 'org-ui-config)
 ```
 
-`org-agenda-config.el`  
-Manages task lists and custom agenda views for project tracking and
-personal organization.
+`org-agenda-config.el`
+:   Manages task lists and custom agenda views for project tracking and
+    personal organization.
 
 ``` elisp
 (setq org-default-notes-file (concat org-directory "/notes.org"))
@@ -1008,9 +1027,9 @@ personal organization.
 (provide 'org-agenda-config)
 ```
 
-`org-roam-config.el`  
-Implements a Zettelkasten system for interconnected note-taking,
-featuring a visual graph and database sync.
+`org-roam-config.el`
+:   Implements a Zettelkasten system for interconnected note-taking,
+    featuring a visual graph and database sync.
 
 ``` elisp
 (use-package org-roam
@@ -1029,30 +1048,31 @@ featuring a visual graph and database sync.
            ("C-c r i" . org-roam-node-insert)))
 
 (use-package org-roam-ui
-    :straight
-      (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
-      :after org-roam
-      :custom
-      ((org-roam-ui-open-on-start nil)
-       (org-roam-ui-sync-theme t)
-       (org-roam-ui-follow t)
-       (org-roam-ui-update-on-save t))
-      :init
-      (org-roam-ui-mode)
-      (setq org-roam-ui-latex-macros
-            '(("\\Tr" . "\\mathrm{Tr}")
-              ("\\tr" . "\\mathrm{Tr}")
-              ("\\dyad" . "\\ket{#1}\\bra{#2}")
-              ("\\order" . "\\mathcal{O}({#1})")
-              ("\\I" . "\\mathbb{I}")
-              ("\\norm" . "\\parallel{#1}\\parallel")
-              ("\\id" . "\\mathbb{I}")
-              ("\\expval" . "\\langle{#1}\\rangle")
-              ("\\dd" . "\\mathrm{d}")
-              ("\\op" . "|{#1}\\rangle\\langle{#2}|")
-              ("\\label" . "\\vphantom")
-              ("\\dv" . "\\frac{\\mathrm{d}{#1}}{\\mathrm{d}{#2}}")
-              ("\\olra" . "\\overleftrightarrow{#1}"))))
+  :straight (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+  :after org-roam
+  :custom
+  ((org-roam-ui-open-on-start nil)
+   (org-roam-ui-sync-theme t)
+   (org-roam-ui-follow t)
+   (org-roam-ui-update-on-save t))
+  :init
+  ;; org-roam-ui-mode starts a websocket server; don't start it in batch.
+  (unless noninteractive
+    (org-roam-ui-mode))
+  (setq org-roam-ui-latex-macros
+        '(("\\Tr" . "\\mathrm{Tr}")
+          ("\\tr" . "\\mathrm{Tr}")
+          ("\\dyad" . "\\ket{#1}\\bra{#2}")
+          ("\\order" . "\\mathcal{O}({#1})")
+          ("\\I" . "\\mathbb{I}")
+          ("\\norm" . "\\parallel{#1}\\parallel")
+          ("\\id" . "\\mathbb{I}")
+          ("\\expval" . "\\langle{#1}\\rangle")
+          ("\\dd" . "\\mathrm{d}")
+          ("\\op" . "|{#1}\\rangle\\langle{#2}|")
+          ("\\label" . "\\vphantom")
+          ("\\dv" . "\\frac{\\mathrm{d}{#1}}{\\mathrm{d}{#2}}")
+          ("\\olra" . "\\overleftrightarrow{#1}"))))
 
 
 (with-eval-after-load 'org-roam
@@ -1069,9 +1089,9 @@ featuring a visual graph and database sync.
 (provide 'org-roam-config)
 ```
 
-`org-capture-config.el`  
-Defines templates for quickly capturing notes, tasks, and inbox items
-without breaking focus.
+`org-capture-config.el`
+:   Defines templates for quickly capturing notes, tasks, and inbox
+    items without breaking focus.
 
 ``` elisp
 (setq org-capture-templates
@@ -1087,9 +1107,9 @@ without breaking focus.
 (provide 'org-capture-config)
 ```
 
-`org-babel-config.el`  
-Configures literate programming environments, allowing code execution
-within Org files for various languages.
+`org-babel-config.el`
+:   Configures literate programming environments, allowing code
+    execution within Org files for various languages.
 
 ``` elisp
 (require 'org-ob-jupyter-config)
@@ -1107,9 +1127,9 @@ within Org files for various languages.
 (provide 'org-babel-config)
 ```
 
-`org-ob-jupyter-config.el`  
-Adds Jupyter-backed Org Babel execution and helpers for connecting to
-existing kernels.
+`org-ob-jupyter-config.el`
+:   Adds Jupyter-backed Org Babel execution and helpers for connecting
+    to existing kernels.
 
 ``` elisp
 (use-package jupyter
@@ -1222,9 +1242,9 @@ existing kernels.
 (provide 'org-ob-jupyter-config)
 ```
 
-`org-latex-config.el`  
-Provides specialized tools for mathematical writing, including `cdlatex`
-for fast snippet expansion.
+`org-latex-config.el`
+:   Provides specialized tools for mathematical writing, including
+    `cdlatex` for fast snippet expansion.
 
 ``` elisp
 (use-package cdlatex
@@ -1244,9 +1264,9 @@ for fast snippet expansion.
 (provide 'org-latex-config)
 ```
 
-`org-link-config.el`  
-Customizes link behaviors for transclusion, subfigures in LaTeX, and
-integrated image pasting.
+`org-link-config.el`
+:   Customizes link behaviors for transclusion, subfigures in LaTeX, and
+    integrated image pasting.
 
 ``` elisp
 ;; use subfigs in LaTeX export
@@ -1324,9 +1344,9 @@ and insert a link to it in the buffer. Supports Org-mode and LaTeX."
 (provide 'org-link-config)
 ```
 
-`org-ox-config.el`  
-Manages the export engine for converting Org files into LaTeX, Reveal.js
-presentations, and other formats.
+`org-ox-config.el`
+:   Manages the export engine for converting Org files into LaTeX,
+    Reveal.js presentations, and other formats.
 
 ``` elisp
 ;; org-export hook: if I have compiled the file once this session
@@ -1355,16 +1375,16 @@ presentations, and other formats.
 (provide 'org-ox-config)
 ```
 
-`org-config.el`  
-Aggregates all Org-related modules.
+`org-config.el`
+:   Aggregates all Org-related modules.
 
 # AI
 
 AI-related tooling and configuration.
 
-`ai-config.el`  
-Integrates Large Language Models via `gptel`, with custom presets for
-coding, physics, and proofreading.
+`ai-config.el`
+:   Integrates Large Language Models via `gptel`, with custom presets
+    for coding, physics, and proofreading.
 
 ``` elisp
 ;; gptel
@@ -1394,7 +1414,38 @@ coding, physics, and proofreading.
               ("C-c C-g" . gptel-commit)))
 
 (use-package gptel-agent
-:config (gptel-agent-update))
+  :config (gptel-agent-update))
+
+;; Keybindings (leader keys)
+;; Keep this here (AI module) so the core keybindings remain generic.
+(with-eval-after-load 'general
+  ;; Prefer the leader definer provided by core, if present.
+  (defvar nm/leader-keys nil
+    "Leader key definer (general.el).")
+  (defun nm/ai--leader-keys (&rest args)
+    "Compatibility wrapper around the config's leader-key definer.
+
+If `my/leader-keys` exists (defined in core), reuse it; otherwise create a
+local leader definer.  ARGS are forwarded to `general-define-key` style
+binding specs." 
+    (if (fboundp 'my/leader-keys)
+        (apply #'my/leader-keys args)
+      (unless (fboundp 'nm/leader-keys)
+        (general-create-definer nm/leader-keys
+          :keymaps '(normal visual)
+          :prefix "SPC"))
+      (apply #'nm/leader-keys args)))
+
+  (nm/ai--leader-keys
+    ;; gptel
+    "gg" #'gptel
+    "ga" #'gptel-add
+    "gm" #'gptel-menu
+    "gr" #'gptel-rewrite
+    "gs" #'gptel-send
+    "gb" #'gptel-buffer
+    "gq" #'gptel-abort
+    "gc" #'gptel-commit))
 
 (use-package gptel-org-tools
   :straight (:host codeberg :repo "bajsicki/gptel-got" :branch "main"))
@@ -1412,8 +1463,9 @@ coding, physics, and proofreading.
 (provide 'ai-config)
 ```
 
-`ai-presets-config.el`  
-Defines custom gptel presets (code/physics/proofread/publication/etc.).
+`ai-presets-config.el`
+:   Defines custom gptel presets
+    (code/physics/proofread/publication/etc.).
 
 ``` elisp
 (gptel-make-preset 'code
@@ -1561,9 +1613,9 @@ Guidelines:
 General-purpose tools that integrate external applications and services
 directly into the Emacs workflow.
 
-`tools-completion-config.el`  
-Configures `corfu` for modern in-buffer completion and `eglot` for
-Language Server Protocol (LSP) support.
+`tools-completion-config.el`
+:   Configures `corfu` for modern in-buffer completion and `eglot` for
+    Language Server Protocol (LSP) support.
 
 ``` elisp
 ;; corfu para auto-complete
@@ -1588,9 +1640,9 @@ Language Server Protocol (LSP) support.
 ;; (use-package json-rpc)
 ```
 
-`tools-references-config.el`  
-Manages academic bibliographies with `citar` and `ebib`, integrating
-PDFs and citations into the workflow.
+`tools-references-config.el`
+:   Manages academic bibliographies with `citar` and `ebib`, integrating
+    PDFs and citations into the workflow.
 
 ``` elisp
 ;; i'm used to using ~org-ref~, but I'm going to migrate to ~citar~. 
@@ -1696,9 +1748,9 @@ PDFs and citations into the workflow.
 (provide 'tools-references-config)
 ```
 
-`tools-utils-config.el`  
-Houses essential utilities like Magit for Git, PDF-Tools for document
-viewing, and Jinx for spellchecking.
+`tools-utils-config.el`
+:   Houses essential utilities like Magit for Git, PDF-Tools for
+    document viewing, and Jinx for spellchecking.
 
 ``` elisp
 ;; box instead of dedicated buffer
@@ -1900,16 +1952,16 @@ viewing, and Jinx for spellchecking.
 (provide 'tools-utils-config)
 ```
 
-`tools-debug-config.el`  
-Debugger integration.
+`tools-debug-config.el`
+:   Debugger integration.
 
 ``` elisp
 (use-package dape)
 (provide 'tools-debug-config)
 ```
 
-`tools-config.el`  
-Aggregates all tools modules.
+`tools-config.el`
+:   Aggregates all tools modules.
 
 ``` elisp
 (require 'tools-references-config)
@@ -1925,9 +1977,9 @@ Aggregates all tools modules.
 Language-specific configurations that provide specialized editing
 features, REPLs, and formatting tools.
 
-`langs-python-config.el`  
-Python setup including virtual environment management and black
-formatting.
+`langs-python-config.el`
+:   Python setup including virtual environment management and black
+    formatting.
 
 ``` elisp
 (use-package python-mode
@@ -1942,9 +1994,9 @@ formatting.
 (provide 'langs-python-config)
 ```
 
-`langs-julia-config.el`  
-Comprehensive Julia support with an integrated REPL and specialized
-keybindings.
+`langs-julia-config.el`
+:   Comprehensive Julia support with an integrated REPL and specialized
+    keybindings.
 
 ``` elisp
 (use-package julia-repl)
@@ -1962,9 +2014,9 @@ keybindings.
 (provide 'langs-julia-config)
 ```
 
-`langs-latex-config.el`  
-Full LaTeX environment using AUCTeX, Synctex, and mathematical
-calculation helpers.
+`langs-latex-config.el`
+:   Full LaTeX environment using AUCTeX, Synctex, and mathematical
+    calculation helpers.
 
 ``` elisp
 ;; auctex enhances usability in latex
@@ -2017,9 +2069,9 @@ calculation helpers.
 (provide 'langs-latex-config)
 ```
 
-`langs-clojure-config.el`  
-Clojure development tools utilizing Tree-sitter and the CIDER
-environment.
+`langs-clojure-config.el`
+:   Clojure development tools utilizing Tree-sitter and the CIDER
+    environment.
 
 ``` elisp
 (use-package clojure-ts-mode)
@@ -2028,8 +2080,8 @@ environment.
 (provide 'langs-clojure-config)
 ```
 
-`langs-utils-config.el`  
-Shared programming utilities (parens management, snippets, etc.).
+`langs-utils-config.el`
+:   Shared programming utilities (parens management, snippets, etc.).
 
 ``` elisp
 ;; better parenthesis
@@ -2095,8 +2147,8 @@ Shared programming utilities (parens management, snippets, etc.).
 (provide 'langs-utils-config)
 ```
 
-`langs-resnippets-config.el`  
-Resnippets definitions used by the shared snippets layer.
+`langs-resnippets-config.el`
+:   Resnippets definitions used by the shared snippets layer.
 
 ``` elisp
 (resnippets-define
@@ -2136,8 +2188,8 @@ Resnippets definitions used by the shared snippets layer.
 (provide 'langs-resnippets-config)
 ```
 
-`langs-config.el`  
-Aggregates all language modules.
+`langs-config.el`
+:   Aggregates all language modules.
 
 ``` elisp
 (require 'langs-utils-config)

@@ -2,7 +2,6 @@
 .cache
 auto-save-list/
 eln-cache/
-straight/{build,repos,build-cache.el,modified}
 recentf
 projectile-bookmarks.eld
 elpa/
@@ -12,3 +11,7 @@ image-dired/
 /tramp
 *.elc
 /modules/tools/img/
+/straight/build-cache.el
+/straight/build/
+/straight/repos/
+/straight/modified
