@@ -93,14 +93,21 @@ Org-mode is the heart of this configuration, tailored for academic research, not
 
 - ~org-config.el~ :: Aggregates all Org-related modules.
 
+* AI
+AI-related tooling and configuration.
+
+- ~ai-config.el~ :: Integrates Large Language Models via ~gptel~, with custom presets for coding, physics, and proofreading.
+
+#+include: "modules/ai/ai-config.el"   src elisp
+
+- ~ai-presets-config.el~ :: Defines custom gptel presets (code/physics/proofread/publication/etc.).
+
+#+include: "modules/ai/ai-presets-config.el"   src elisp
+
 #+include: "modules/org/org-config.el"   src elisp
 
 * Tools
 General-purpose tools that integrate external applications and services directly into the Emacs workflow.
-
-- ~tools-ai-config.el~ :: Integrates Large Language Models via ~gptel~, with custom presets for coding, physics, and proofreading.
-
-#+include: "modules/tools/tools-ai-config.el"   src elisp
 
 - ~tools-completion-config.el~ :: Configures ~corfu~ for modern in-buffer completion and ~eglot~ for Language Server Protocol (LSP) support.
 
@@ -118,9 +125,6 @@ General-purpose tools that integrate external applications and services directly
 
 #+include: "modules/tools/tools-debug-config.el"   src elisp
 
-- ~tools-ai-presets-config.el~ :: Defines custom gptel presets (code/physics/proofread/publication/etc.).
-
-#+include: "modules/tools/tools-ai-presets-config.el"   src elisp
 
 - ~tools-config.el~ :: Aggregates all tools modules.
 

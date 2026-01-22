@@ -1,19 +1,22 @@
 ;; gptel
 (use-package gptel
-
-  :init (gptel-make-gemini "Gemini"
-	  :key (lambda ()
-		 (auth-source-pick-first-password
-		  :host "generativelanguage.googleapis.com"
-		  :user "apikey"))
-	  :stream t)
+  :init
+  ;; Avoid eager evaluation during byte-compilation (and before straight has
+  ;; ensured the package is installed).
+  (with-eval-after-load 'gptel
+    (gptel-make-gemini "Gemini"
+      :key (lambda ()
+             (auth-source-pick-first-password
+              :host "generativelanguage.googleapis.com"
+              :user "apikey"))
+      :stream t))
   :custom ((gptel-default-mode #'org-mode)
-	   (gptel-track-media t)
-	   (gptel-use-tools t)
-	   (gptel-model 'gemini-flash-latest)))
+           (gptel-track-media t)
+           (gptel-use-tools t)
+           (gptel-model 'gemini-flash-latest)))
 
 (with-eval-after-load 'gptel
-  (require 'tools-ai-presets-config))
+  (require 'ai-presets-config))
 
 (use-package gptel-commit
   :straight (:host github :repo "lakkiy/gptel-commit")
@@ -33,7 +36,8 @@
 
 (use-package llm-tool-collection
   :straight (:host github :repo "skissue/llm-tool-collection" :branch "main")
-  :config (mapcar (apply-partially #'apply #'gptel-make-tool)
-		  (llm-tool-collection-get-all)))
+  :config
+  (mapc (apply-partially #'apply #'gptel-make-tool)
+        (llm-tool-collection-get-all)))
 
-(provide 'tools-ai-config)
+(provide 'ai-config)

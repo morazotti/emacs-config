@@ -1,6 +1,3 @@
-```{=org}
-#+STARTUP: overview
-```
 This is a modular Emacs configuration designed for performance,
 scientific writing, and a hybrid Vim/Emacs workflow. The setup is
 divided into functional modules to maintain clarity and ease of
@@ -12,9 +9,9 @@ The startup process begins with the early-init file to optimize the UI
 and memory management, followed by the main init file which orchestrates
 the loading of all sub-modules.
 
-`early-init.el`
-:   Configures the frame UI before it\'s created and maximizes garbage
-    collection thresholds for a faster startup.
+`early-init.el`  
+Configures the frame UI before it's created and maximizes garbage
+collection thresholds for a faster startup.
 
 ``` elisp
 (setq gc-cons-threshold most-positive-fixnum)
@@ -27,31 +24,38 @@ the loading of all sub-modules.
 (scroll-bar-mode -1)
 ```
 
-`init.el`
-:   The main entry point. It sets up the load paths, initializes
-    modules, and restores editor performance settings after startup.
+`init.el`  
+The main entry point. It sets up the load paths, initializes modules,
+and restores editor performance settings after startup.
 
 ``` elisp
 (setq custom-file (expand-file-name "emacs-custom.el" user-emacs-directory))
 
-(let ((file-name-handler-alist-original file-name-handler-alist))
+(let ((file-name-handler-alist-original file-name-handler-alist)
+      ;; Ensure load-path/module loading is stable even if init.el is loaded from a
+      ;; non-standard location.
+      (default-directory user-emacs-directory))
   (setq file-name-handler-alist nil)
 
   (when (file-exists-p custom-file) (load custom-file))
 
-  (dolist (module '("core" "org" "tools" "langs"))
+  ;; Add each module dir (modules/<name>/) to `load-path`.
+  (dolist (module '("core" "org" "tools" "langs" "ai"))
     (add-to-list 'load-path
-                 (expand-file-name
-                  (format "modules/%s" module)
-                  user-emacs-directory)))
+                 (expand-file-name (format "modules/%s" module)
+                                   user-emacs-directory)))
 
-  ;; if we ever need to M-x straight-freeze-versions, we need to uncomment the following line before
+  ;; Add the modules root for non-subdir modules like modules/wip-functions.el.
+  (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
+
+  ;; If we ever need to M-x straight-freeze-versions, we need to uncomment the following line before
   ;; (load (expand-file-name "modules/core/core-packages-config.el" user-emacs-directory))
 
   (require 'core-config)
   (require 'org-config)
   (require 'tools-config)
   (require 'langs-config)
+  (require 'ai-config)
 
   ;; (require 'wip-functions)
 
@@ -62,9 +66,9 @@ the loading of all sub-modules.
             (setq gc-cons-threshold (* 16 1024 1024))))
 ```
 
-`emacs-custom.el`
-:   Stores variables and faces generated through the Emacs Customization
-    UI, kept separate to prevent cluttering the main configuration.
+`emacs-custom.el`  
+Stores variables and faces generated through the Emacs Customization UI,
+kept separate to prevent cluttering the main configuration.
 
 ``` elisp
 (custom-set-variables
@@ -100,9 +104,9 @@ the loading of all sub-modules.
 These modules define the fundamental editor experience, from package
 management to the visual theme and keybinding philosophy.
 
-`core-packages-config.el`
-:   Bootstraps `straight.el` as the package manager and sets up
-    `use-package` for declarative configuration.
+`core-packages-config.el`  
+Bootstraps `straight.el` as the package manager and sets up
+`use-package` for declarative configuration.
 
 ``` elisp
 ;; packages.el
@@ -141,9 +145,9 @@ management to the visual theme and keybinding philosophy.
 (provide 'core-packages-config)
 ```
 
-`core-variables-config.el`
-:   Centralizes global settings, directory paths for backups/undo
-    history, and environment variables.
+`core-variables-config.el`  
+Centralizes global settings, directory paths for backups/undo history,
+and environment variables.
 
 ``` elisp
 (defconst home (expand-file-name "~"))
@@ -188,9 +192,9 @@ management to the visual theme and keybinding philosophy.
 (provide 'core-variables-config)
 ```
 
-`core-ui-config.el`
-:   Configures the visual interface, including the theme, fonts for both
-    fixed and variable pitch, ligatures, and the modeline.
+`core-ui-config.el`  
+Configures the visual interface, including the theme, fonts for both
+fixed and variable pitch, ligatures, and the modeline.
 
 ``` elisp
 (setq global-hl-line-mode t
@@ -303,9 +307,9 @@ management to the visual theme and keybinding philosophy.
 (provide 'core-ui-config)
 ```
 
-`core-keybindings-config.el`
-:   Implements `evil-mode` for Vim emulation and defines a central
-    leader-key system using `general.el`.
+`core-keybindings-config.el`  
+Implements `evil-mode` for Vim emulation and defines a central
+leader-key system using `general.el`.
 
 ``` elisp
 (defun my/duplicate-line ()
@@ -531,9 +535,9 @@ management to the visual theme and keybinding philosophy.
 (provide 'core-keybindings-config)
 ```
 
-`core-utils-config.el`
-:   Manages the completion stack (Vertico, Marginalia, Orderless) and
-    essential navigation tools like Consult and Embark.
+`core-utils-config.el`  
+Manages the completion stack (Vertico, Marginalia, Orderless) and
+essential navigation tools like Consult and Embark.
 
 ``` elisp
 ;; Ibuffer
@@ -791,8 +795,8 @@ management to the visual theme and keybinding philosophy.
 (provide 'core-utils-config)
 ```
 
-`core-config.el`
-:   Aggregates all core modules.
+`core-config.el`  
+Aggregates all core modules.
 
 ``` elisp
 (require 'core-packages-config)
@@ -809,9 +813,9 @@ management to the visual theme and keybinding philosophy.
 Org-mode is the heart of this configuration, tailored for academic
 research, note-taking, and scientific publishing.
 
-`org-core-config.el`
-:   Sets up the base Org-mode environment, utilizing a specific
-    development branch for enhanced LaTeX previews.
+`org-core-config.el`  
+Sets up the base Org-mode environment, utilizing a specific development
+branch for enhanced LaTeX previews.
 
 ``` elisp
 ;; autoload org package
@@ -900,8 +904,8 @@ research, note-taking, and scientific publishing.
 (provide 'org-core-config)
 ```
 
-`org-ui-config.el`
-:   Improves Org buffer visuals (e.g., org-modern, mixed-pitch).
+`org-ui-config.el`  
+Improves Org buffer visuals (e.g., org-modern, mixed-pitch).
 
 ``` elisp
 (defun display-ansi-colors ()
@@ -949,9 +953,9 @@ research, note-taking, and scientific publishing.
 (provide 'org-ui-config)
 ```
 
-`org-agenda-config.el`
-:   Manages task lists and custom agenda views for project tracking and
-    personal organization.
+`org-agenda-config.el`  
+Manages task lists and custom agenda views for project tracking and
+personal organization.
 
 ``` elisp
 (setq org-default-notes-file (concat org-directory "/notes.org"))
@@ -1004,9 +1008,9 @@ research, note-taking, and scientific publishing.
 (provide 'org-agenda-config)
 ```
 
-`org-roam-config.el`
-:   Implements a Zettelkasten system for interconnected note-taking,
-    featuring a visual graph and database sync.
+`org-roam-config.el`  
+Implements a Zettelkasten system for interconnected note-taking,
+featuring a visual graph and database sync.
 
 ``` elisp
 (use-package org-roam
@@ -1065,9 +1069,9 @@ research, note-taking, and scientific publishing.
 (provide 'org-roam-config)
 ```
 
-`org-capture-config.el`
-:   Defines templates for quickly capturing notes, tasks, and inbox
-    items without breaking focus.
+`org-capture-config.el`  
+Defines templates for quickly capturing notes, tasks, and inbox items
+without breaking focus.
 
 ``` elisp
 (setq org-capture-templates
@@ -1083,9 +1087,9 @@ research, note-taking, and scientific publishing.
 (provide 'org-capture-config)
 ```
 
-`org-babel-config.el`
-:   Configures literate programming environments, allowing code
-    execution within Org files for various languages.
+`org-babel-config.el`  
+Configures literate programming environments, allowing code execution
+within Org files for various languages.
 
 ``` elisp
 (require 'org-ob-jupyter-config)
@@ -1103,9 +1107,9 @@ research, note-taking, and scientific publishing.
 (provide 'org-babel-config)
 ```
 
-`org-ob-jupyter-config.el`
-:   Adds Jupyter-backed Org Babel execution and helpers for connecting
-    to existing kernels.
+`org-ob-jupyter-config.el`  
+Adds Jupyter-backed Org Babel execution and helpers for connecting to
+existing kernels.
 
 ``` elisp
 (use-package jupyter
@@ -1218,9 +1222,9 @@ research, note-taking, and scientific publishing.
 (provide 'org-ob-jupyter-config)
 ```
 
-`org-latex-config.el`
-:   Provides specialized tools for mathematical writing, including
-    `cdlatex` for fast snippet expansion.
+`org-latex-config.el`  
+Provides specialized tools for mathematical writing, including `cdlatex`
+for fast snippet expansion.
 
 ``` elisp
 (use-package cdlatex
@@ -1240,9 +1244,9 @@ research, note-taking, and scientific publishing.
 (provide 'org-latex-config)
 ```
 
-`org-link-config.el`
-:   Customizes link behaviors for transclusion, subfigures in LaTeX, and
-    integrated image pasting.
+`org-link-config.el`  
+Customizes link behaviors for transclusion, subfigures in LaTeX, and
+integrated image pasting.
 
 ``` elisp
 ;; use subfigs in LaTeX export
@@ -1320,9 +1324,9 @@ and insert a link to it in the buffer. Supports Org-mode and LaTeX."
 (provide 'org-link-config)
 ```
 
-`org-ox-config.el`
-:   Manages the export engine for converting Org files into LaTeX,
-    Reveal.js presentations, and other formats.
+`org-ox-config.el`  
+Manages the export engine for converting Org files into LaTeX, Reveal.js
+presentations, and other formats.
 
 ``` elisp
 ;; org-export hook: if I have compiled the file once this session
@@ -1351,8 +1355,192 @@ and insert a link to it in the buffer. Supports Org-mode and LaTeX."
 (provide 'org-ox-config)
 ```
 
-`org-config.el`
-:   Aggregates all Org-related modules.
+`org-config.el`  
+Aggregates all Org-related modules.
+
+# AI
+
+AI-related tooling and configuration.
+
+`ai-config.el`  
+Integrates Large Language Models via `gptel`, with custom presets for
+coding, physics, and proofreading.
+
+``` elisp
+;; gptel
+(use-package gptel
+  :init
+  ;; Avoid eager evaluation during byte-compilation (and before straight has
+  ;; ensured the package is installed).
+  (with-eval-after-load 'gptel
+    (gptel-make-gemini "Gemini"
+      :key (lambda ()
+             (auth-source-pick-first-password
+              :host "generativelanguage.googleapis.com"
+              :user "apikey"))
+      :stream t))
+  :custom ((gptel-default-mode #'org-mode)
+           (gptel-track-media t)
+           (gptel-use-tools t)
+           (gptel-model 'gemini-flash-latest)))
+
+(with-eval-after-load 'gptel
+  (require 'ai-presets-config))
+
+(use-package gptel-commit
+  :straight (:host github :repo "lakkiy/gptel-commit")
+  :after (gptel magit)
+  :bind (:map git-commit-mode-map
+              ("C-c C-g" . gptel-commit)))
+
+(use-package gptel-agent
+:config (gptel-agent-update))
+
+(use-package gptel-org-tools
+  :straight (:host codeberg :repo "bajsicki/gptel-got" :branch "main"))
+
+(use-package ragmacs
+   :straight (:host github :repo "positron-solutions/ragmacs":branch "master")
+   :after gptel)
+
+(use-package llm-tool-collection
+  :straight (:host github :repo "skissue/llm-tool-collection" :branch "main")
+  :config
+  (mapc (apply-partially #'apply #'gptel-make-tool)
+        (llm-tool-collection-get-all)))
+
+(provide 'ai-config)
+```
+
+`ai-presets-config.el`  
+Defines custom gptel presets (code/physics/proofread/publication/etc.).
+
+``` elisp
+(gptel-make-preset 'code
+  :description "Optimized for programming tasks; follows the current buffer's major mode/language."
+  :backend "Gemini"
+  :model 'gemini-3-flash-preview
+  :system (string-join
+           '("You are a senior software engineer and pair-programmer."
+             "Primary goal: produce correct, idiomatic, maintainable code and precise explanations."
+             "IMPORTANT: Always adapt to the language and conventions of the current buffer, inferred from its Emacs major mode and surrounding code."
+             "Before changing anything, quickly read the relevant buffer region for context."
+             "Ask clarifying questions when requirements are ambiguous; otherwise proceed."
+             "When editing: make minimal, well-scoped changes; preserve style, formatting, and existing architecture."
+             "When proposing code: include tests or usage examples when appropriate, and note edge cases."
+             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools (e.g., do not use spell_check for code tasks unless explicitly requested)."
+             "When unsure, state assumptions and provide alternatives.")
+           "\n")
+  :tools gptel--known-tools)
+
+(gptel-make-preset 'physics
+  :description "Optimized for studying physics and mathematics; clear derivations and careful reasoning."
+  :backend "Gemini"
+  :model 'gemini-3-pro-preview
+  :system (string-join
+           '("You are a physics and mathematics tutor and problem-solver."
+             "Primary goal: help the user learn; prioritize clarity, correctness, and step-by-step derivations."
+             "Use consistent notation; define variables and assumptions."
+             "Check dimensional consistency and limiting cases when relevant."
+             "Offer multiple solution paths (analytic, geometric, computational) when helpful."
+             "If the user provides a problem statement in the buffer, read it and keep their notation."
+             "When appropriate, summarize the key idea and common pitfalls at the end."
+             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools.")
+           "\n")
+  :tools gptel--known-tools)
+
+(gptel-make-preset 'proofread
+  :description "Proofreading and copyediting in Portuguese and English; fixes grammar, style, and consistency."
+  :backend "Gemini"
+  :model 'gemini-2.5-flash
+  :system (string-join
+           '("You are an expert proofreader and copyeditor for Portuguese (PT-BR) and English (US/UK)."
+             "Primary goal: correct grammar, spelling, punctuation, agreement, and style; improve clarity and flow without changing meaning."
+             "Respect the author's voice; avoid unnecessary rewrites."
+             "Detect and fix inconsistencies (tense, register, terminology, hyphenation, capitalization, citations)."
+             "If the target variant is not specified, infer from the text and keep it consistent; ask if ambiguous."
+             "When editing, keep formatting (Markdown/LaTeX/code blocks) intact; do not 'correct' code."
+             "Provide corrected text; optionally list key changes if asked."
+             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools.")
+           "\n")
+  :tools gptel--known-tools
+  :temperature 0.2)
+
+(gptel-make-preset 'publication
+  :description "Scientific writing for publications: clarity, structure, rigor, and journal-ready style."
+  :backend "Gemini"
+  :model 'gemini-3-pro-preview
+  :system (string-join
+           '(
+	     "You are an academic writing editor for scientific publications."
+             "Primary goal: rewrite and refine text to be publication-ready while preserving meaning and technical correctness."
+             "Improve structure (logical flow, paragraphing, topic sentences), concision, and readability."
+             "Ensure rigorous claims: flag overstatements, missing definitions, unclear assumptions, and unsupported assertions."
+             "Standardize terminology and symbols; keep notation consistent across the document."
+             "Respect domain conventions; maintain LaTeX/Markdown formatting, citations, equations, figure/table references."
+             "Do not change code blocks except for obvious typos when explicitly requested."
+             "If the target venue/style is unspecified, default to a neutral academic tone; ask for journal/field guidelines if needed."
+             "Output: provide an improved version of the text; if asked, provide a brief list of substantive changes."
+             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools."
+	     )
+           "\n")
+  :tools gptel--known-tools
+  :temperature 0.2)
+
+(gptel-make-preset 'physpub
+  :description "Refines text for scientific journals, primarily in Physics, focusing on academic rigor, structural clarity, and technical precision."
+  :backend "Gemini"
+  :model 'gemini-3-pro-preview
+  :system "You are an expert academic editor for high-impact scientific publications, with a primary focus on the field of Physics. Your objective is to refine text for clarity, logical flow, and technical rigor while maintaining the author's original meaning.
+
+Guidelines:
+- Structural Flow: Improve transitions, topic sentences, and the logical progression of arguments.
+- Technical Rigor: Flag overstatements or unsupported claims. Ensure symbols, notation, and terminology (especially physical constants and units) are consistent and standard for the field.
+- Tone: Maintain a neutral, formal, and concise academic style.
+- Preservation: Do not alter LaTeX/Markdown formatting, citations, equations, or references. Do not modify code blocks.
+- Output: Provide the improved version directly. If requested, include a brief list of substantive changes.
+- Tooling: Use the provided tools only when strictly necessary to enhance the editing process."
+  :temperature 0.2
+  :tools gptel--known-tools)
+
+(gptel-make-preset 'introspect
+  :pre (lambda () (require 'ragmacs))
+  :system
+  "You are pair programming with the user in Emacs and on Emacs.
+ 
+ Your job is to dive into Elisp code and understand the APIs and
+ structure of elisp libraries and Emacs.  Use the provided tools to do
+ so, but do not make duplicate tool calls for information already
+ available in the chat.
+ 
+ <tone>
+ 1. Be terse and to the point.  Speak directly.
+ 2. Explain your reasoning.
+ 3. Do NOT hedge or qualify.
+ 4. If you don't know, say you don't know.
+ 5. Do not offer unprompted advice or clarifications.
+ 6. Never apologize.
+ 7. Do NOT summarize your answers.
+ </tone>
+ 
+ <code_generation>
+ When generating code:
+ 1. Always check that functions or variables you use in your code exist.
+ 2. Also check their calling convention and function-arity before you use them.
+ 3. Write code that can be tested by evaluation, and offer to evaluate
+ code using the `elisp_eval` tool.
+ </code_generation>
+ 
+ <formatting>
+ 1. When referring to code symbols (variables, functions, tags etc) enclose them in markdown quotes.
+    Examples: `read_file`, `getResponse(url, callback)`
+    Example: `<details>...</details>`
+ 2. If you use LaTeX notation, enclose math in \( and \), or \[ and \] delimiters.
+ </formatting>"
+  :tools '("introspection"))
+
+(provide 'ai-presets-config)
+```
 
 ``` elisp
 (require 'org-core-config)
@@ -1373,55 +1561,9 @@ and insert a link to it in the buffer. Supports Org-mode and LaTeX."
 General-purpose tools that integrate external applications and services
 directly into the Emacs workflow.
 
-`tools-ai-config.el`
-:   Integrates Large Language Models via `gptel`, with custom presets
-    for coding, physics, and proofreading.
-
-``` elisp
-;; gptel
-(use-package gptel
-
-  :init (gptel-make-gemini "Gemini"
-	  :key (lambda ()
-		 (auth-source-pick-first-password
-		  :host "generativelanguage.googleapis.com"
-		  :user "apikey"))
-	  :stream t)
-  :custom ((gptel-default-mode #'org-mode)
-	   (gptel-track-media t)
-	   (gptel-use-tools t)
-	   (gptel-model 'gemini-flash-latest)))
-
-(with-eval-after-load 'gptel
-  (require 'tools-ai-presets-config))
-
-(use-package gptel-commit
-  :straight (:host github :repo "lakkiy/gptel-commit")
-  :after (gptel magit)
-  :bind (:map git-commit-mode-map
-              ("C-c C-g" . gptel-commit)))
-
-(use-package gptel-agent
-:config (gptel-agent-update))
-
-(use-package gptel-org-tools
-  :straight (:host codeberg :repo "bajsicki/gptel-got" :branch "main"))
-
-(use-package ragmacs
-   :straight (:host github :repo "positron-solutions/ragmacs":branch "master")
-   :after gptel)
-
-(use-package llm-tool-collection
-  :straight (:host github :repo "skissue/llm-tool-collection" :branch "main")
-  :config (mapcar (apply-partially #'apply #'gptel-make-tool)
-		  (llm-tool-collection-get-all)))
-
-(provide 'tools-ai-config)
-```
-
-`tools-completion-config.el`
-:   Configures `corfu` for modern in-buffer completion and `eglot` for
-    Language Server Protocol (LSP) support.
+`tools-completion-config.el`  
+Configures `corfu` for modern in-buffer completion and `eglot` for
+Language Server Protocol (LSP) support.
 
 ``` elisp
 ;; corfu para auto-complete
@@ -1446,9 +1588,9 @@ directly into the Emacs workflow.
 ;; (use-package json-rpc)
 ```
 
-`tools-references-config.el`
-:   Manages academic bibliographies with `citar` and `ebib`, integrating
-    PDFs and citations into the workflow.
+`tools-references-config.el`  
+Manages academic bibliographies with `citar` and `ebib`, integrating
+PDFs and citations into the workflow.
 
 ``` elisp
 ;; i'm used to using ~org-ref~, but I'm going to migrate to ~citar~. 
@@ -1554,9 +1696,9 @@ directly into the Emacs workflow.
 (provide 'tools-references-config)
 ```
 
-`tools-utils-config.el`
-:   Houses essential utilities like Magit for Git, PDF-Tools for
-    document viewing, and Jinx for spellchecking.
+`tools-utils-config.el`  
+Houses essential utilities like Magit for Git, PDF-Tools for document
+viewing, and Jinx for spellchecking.
 
 ``` elisp
 ;; box instead of dedicated buffer
@@ -1758,154 +1900,22 @@ directly into the Emacs workflow.
 (provide 'tools-utils-config)
 ```
 
-`tools-debug-config.el`
-:   Debugger integration.
+`tools-debug-config.el`  
+Debugger integration.
 
 ``` elisp
 (use-package dape)
 (provide 'tools-debug-config)
 ```
 
-`tools-ai-presets-config.el`
-:   Defines custom gptel presets
-    (code/physics/proofread/publication/etc.).
-
-``` elisp
-(gptel-make-preset 'code
-  :description "Optimized for programming tasks; follows the current buffer's major mode/language."
-  :backend "Gemini"
-  :model 'gemini-3-flash-preview
-  :system (string-join
-           '("You are a senior software engineer and pair-programmer."
-             "Primary goal: produce correct, idiomatic, maintainable code and precise explanations."
-             "IMPORTANT: Always adapt to the language and conventions of the current buffer, inferred from its Emacs major mode and surrounding code."
-             "Before changing anything, quickly read the relevant buffer region for context."
-             "Ask clarifying questions when requirements are ambiguous; otherwise proceed."
-             "When editing: make minimal, well-scoped changes; preserve style, formatting, and existing architecture."
-             "When proposing code: include tests or usage examples when appropriate, and note edge cases."
-             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools (e.g., do not use spell_check for code tasks unless explicitly requested)."
-             "When unsure, state assumptions and provide alternatives.")
-           "\n")
-  :tools gptel--known-tools)
-
-(gptel-make-preset 'physics
-  :description "Optimized for studying physics and mathematics; clear derivations and careful reasoning."
-  :backend "Gemini"
-  :model 'gemini-3-pro-preview
-  :system (string-join
-           '("You are a physics and mathematics tutor and problem-solver."
-             "Primary goal: help the user learn; prioritize clarity, correctness, and step-by-step derivations."
-             "Use consistent notation; define variables and assumptions."
-             "Check dimensional consistency and limiting cases when relevant."
-             "Offer multiple solution paths (analytic, geometric, computational) when helpful."
-             "If the user provides a problem statement in the buffer, read it and keep their notation."
-             "When appropriate, summarize the key idea and common pitfalls at the end."
-             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools.")
-           "\n")
-  :tools gptel--known-tools)
-
-(gptel-make-preset 'proofread
-  :description "Proofreading and copyediting in Portuguese and English; fixes grammar, style, and consistency."
-  :backend "Gemini"
-  :model 'gemini-2.5-flash
-  :system (string-join
-           '("You are an expert proofreader and copyeditor for Portuguese (PT-BR) and English (US/UK)."
-             "Primary goal: correct grammar, spelling, punctuation, agreement, and style; improve clarity and flow without changing meaning."
-             "Respect the author's voice; avoid unnecessary rewrites."
-             "Detect and fix inconsistencies (tense, register, terminology, hyphenation, capitalization, citations)."
-             "If the target variant is not specified, infer from the text and keep it consistent; ask if ambiguous."
-             "When editing, keep formatting (Markdown/LaTeX/code blocks) intact; do not 'correct' code."
-             "Provide corrected text; optionally list key changes if asked."
-             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools.")
-           "\n")
-  :tools gptel--known-tools
-  :temperature 0.2)
-
-(gptel-make-preset 'publication
-  :description "Scientific writing for publications: clarity, structure, rigor, and journal-ready style."
-  :backend "Gemini"
-  :model 'gemini-3-pro-preview
-  :system (string-join
-           '(
-	     "You are an academic writing editor for scientific publications."
-             "Primary goal: rewrite and refine text to be publication-ready while preserving meaning and technical correctness."
-             "Improve structure (logical flow, paragraphing, topic sentences), concision, and readability."
-             "Ensure rigorous claims: flag overstatements, missing definitions, unclear assumptions, and unsupported assertions."
-             "Standardize terminology and symbols; keep notation consistent across the document."
-             "Respect domain conventions; maintain LaTeX/Markdown formatting, citations, equations, figure/table references."
-             "Do not change code blocks except for obvious typos when explicitly requested."
-             "If the target venue/style is unspecified, default to a neutral academic tone; ask for journal/field guidelines if needed."
-             "Output: provide an improved version of the text; if asked, provide a brief list of substantive changes."
-             "When using tools: only use the subset of tools that best fit the current task and context; avoid irrelevant tools."
-	     )
-           "\n")
-  :tools gptel--known-tools
-  :temperature 0.2)
-
-(gptel-make-preset 'physpub
-  :description "Refines text for scientific journals, primarily in Physics, focusing on academic rigor, structural clarity, and technical precision."
-  :backend "Gemini"
-  :model 'gemini-3-pro-preview
-  :system "You are an expert academic editor for high-impact scientific publications, with a primary focus on the field of Physics. Your objective is to refine text for clarity, logical flow, and technical rigor while maintaining the author's original meaning.
-
-Guidelines:
-- Structural Flow: Improve transitions, topic sentences, and the logical progression of arguments.
-- Technical Rigor: Flag overstatements or unsupported claims. Ensure symbols, notation, and terminology (especially physical constants and units) are consistent and standard for the field.
-- Tone: Maintain a neutral, formal, and concise academic style.
-- Preservation: Do not alter LaTeX/Markdown formatting, citations, equations, or references. Do not modify code blocks.
-- Output: Provide the improved version directly. If requested, include a brief list of substantive changes.
-- Tooling: Use the provided tools only when strictly necessary to enhance the editing process."
-  :temperature 0.2
-  :tools gptel--known-tools)
-
-(gptel-make-preset 'introspect
-  :pre (lambda () (require 'ragmacs))
-  :system
-  "You are pair programming with the user in Emacs and on Emacs.
- 
- Your job is to dive into Elisp code and understand the APIs and
- structure of elisp libraries and Emacs.  Use the provided tools to do
- so, but do not make duplicate tool calls for information already
- available in the chat.
- 
- <tone>
- 1. Be terse and to the point.  Speak directly.
- 2. Explain your reasoning.
- 3. Do NOT hedge or qualify.
- 4. If you don't know, say you don't know.
- 5. Do not offer unprompted advice or clarifications.
- 6. Never apologize.
- 7. Do NOT summarize your answers.
- </tone>
- 
- <code_generation>
- When generating code:
- 1. Always check that functions or variables you use in your code exist.
- 2. Also check their calling convention and function-arity before you use them.
- 3. Write code that can be tested by evaluation, and offer to evaluate
- code using the `elisp_eval` tool.
- </code_generation>
- 
- <formatting>
- 1. When referring to code symbols (variables, functions, tags etc) enclose them in markdown quotes.
-    Examples: `read_file`, `getResponse(url, callback)`
-    Example: `<details>...</details>`
- 2. If you use LaTeX notation, enclose math in \( and \), or \[ and \] delimiters.
- </formatting>"
-  :tools '("introspection"))
-
-(provide 'tools-ai-presets-config)
-```
-
-`tools-config.el`
-:   Aggregates all tools modules.
+`tools-config.el`  
+Aggregates all tools modules.
 
 ``` elisp
 (require 'tools-references-config)
 (require 'tools-utils-config)
 (require 'tools-debug-config)
 (require 'tools-completion-config)
-(require 'tools-ai-config)
 
 (provide 'tools-config)
 ```
@@ -1915,9 +1925,9 @@ Guidelines:
 Language-specific configurations that provide specialized editing
 features, REPLs, and formatting tools.
 
-`langs-python-config.el`
-:   Python setup including virtual environment management and black
-    formatting.
+`langs-python-config.el`  
+Python setup including virtual environment management and black
+formatting.
 
 ``` elisp
 (use-package python-mode
@@ -1932,9 +1942,9 @@ features, REPLs, and formatting tools.
 (provide 'langs-python-config)
 ```
 
-`langs-julia-config.el`
-:   Comprehensive Julia support with an integrated REPL and specialized
-    keybindings.
+`langs-julia-config.el`  
+Comprehensive Julia support with an integrated REPL and specialized
+keybindings.
 
 ``` elisp
 (use-package julia-repl)
@@ -1952,9 +1962,9 @@ features, REPLs, and formatting tools.
 (provide 'langs-julia-config)
 ```
 
-`langs-latex-config.el`
-:   Full LaTeX environment using AUCTeX, Synctex, and mathematical
-    calculation helpers.
+`langs-latex-config.el`  
+Full LaTeX environment using AUCTeX, Synctex, and mathematical
+calculation helpers.
 
 ``` elisp
 ;; auctex enhances usability in latex
@@ -2007,9 +2017,9 @@ features, REPLs, and formatting tools.
 (provide 'langs-latex-config)
 ```
 
-`langs-clojure-config.el`
-:   Clojure development tools utilizing Tree-sitter and the CIDER
-    environment.
+`langs-clojure-config.el`  
+Clojure development tools utilizing Tree-sitter and the CIDER
+environment.
 
 ``` elisp
 (use-package clojure-ts-mode)
@@ -2018,8 +2028,8 @@ features, REPLs, and formatting tools.
 (provide 'langs-clojure-config)
 ```
 
-`langs-utils-config.el`
-:   Shared programming utilities (parens management, snippets, etc.).
+`langs-utils-config.el`  
+Shared programming utilities (parens management, snippets, etc.).
 
 ``` elisp
 ;; better parenthesis
@@ -2085,8 +2095,8 @@ features, REPLs, and formatting tools.
 (provide 'langs-utils-config)
 ```
 
-`langs-resnippets-config.el`
-:   Resnippets definitions used by the shared snippets layer.
+`langs-resnippets-config.el`  
+Resnippets definitions used by the shared snippets layer.
 
 ``` elisp
 (resnippets-define
@@ -2126,8 +2136,8 @@ features, REPLs, and formatting tools.
 (provide 'langs-resnippets-config)
 ```
 
-`langs-config.el`
-:   Aggregates all language modules.
+`langs-config.el`  
+Aggregates all language modules.
 
 ``` elisp
 (require 'langs-utils-config)

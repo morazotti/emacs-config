@@ -121,4 +121,4 @@ Guidelines:
  </formatting>"
   :tools '("introspection"))
 
-(provide 'tools-ai-presets-config)
+(provide 'ai-presets-config)
