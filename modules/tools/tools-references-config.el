@@ -89,6 +89,7 @@
   :custom ((ebib-default-directory my/library-directory)
 	   (ebib-bib-search-dirs (file-name-concat my/library-directory "pdfs"))
 	   (ebib-preload-bib-files `(,my/bibliography-file))
+	   (ebib-import-source-directory ebib-bib-search-dirs)
 	   (ebib-reading-list-file (file-name-concat ebib-default-directory "reading-list.org")))
   :config
   (require 'ebib-biblio)

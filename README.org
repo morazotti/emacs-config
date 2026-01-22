@@ -2,6 +2,7 @@
 #+author: nmorazotti
 #+email: nicolas.morazotti@protonmail.ch
 #+STARTUP: overview
+#+exclude_tags: noexport
 
 This is a modular Emacs configuration designed for performance, scientific writing, and a hybrid Vim/Emacs workflow. The setup is divided into functional modules to maintain clarity and ease of maintenance.
 
@@ -115,3 +116,8 @@ Language-specific configurations that provide specialized editing features, REPL
 - ~langs-clojure-config.el~ :: Clojure development tools utilizing Tree-sitter and the CIDER environment.
 
 #+include: "modules/langs/langs-clojure-config.el"   src elisp
+* Variables                                                        :noexport:
+[[shell:pandoc README.org -o README.md]]
+# Local Variables:
+# eval: (add-hook 'after-save-hook (lambda () (shell-command "pandoc README.org -o README.md")) nil t)
+# End:
