@@ -77,6 +77,16 @@
   "TAB" 'other-window
   "s" 'avy-goto-char
 
+  ;; gptel
+  "gg" 'gptel
+  "ga" 'gptel-add
+  "gm" 'gptel-menu
+  "gr" 'gptel-rewrite
+  "gs" 'gptel-send
+  "gb" 'gptel-buffer
+  "gq" 'gptel-abort
+  "gc" 'gptel-commit
+
   ;; jinx
   "tb" 'jinx-correct-all
   "tw" 'jinx-correct-nearest
@@ -91,17 +101,6 @@
   "w-" 'balance-windows
   ;; "wt" 'transpose-frame
   "wo" 'ace-window
-
-  ;; magit
-  "gg" 'magit-status
-  ;; "gb" 'magit-blame
-  "gc" 'magit-commit
-  "gC" 'magit-clone
-  "gp" 'magit-push
-  "gR" 'magit-revert
-  "gs" 'magit-stage 
-  "gx" 'magit-reset
-  "gz" 'magit-stash
 
   ;; open - general
   "om" 'notmuch
