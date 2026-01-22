@@ -52,7 +52,6 @@
 (with-eval-after-load 'resnippets
   (require 'langs-resnippets-config))
 
-
 ;; remap -mode to -ts-mode
 (add-to-list 'major-mode-remap-alist '(clojure-mode . clojure-ts-mode))
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))

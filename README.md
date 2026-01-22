@@ -108,8 +108,19 @@ without interrupting your session.
  '(ebib-file-associations '(("pdf") ("ps" . "gv")))
  '(ebib-reading-list-template "* %M %T\12\12\12:PROPERTIES:\12%K\12:END:\12")
  '(org-hide-emphasis-markers t)
+ '(org-hide-leading-stars t)
+ '(org-hide-macro-markers t)
+ '(org-image-actual-width '(350))
+ '(org-image-align 'center)
+ '(org-latex-preview-appearance-options
+   '(:foreground default :background default :scale 2.0 :html-foreground
+		 "Black" :html-background "Transparent" :html-scale
+		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")) nil nil "Customized with use-package org")
+ '(org-latex-src-block-backend 'minted nil nil "Customized with use-package org")
+ '(org-modern-star 'fold)
  '(org-pretty-entities-include-sub-superscripts nil)
  '(org-safe-remote-resources '("\\`\\[\\[file:early-init\\.el]]\\'"))
+ '(org-startup-with-latex-preview t)
  '(org-use-sub-superscripts nil)
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
@@ -123,7 +134,7 @@ without interrupting your session.
  ;; If there is more than one, they won't work right.
  '(italic ((t (:slant italic))))
  '(jinx-misspelled ((t (:underline (:color "red" :style wave :position nil)))))
- '(org-document-title ((t (:foreground "#fe640b" :weight bold))))
+ '(org-document-title ((t (:weight bold :height 1.0))))
  '(org-drawer ((t (:foreground "Blue1" :family "Ligamonacop"))))
  '(visual-shorthands-face ((t (:inherit font-lock-keyword-face :extend nil :background "#e0e0e0")))))
 ```
@@ -2117,7 +2128,6 @@ features, REPLs, and formatting tools.
 (with-eval-after-load 'resnippets
   (require 'langs-resnippets-config))
 
-
 ;; remap -mode to -ts-mode
 (add-to-list 'major-mode-remap-alist '(clojure-mode . clojure-ts-mode))
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
@@ -2147,12 +2157,17 @@ features, REPLs, and formatting tools.
    ("\\([a-zA-Z\\]+\\)trans" '(1 "^{T}"))
    ("\\([a-zA-Z\\]+\\)inv" '(1 "^{-1}"))
 
+   ("\\(.[a-zA-Z0-9\\\\{}]+\\)\\(_{[^]]+}\\)!"
+    '(1 2 "\\!^{" (resnippets-cursor)))
+   ("\\(.[a-zA-Z0-9\\\\{}]+\\)\\(\\^{[^]]+}\\)!"
+    '(1 2 "\\!_{" (resnippets-cursor)))
+
    ("<\\([a-zA-Z0-9_^{}\\\\]+\\)|" '("\\bra{" 1 "}"))
    ("<\\([a-zA-Z0-9_^{}\\\\]+\\) ?|\\([a-zA-Z0-9_^{}\\\\]+\\) ?>"
     '("\\braket{" 1 "}{" 2 "}"))
 
-   ("\\([\(]?\\)\\([ ]?\\)//" '(1 "\\frac{" (resnippets-cursor) "{}"))
-   ("\\([a-zA-Z0-9{}\\\\]+\\)/" '("\\frac{" 1 "}{" (resnippets-cursor)))
+   ("\\([\(]?\\)\\([ ]?\\)//" '(1 "\\frac{" (resnippets-cursor) "}{}"))
+   ("\\([a-zA-Z0-9{}\\\\]+\\)/" '("\\frac{" 1 "}{" (resnippets-cursor "}")))
    ("\\([a-zA-Z}]\\)\\([0-9]\\)" '(1 "_" 2))
    ("_\\([0-9][0-9]\\)" '("_{" 1 (resnippets-cursor) "}"))
 
