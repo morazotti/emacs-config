@@ -1,4 +1,4 @@
-	```{=org}
+```{=org}
 #+STARTUP: overview
 ```
 This is a modular Emacs configuration designed for performance,
@@ -419,6 +419,16 @@ management to the visual theme and keybinding philosophy.
   ;; movement
   "TAB" 'other-window
   "s" 'avy-goto-char
+
+  ;; gptel
+  "gg" 'gptel
+  "ga" 'gptel-add
+  "gm" 'gptel-menu
+  "gr" 'gptel-rewrite
+  "gs" 'gptel-send
+  "gb" 'gptel-buffer
+  "gq" 'gptel-abort
+  "gc" 'gptel-commit
 
   ;; jinx
   "tb" 'jinx-correct-all
@@ -1415,37 +1425,6 @@ AI-related tooling and configuration.
 
 (use-package gptel-agent
   :config (gptel-agent-update))
-
-;; Keybindings (leader keys)
-;; Keep this here (AI module) so the core keybindings remain generic.
-(with-eval-after-load 'general
-  ;; Prefer the leader definer provided by core, if present.
-  (defvar nm/leader-keys nil
-    "Leader key definer (general.el).")
-  (defun nm/ai--leader-keys (&rest args)
-    "Compatibility wrapper around the config's leader-key definer.
-
-If `my/leader-keys` exists (defined in core), reuse it; otherwise create a
-local leader definer.  ARGS are forwarded to `general-define-key` style
-binding specs." 
-    (if (fboundp 'my/leader-keys)
-        (apply #'my/leader-keys args)
-      (unless (fboundp 'nm/leader-keys)
-        (general-create-definer nm/leader-keys
-          :keymaps '(normal visual)
-          :prefix "SPC"))
-      (apply #'nm/leader-keys args)))
-
-  (nm/ai--leader-keys
-    ;; gptel
-    "gg" #'gptel
-    "ga" #'gptel-add
-    "gm" #'gptel-menu
-    "gr" #'gptel-rewrite
-    "gs" #'gptel-send
-    "gb" #'gptel-buffer
-    "gq" #'gptel-abort
-    "gc" #'gptel-commit))
 
 (use-package gptel-org-tools
   :straight (:host codeberg :repo "bajsicki/gptel-got" :branch "main"))

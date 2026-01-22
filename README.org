@@ -166,6 +166,7 @@ Language-specific configurations that provide specialized editing features, REPL
 - ~langs-config.el~ :: Aggregates all language modules.
 
 #+include: "modules/langs/langs-config.el"   src elisp
+
 * Variables                                                        :noexport:
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (shell-command "pandoc README.org -o README.md")) nil t)
