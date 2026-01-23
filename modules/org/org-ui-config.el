@@ -27,30 +27,63 @@
      (font-lock-add-keywords nil color-list-aux 'append)))
 
 
-(defun my/update-latex-colors-org-file ()
-  "Gera o arquivo latex-colors.org programaticamente a partir de my-latex-colors-alist."
-  (interactive)
-  (let ((file-path
-	 (expand-file-name "macros/latex-colors.org" user-emacs-directory)))
-    (with-temp-file file-path
-      ;; Cabeçalho padrão (a macro genérica 'color')
-      (insert "#+MACRO: color \\textcolor{$1}{$2}\n")
+(defun my/org--color-macro-header (backend)
+  (pcase backend
+    ('latex "#+MACRO: color \\textcolor{$1}{$2}\n")
+    ('html  "#+MACRO: color @@html:<font color=\"$1\">$2</font>@@\n")
+    (_ (error "Backend inválido: %S" backend))))
 
-      ;; Loop pelas cores do seu Alist
+(defun my/org--color-macro-render (backend color &optional mapping)
+  (pcase backend
+    ('latex
+     (if (and (stringp color) (string-prefix-p "#" color))
+         (format "\\textcolor[HTML]{%s}{$1}" (substring color 1))
+       (format "\\textcolor{%s}{$1}" color)))
+    ('html
+     (let* ((raw-color (or (and mapping (cdr (assoc-string color mapping t)))
+                           color))
+            (html-color
+             (if (stringp raw-color)
+                 (replace-regexp-in-string
+                  "\\b\\([[:alpha:]]\\)"
+                  (lambda (m) (upcase m))
+                  (downcase raw-color)
+                  nil nil 1)
+               raw-color)))
+       (format "@@html:<font color=\"%s\">$1</font>@@" html-color)))
+    (_ (error "Backend inválido: %S" backend))))
+
+(defun my/update-colors-org-file (backend)
+  (interactive
+   (list (intern (completing-read "Backend: " '("latex" "html") nil t nil nil "latex"))))
+  (let* ((relative-path (pcase backend
+                          ('latex "macros/latex-colors.org")
+                          ('html  "macros/colors.org")
+                          (_ (error "Backend inválido: %S" backend))))
+         (file-path (expand-file-name relative-path user-emacs-directory))
+         (mapping (pcase backend
+                    ('html '(("forest green" . "LightGreen")))
+                    (_ nil))))
+    (with-temp-file file-path
+      (insert (my/org--color-macro-header backend))
       (dolist (entry my/latex-colors-alist)
         (let* ((name (car entry))
                (color (cdr entry))
-               (latex-cmd
-		(if (string-prefix-p "#" color)
-                    (format "\\textcolor[HTML]{%s}{$1}" (substring color 1))
-                  (format "\\textcolor{%s}{$1}" color))))
-          (insert (format "#+MACRO: %s %s\n" name latex-cmd))))
+               (body (my/org--color-macro-render backend color mapping)))
+          (insert (format "#+MACRO: %s %s\n" name body)))))
+    (message "Arquivo %s atualizado com sucesso!" file-path)))
 
-      (message "Arquivo %s atualizado com sucesso!" file-path))))
+(defun my/update-latex-colors-org-file ()
+  (interactive)
+  (my/update-colors-org-file 'latex))
+
+(defun my/update-html-colors-org-file ()
+  (interactive)
+  (my/update-colors-org-file 'html))
 
 (when (bound-and-true-p my/latex-colors-alist)
-  (my/update-latex-colors-org-file))
-
+  (progn (my/update-latex-colors-org-file)
+	 (my/update-html-colors-org-file)))
 
 (add-hook 'org-mode-hook #'my/org-fontify-macros)
 
