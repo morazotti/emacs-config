@@ -75,6 +75,7 @@
  ("map" . "f02ecaffea870254be1be76d585d45b77e4eafca")
  ("marginalia" . "e980b562e5b5f6db0851675eb6576d4c4b228540")
  ("markdown-mode" . "92802fae9ebbc8c2e4c281c06dcdbd74b8bca80e")
+ ("mason.el" . "47b6e24820fb65bc934fca3ebc17d215e9db9893")
  ("melpa" . "c5d9b5b9a3b682887441abbfbf966a4a4f1e2ce6")
  ("mise.el" . "849c44b36594c80c57a555c5671dd1a5a83d3184")
  ("mixed-pitch" . "519e05f74825abf04b7d2e0e38ec040d013a125a")

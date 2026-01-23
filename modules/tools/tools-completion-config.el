@@ -1,7 +1,6 @@
 ;; corfu para auto-complete
 (use-package corfu
   :init (global-corfu-mode))
-(provide 'tools-completion-config)
 
 ;; eglot para LSP
 (use-package eglot
@@ -17,4 +16,9 @@
   :straight (:host github :repo "jdtsmith/eglot-booster" :branch "main")
   :config (eglot-booster-mode))
 
+;; mason manages lsp servers
+(use-package mason
+  :config (mason-setup))
+
 ;; (use-package json-rpc)
+(provide 'tools-completion-config)

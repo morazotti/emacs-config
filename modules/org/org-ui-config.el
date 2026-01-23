@@ -1,6 +1,59 @@
 (defun display-ansi-colors ()
   (ansi-color-apply-on-region (point-min) (point-max)))
 
+(defvar my/latex-colors-alist
+  '(("red"     . "red")
+    ("blue"    . "blue")
+    ("green"   . "forest green")
+    ("yellow"  . "yellow")
+    ("magenta" . "magenta")
+    ("cyan"    . "cyan")
+    ("brown"   . "brown")
+    ("blood"   . "#aa2233")
+    ("orange"  . "orange"))
+  "Lista associativa (Alist) mapeando o nome da macro para a cor de exibição no Emacs.")
+
+(defun my/org-fontify-macros ()
+  "Aplica cores reais às macros {{{cor(texto)}}} no buffer."
+  (setq font-lock-extra-managed-props (append ' (invisible display) font-lock-extra-managed-props))
+  (let ((color-list-aux (list)))
+     (dolist (color-entry my/latex-colors-alist)
+       (let ((macro-name (car color-entry))
+	     (color-value (cdr color-entry)))
+	 (push `(,(format "{{{%s(\\(.*?\\))}}}" macro-name )
+	    (0 (put-text-property (match-beginning 1)
+				  (match-end 1)
+	       'face '(:foreground ,color-value :weight bold)))) color-list-aux)))
+     (font-lock-add-keywords nil color-list-aux 'append)))
+
+
+(defun my/update-latex-colors-org-file ()
+  "Gera o arquivo latex-colors.org programaticamente a partir de my-latex-colors-alist."
+  (interactive)
+  (let ((file-path
+	 (expand-file-name "macros/latex-colors.org" user-emacs-directory)))
+    (with-temp-file file-path
+      ;; Cabeçalho padrão (a macro genérica 'color')
+      (insert "#+MACRO: color \\textcolor{$1}{$2}\n")
+
+      ;; Loop pelas cores do seu Alist
+      (dolist (entry my/latex-colors-alist)
+        (let* ((name (car entry))
+               (color (cdr entry))
+               (latex-cmd
+		(if (string-prefix-p "#" color)
+                    (format "\\textcolor[HTML]{%s}{$1}" (substring color 1))
+                  (format "\\textcolor{%s}{$1}" color))))
+          (insert (format "#+MACRO: %s %s\n" name latex-cmd))))
+
+      (message "Arquivo %s atualizado com sucesso!" file-path))))
+
+(when (bound-and-true-p my/latex-colors-alist)
+  (my/update-latex-colors-org-file))
+
+
+(add-hook 'org-mode-hook #'my/org-fontify-macros)
+
 (use-package org-modern
   :after org
   :straight (:host github :repo "minad/org-modern" :branch "main")
