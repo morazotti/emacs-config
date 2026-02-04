@@ -15,17 +15,21 @@
 
 (defun my/org-fontify-macros ()
   "Aplica cores reais às macros {{{cor(texto)}}} no buffer."
-  (setq font-lock-extra-managed-props (append ' (invisible display) font-lock-extra-managed-props))
+  (setq font-lock-extra-managed-props (append '(invisible display) font-lock-extra-managed-props))
   (let ((color-list-aux (list)))
-     (dolist (color-entry my/latex-colors-alist)
-       (let ((macro-name (car color-entry))
-	     (color-value (cdr color-entry)))
-	 (push `(,(format "{{{%s(\\(.*?\\))}}}" macro-name )
-	    (0 (put-text-property (match-beginning 1)
-				  (match-end 1)
-	       'face '(:foreground ,color-value :weight bold)))) color-list-aux)))
-     (font-lock-add-keywords nil color-list-aux 'append)))
-
+    (dolist (color-entry my/latex-colors-alist)
+      (let ((macro-name (car color-entry))
+            (color-value (cdr color-entry)))
+        (push `(,(format "{{{%s(\\(.*?\\))}}}" macro-name)
+                (0 (progn
+                     (put-text-property (match-beginning 0) (match-beginning 1)
+                                        'invisible t)
+                     (put-text-property (match-beginning 1) (match-end 1)
+                                        'face '(:foreground ,color-value :weight bold))
+                     (put-text-property (match-end 1) (match-end 0)
+                                        'invisible t))))
+              color-list-aux)))
+    (font-lock-add-keywords nil color-list-aux 'append)))
 
 (defun my/org--color-macro-header (backend)
   (pcase backend

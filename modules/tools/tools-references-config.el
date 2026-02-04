@@ -49,6 +49,7 @@
 (use-package citar-embark
   :after (citar embark)
   :no-require
+  :demand t
   :config (citar-embark-mode))
 
 (use-package bibtex-completion

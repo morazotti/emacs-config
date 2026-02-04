@@ -64,35 +64,21 @@ without interrupting your session.
 (setq custom-file (expand-file-name "emacs-custom.el" user-emacs-directory))
 
 (let ((file-name-handler-alist-original file-name-handler-alist)
-      ;; Ensure load-path/module loading is stable even if init.el is loaded from a
-      ;; non-standard location.
       (default-directory user-emacs-directory))
   (setq file-name-handler-alist nil)
 
   (when (file-exists-p custom-file) (load custom-file))
 
-  ;; Add each module dir (modules/<name>/) to `load-path`.
   (dolist (module '("core" "org" "tools" "langs" "ai"))
     (add-to-list 'load-path
                  (expand-file-name (format "modules/%s" module)
-                                   user-emacs-directory)))
-
-  ;; if we ever need to M-x straight-freeze-versions, we need to uncomment the following line before
-  ;; (load (expand-file-name "modules/core/core-packages-config.el" user-emacs-directory))
-
-  (require 'core-config)
-  (require 'org-config)
-  (require 'tools-config)
-  (require 'langs-config)
-  (require 'ai-config)
-
-  ;; (require 'wip-functions)
-
+                                   user-emacs-directory))
+    (require (intern (format "%s-config" module))))
   (setq file-name-handler-alist file-name-handler-alist-original))
 
 (add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold (* 16 1024 1024))))
+	  (lambda ()
+	    (setq gc-cons-threshold (* 16 1024 1024))))
 ```
 
 `emacs-custom.el`
@@ -951,6 +937,96 @@ research, note-taking, and scientific publishing.
 (defun display-ansi-colors ()
   (ansi-color-apply-on-region (point-min) (point-max)))
 
+(defvar my/latex-colors-alist
+  '(("red"     . "red")
+    ("blue"    . "blue")
+    ("green"   . "forest green")
+    ("yellow"  . "yellow")
+    ("magenta" . "magenta")
+    ("cyan"    . "cyan")
+    ("brown"   . "brown")
+    ("blood"   . "#aa2233")
+    ("orange"  . "orange"))
+  "Lista associativa (Alist) mapeando o nome da macro para a cor de exibição no Emacs.")
+
+(defun my/org-fontify-macros ()
+  "Aplica cores reais às macros {{{cor(texto)}}} no buffer."
+  (setq font-lock-extra-managed-props (append '(invisible display) font-lock-extra-managed-props))
+  (let ((color-list-aux (list)))
+    (dolist (color-entry my/latex-colors-alist)
+      (let ((macro-name (car color-entry))
+            (color-value (cdr color-entry)))
+        (push `(,(format "{{{%s(\\(.*?\\))}}}" macro-name)
+                (0 (progn
+                     (put-text-property (match-beginning 0) (match-beginning 1)
+                                        'invisible t)
+                     (put-text-property (match-beginning 1) (match-end 1)
+                                        'face '(:foreground ,color-value :weight bold))
+                     (put-text-property (match-end 1) (match-end 0)
+                                        'invisible t))))
+              color-list-aux)))
+    (font-lock-add-keywords nil color-list-aux 'append)))
+
+(defun my/org--color-macro-header (backend)
+  (pcase backend
+    ('latex "#+MACRO: color \\textcolor{$1}{$2}\n")
+    ('html  "#+MACRO: color @@html:<font color=\"$1\">$2</font>@@\n")
+    (_ (error "Backend inválido: %S" backend))))
+
+(defun my/org--color-macro-render (backend color &optional mapping)
+  (pcase backend
+    ('latex
+     (if (and (stringp color) (string-prefix-p "#" color))
+         (format "\\textcolor[HTML]{%s}{$1}" (substring color 1))
+       (format "\\textcolor{%s}{$1}" color)))
+    ('html
+     (let* ((raw-color (or (and mapping (cdr (assoc-string color mapping t)))
+                           color))
+            (html-color
+             (if (stringp raw-color)
+                 (replace-regexp-in-string
+                  "\\b\\([[:alpha:]]\\)"
+                  (lambda (m) (upcase m))
+                  (downcase raw-color)
+                  nil nil 1)
+               raw-color)))
+       (format "@@html:<font color=\"%s\">$1</font>@@" html-color)))
+    (_ (error "Backend inválido: %S" backend))))
+
+(defun my/update-colors-org-file (backend)
+  (interactive
+   (list (intern (completing-read "Backend: " '("latex" "html") nil t nil nil "latex"))))
+  (let* ((relative-path (pcase backend
+                          ('latex "macros/latex-colors.org")
+                          ('html  "macros/colors.org")
+                          (_ (error "Backend inválido: %S" backend))))
+         (file-path (expand-file-name relative-path user-emacs-directory))
+         (mapping (pcase backend
+                    ('html '(("forest green" . "LightGreen")))
+                    (_ nil))))
+    (with-temp-file file-path
+      (insert (my/org--color-macro-header backend))
+      (dolist (entry my/latex-colors-alist)
+        (let* ((name (car entry))
+               (color (cdr entry))
+               (body (my/org--color-macro-render backend color mapping)))
+          (insert (format "#+MACRO: %s %s\n" name body)))))
+    (message "Arquivo %s atualizado com sucesso!" file-path)))
+
+(defun my/update-latex-colors-org-file ()
+  (interactive)
+  (my/update-colors-org-file 'latex))
+
+(defun my/update-html-colors-org-file ()
+  (interactive)
+  (my/update-colors-org-file 'html))
+
+(when (bound-and-true-p my/latex-colors-alist)
+  (progn (my/update-latex-colors-org-file)
+	 (my/update-html-colors-org-file)))
+
+(add-hook 'org-mode-hook #'my/org-fontify-macros)
+
 (use-package org-modern
   :after org
   :straight (:host github :repo "minad/org-modern" :branch "main")
@@ -1611,7 +1687,6 @@ directly into the Emacs workflow.
 ;; corfu para auto-complete
 (use-package corfu
   :init (global-corfu-mode))
-(provide 'tools-completion-config)
 
 ;; eglot para LSP
 (use-package eglot
@@ -1627,7 +1702,12 @@ directly into the Emacs workflow.
   :straight (:host github :repo "jdtsmith/eglot-booster" :branch "main")
   :config (eglot-booster-mode))
 
+;; mason manages lsp servers
+(use-package mason
+  :config (mason-setup))
+
 ;; (use-package json-rpc)
+(provide 'tools-completion-config)
 ```
 
 `tools-references-config.el`
@@ -1686,6 +1766,7 @@ directly into the Emacs workflow.
 (use-package citar-embark
   :after (citar embark)
   :no-require
+  :demand t
   :config (citar-embark-mode))
 
 (use-package bibtex-completion
@@ -2152,9 +2233,10 @@ features, REPLs, and formatting tools.
    ("\\([a-zA-Z\\]+\\)cnc" '("\\cancel{" 1 "}"))
    ("\\([a-zA-Z\\]+\\)dag" '(1 "^{\\dag}"))
    ("\\([a-zA-Z{\\]+\\)hh" '(1 "\\hbar"))
-   ("\\([a-zA-Z{\\]+\\)ll" '(1 "\\ell"))
+   ("\\([0-9a-zA-Z(){\\]+\\)ll" '(1 "\\ell"))
    ("\\([a-zA-Z\\]+\\)conj" '(1 "^{*}"))
    ("\\([a-zA-Z\\]+\\)trans" '(1 "^{T}"))
+   ("\\([a-zA-Z\\]+\\)comp" '(1 "^{\\perp}"))
    ("\\([a-zA-Z\\]+\\)inv" '(1 "^{-1}"))
 
    ("\\(.[a-zA-Z0-9\\\\{}]+\\)\\(_{[^]]+}\\)!"
@@ -2167,7 +2249,7 @@ features, REPLs, and formatting tools.
     '("\\braket{" 1 "}{" 2 "}"))
 
    ("\\([\(]?\\)\\([ ]?\\)//" '(1 "\\frac{" (resnippets-cursor) "}{}"))
-   ("\\([a-zA-Z0-9{}\\\\]+\\)/" '("\\frac{" 1 "}{" (resnippets-cursor "}")))
+   ("\\([a-zA-Z0-9{}\\\\]+\\)/" '("\\frac{" 1 "}{" (resnippets-cursor)))
    ("\\([a-zA-Z}]\\)\\([0-9]\\)" '(1 "_" 2))
    ("_\\([0-9][0-9]\\)" '("_{" 1 (resnippets-cursor) "}"))
 
