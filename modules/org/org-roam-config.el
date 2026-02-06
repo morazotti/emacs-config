@@ -47,9 +47,14 @@
    '("r" "reference" plain
      "%?"
      :if-new
-     (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                "#+title: ${citar-title}\n#+roam_key: ${citar-citekey}\n")
-     :node-properties (:ROAM_ALIASES "${citar-citekey}")
+     (file+head "%<%Y%m%d%H%M%S>-${citar-citekey}.org"
+		":PROPERTIES:\n:ROAM_ALIASES: ${citar-citekey}\n:END:\n
+#+title: ${citar-title}\n#+roam_key: ${citar-citekey}\n")
      :unnarrowed t)))
 
 (provide 'org-roam-config)
+
+(setq org-roam-capture-templates '(("d" "default" plain "%?" :target (file+head
+				    "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
+")
+  :unnarrowed t)))
