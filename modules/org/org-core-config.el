@@ -44,6 +44,7 @@
            (org-latex-packages-alist '(("AUTO" "babel" t)
                                        ("" "physics" t)
                                        ("" "framed" t)
+                                       ("style=american" "csquotes" t)
                                        ("" "tikz" t)))
            (org-latex-pdf-process '("latexmk -synctex=1 -shell-escape -bibtex -interaction=nonstopmode -pdf -f -8bit %f"))
            (org-latex-prefer-user-labels t)

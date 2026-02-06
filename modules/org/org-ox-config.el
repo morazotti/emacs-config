@@ -16,6 +16,16 @@
     (setq org-export-dispatch-last-action local-org-export-dispatch-last-action)
     (org-export-dispatch 1)))
 
+;; make pretty quotes in org-export
+(add-to-list
+ 'org-export-smart-quotes-alist
+ '("pt"
+   (primary-opening   :utf-8 "“" :html "&ldquo;" :latex "\\enquote{"  :texinfo "``")
+   (primary-closing   :utf-8 "”" :html "&rdquo;" :latex "}"           :texinfo "''")
+   (secondary-opening :utf-8 "‘" :html "&lsquo;" :latex "\\enquote*{" :texinfo "`")
+   (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "}"           :texinfo "'")
+   (apostrophe        :utf-8 "’" :html "&rsquo;")))
+
 (use-package org-reveal)
 (use-package ox-reveal
   :after (org-reveal))
