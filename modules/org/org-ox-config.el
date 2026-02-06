@@ -21,6 +21,29 @@
   :after (org-reveal))
 (load-library "ox-reveal")
 
+;; fixes preview with #+cite_export malforming
+(defun my/fix-org-cite-export-parsing (info)
+  "Fix the :cite-export data type before Org attempts to process it.
+Converts strings (\"biblatex opt\") or symbols ('bibtex) into lists."
+  (let ((cite-export (plist-get info :cite-export)))
+    (cond
+     ;; Case 1: It is a string (Yu Huang's email bug)
+     ;; Ex: "biblatex backend=biber" -> (biblatex "backend=biber")
+     ((stringp cite-export)
+      (let* ((parts (split-string cite-export))
+             (processor (intern (car parts)))
+             (args (cdr parts)))
+        (plist-put info :cite-export (cons processor args))))
+
+     ;; Case 2: It is a loose symbol (Your initial error)
+     ;; Ex: 'bibtex -> (bibtex)
+     ((symbolp cite-export)
+      (plist-put info :cite-export (list cite-export)))))
+  info)
+
+;; Apply the advice to run BEFORE feature processing
+(advice-add 'org-export-process-features :before #'my/fix-org-cite-export-parsing)
+
 ;; allows correct quotation on portuguese export
 (add-to-list 'org-export-smart-quotes-alist
 	     '("pt"
