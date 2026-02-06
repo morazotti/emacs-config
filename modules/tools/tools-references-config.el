@@ -64,6 +64,7 @@
 
 (use-package biblio-openlibrary
   :straight (:host github :repo "fabcontigiani/biblio-openlibrary" :branch "master"))
+
 (use-package biblio-gbooks
   :straight (:host github :repo "jrasband/biblio-gbooks" :branch "main"))
 
@@ -88,9 +89,10 @@
   :after biblio
 
   :custom ((ebib-default-directory my/library-directory)
-	   (ebib-bib-search-dirs (file-name-concat my/library-directory "pdfs"))
+	   (ebib-bib-search-dirs `(,ebib-default-directory))
 	   (ebib-preload-bib-files `(,my/bibliography-file))
-	   (ebib-import-source-directory ebib-bib-search-dirs)
+	   (ebib-import-source-directory (file-name-concat home "Downloads"))
+	   (ebib-import-target-directory (file-name-concat ebib-default-directory "pdfs"))
 	   (ebib-reading-list-file (file-name-concat ebib-default-directory "reading-list.org")))
   :config
   (require 'ebib-biblio)
