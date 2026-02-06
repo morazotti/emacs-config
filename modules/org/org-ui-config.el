@@ -13,7 +13,7 @@
     ("orange"  . "orange"))
   "Lista associativa (Alist) mapeando o nome da macro para a cor de exibição no Emacs.")
 
-(defun my/org-fontify-macros ()
+(defun my/org-fontify-color-macros ()
   "Aplica cores reais às macros {{{cor(texto)}}} no buffer."
   (setq font-lock-extra-managed-props (append '(invisible display) font-lock-extra-managed-props))
   (let ((color-list-aux (list)))
@@ -89,7 +89,7 @@
   (progn (my/update-latex-colors-org-file)
 	 (my/update-html-colors-org-file)))
 
-(add-hook 'org-mode-hook #'my/org-fontify-macros)
+(add-hook 'org-mode-hook #'my/org-fontify-color-macros)
 
 (use-package org-modern
   :after org
