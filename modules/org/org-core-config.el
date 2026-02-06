@@ -46,6 +46,7 @@
                                        ("" "framed" t)
                                        ("style=american" "csquotes" t)
                                        ("" "tikz" t)))
+
            (org-latex-pdf-process '("latexmk -synctex=1 -shell-escape -bibtex -interaction=nonstopmode -pdf -f -8bit %f"))
            (org-latex-prefer-user-labels t)
            (org-format-latex-options
@@ -62,6 +63,15 @@
 
            ;; ox
            (org-export-async-init-file (expand-file-name "init-async.el" user-emacs-directory)))
+  :config
+  (add-to-list
+   'org-export-smart-quotes-alist
+   '("pt"
+     (primary-opening   :utf-8 "“" :html "&ldquo;" :latex "\\enquote{"  :texinfo "``")
+     (primary-closing   :utf-8 "”" :html "&rdquo;" :latex "}"           :texinfo "''")
+     (secondary-opening :utf-8 "‘" :html "&lsquo;" :latex "\\enquote*{" :texinfo "`")
+     (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "}"           :texinfo "'")
+     (apostrophe        :utf-8 "’" :html "&rsquo;")))
 
   :hook ((org-babel-after-execute . display-ansi-colors)
          (org-mode . org-indent-mode)
