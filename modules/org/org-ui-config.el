@@ -74,8 +74,7 @@
         (let* ((name (car entry))
                (color (cdr entry))
                (body (my/org--color-macro-render backend color mapping)))
-          (insert (format "#+MACRO: %s %s\n" name body)))))
-    (message "Arquivo %s atualizado com sucesso!" file-path)))
+          (insert (format "#+MACRO: %s %s\n" name body)))))))
 
 (defun my/update-latex-colors-org-file ()
   (interactive)
