@@ -63,15 +63,6 @@
 
            ;; ox
            (org-export-async-init-file (expand-file-name "init-async.el" user-emacs-directory)))
-  :config
-  (add-to-list
-   'org-export-smart-quotes-alist
-   '("pt"
-     (primary-opening   :utf-8 "“" :html "&ldquo;" :latex "\\enquote{"  :texinfo "``")
-     (primary-closing   :utf-8 "”" :html "&rdquo;" :latex "}"           :texinfo "''")
-     (secondary-opening :utf-8 "‘" :html "&lsquo;" :latex "\\enquote*{" :texinfo "`")
-     (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "}"           :texinfo "'")
-     (apostrophe        :utf-8 "’" :html "&rsquo;")))
 
   :hook ((org-babel-after-execute . display-ansi-colors)
          (org-mode . org-indent-mode)
@@ -83,6 +74,7 @@
                         'after-save-hook
                         'my/org-export-run-on-save
                         nil 'make-it-local))))
+
   :bind (("C-c l" . org-store-link)
          (:map org-mode-map ("<f7>" . my/org-export-and-set-async-hook))))
 

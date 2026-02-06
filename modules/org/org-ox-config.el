@@ -21,4 +21,14 @@
   :after (org-reveal))
 (load-library "ox-reveal")
 
+;; allows correct quotation on portuguese export
+(add-to-list 'org-export-smart-quotes-alist
+	     '("pt"
+	       (primary-opening   :utf-8 "“" :html "&ldquo;" :latex "\\enquote{"  :texinfo "``")
+	       (primary-closing   :utf-8 "”" :html "&rdquo;" :latex "}"           :texinfo "''")
+	       (secondary-opening :utf-8 "‘" :html "&lsquo;" :latex "\\enquote*{" :texinfo "`")
+	       (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "}"           :texinfo "'")
+	       (apostrophe        :utf-8 "’" :html "&rsquo;")))
+
+
 (provide 'org-ox-config)
