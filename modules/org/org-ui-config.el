@@ -11,7 +11,7 @@
     ("brown"   . "brown")
     ("blood"   . "#aa2233")
     ("orange"  . "orange"))
-  "Lista associativa (Alist) mapeando o nome da macro para a cor de exibição no Emacs.")
+  "Alist mapping macro names to display colors in Emacs.")
 
 (defun my/org-fontify-color-macros ()
   "Aplica cores reais às macros {{{cor(texto)}}} no buffer."
