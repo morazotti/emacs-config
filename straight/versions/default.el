@@ -102,7 +102,7 @@
  ("queue" . "8df1334d54d4735d2f821790422a850dfaaa08ef")
  ("ragmacs" . "d3ad46ded557a651faa959f1545ca4df48da78f0")
  ("rainbow-delimiters" . "f40ece58df8b2f0fb6c8576b527755a552a5e763")
- ("resnippets" . "749d357772c1a34cd9bde919c884af9771a5674d")
+ ("resnippets.el" . "937dc189aa08f5ed373988fdc2664b7b13de2153")
  ("s.el" . "dda84d38fffdaf0c9b12837b504b402af910d01d")
  ("seq" . "da86da9bf111f68fb81efd466d76d53af5aebc00")
  ("sesman" . "7bca68dbbab0af26a6a23be1ff5fa97f9a18e022")
