@@ -27,7 +27,9 @@
 ;; adds transient menu to calc
 (use-package casual
   :bind (:map calc-mode-map
-	      ("C-c C-c" . casual-calc-tmenu)))
+	      ("C-c C-c" . casual-calc-tmenu)
+	 :map dired-mode-map
+	      ("C-c C-c" . casual-dired-tmenu)))
 
 ;;jinx
 (use-package jinx
@@ -37,6 +39,7 @@
          ("C-M-$" . jinx-languages)))
 (add-to-list 'vertico-multiform-categories
                '(jinx grid (vertico-grid-annotate . 20) (vertico-count . 4)))
+
 ;;ledger
 (use-package ledger-mode
   :custom
@@ -155,9 +158,10 @@
 (defun my/split-and-follow (direction)
   (interactive "c")
   (catch 'my-tag
-    (cond ((= direction ?h) (split-window-below))
-  	((= direction ?v) (split-window-right))
-  	(t (throw 'my-tag "no correct character pressed")))
+    (cond
+     ((= direction ?h) (split-window-below))
+     ((= direction ?v) (split-window-right))
+     (t (throw 'my-tag "no correct character pressed")))
     (other-window 1)))
 
 (defun my/split-and-follow-horizontally ()
