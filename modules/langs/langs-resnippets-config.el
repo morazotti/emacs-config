@@ -31,11 +31,18 @@
    ((rx (or ",." ".,")) "\\to")
 
    ("\\(.[a-zA-Z0-9\\\\{}]+\\)\\(_{[^]]+}\\)!"
-    '(1 2 "\\!^{" (resnippets-cursor)))
+    '(1 2 "\\!^{" (resnippets-cursor) "}"))
    ("\\(.[a-zA-Z0-9\\\\{}]+\\)\\(\\^{[^]]+}\\)!"
-    '(1 2 "\\!_{" (resnippets-cursor)))
+    '(1 2 "\\!_{" (resnippets-cursor) "}"))
 
    ("\\(\\mqty.\\)\\([^])}]*\\);" '(1 2 "\\\\ " (resnippets-cursor)))
+   ("lr\\([({[]\\)" '("\\left"
+			 (if (string= "{" (resnippets-group 1))
+			     "\\{" (resnippets-group 1))
+			 " " (resnippets-cursor) " \\right"
+		       (when (string= "{" (resnippets-group 1)) "\\")))
+
+   ("lr<" '("\\left\\langle " (resnippets-cursor) " \\right\\rangle"))
 
    ("^," "&")
    ("\\ket{bra" '("\ketbra{" (resnippets-cursor) "}{"))
@@ -57,15 +64,34 @@
                 (string-to-number (resnippets-group 2)))))))
 
 (resnippets-define
- "text-mode"
+ "text-mode-enus"
  '(:mode text-mode
-	 :condition (not (or (texmathp) (org-inside-LaTeX-fragment-p)))
-	 :match-case t)
+	 :condition (and
+		     (not (or (texmathp) (org-inside-LaTeX-fragment-p)))
+		     (or
+		      (string= "en" (cadar (org-collect-keywords '("LANGUAGE"))))
+		      (string= "en_US" jinx-languages)))
+
+	 :match-case t
+	 :priority 20)
+ ("freq\\(s?\\) " '("frequenc" (if (string= "s" (resnippets-group 1)) "ies " "y ")))
+ ("sn " "tion ")
+ )
+
+(resnippets-define
+ "text-mode-ptbr"
+ '(:mode text-mode
+	 :condition (and
+		     (not (or (texmathp) (org-inside-LaTeX-fragment-p)))
+		     (or
+		      (string= "pt" (cadar (org-collect-keywords '("LANGUAGE"))))
+		      (string= "pt_BR" jinx-languages)))
+
+	 :match-case t
+	 :priority 10)
  ("cao " '(1 "ção ") :priority 1)
  ("cao " "cão " :priority 2 :word-boundary t)
  ("coes " '(1 "ções "))
- ((rx (or "mv" "vm")) '("\\(" (resnippets-cursor) "\\)") :word-boundary t)
- ((rx (or "ts" "st")) '("\\[" (resnippets-cursor) "\\]") :word-boundary t)
  ("aa " "à " :word-boundary t)
  ("apos " "após " :word-boundary t)
  ("e\\([he]\\) " "é " :word-boundary t)
@@ -77,16 +103,24 @@
  ("mt\\(s?\\) " '("muito" 1 " "))
  ("rapido " "rápido ")
  ("ruido " "ruído ")
- ("qt\\(s?\\) " '("qubit" 1 " "))
- ("qi " "qubit ")
- ("qii " "qubits ")
  ("port\\(i?\\)f\\([oó]\\)lio " "portfólio ")
  ("voce " "você ")
  ("vc " "você ")
- ("ali\\*" '((cdlatex-environment "align*")))
- ("rf" '((funcall (org-cite-insert 1))) :word-boundary t)
- 
- (",," ","))
 
+ )
+
+(resnippets-define
+ "text-mode"
+ '(:mode text-mode
+	 :condition (not (or (texmathp) (org-inside-LaTeX-fragment-p)))
+	 :match-case t)
+ ((rx (or "mv" "vm")) '("\\(" (resnippets-cursor) "\\)") :word-boundary t)
+ ((rx (or "ts" "st")) '("\\[" (resnippets-cursor) "\\]") :word-boundary t)
+ ("qt\\(s?\\) " '("qubit" 1 " "))
+ ("qi " "qubit ")
+ ("qii " "qubits ")
+ ("ali\\*" '((cdlatex-environment "align*")))
+ ("cite " '(citar-insert-keys))
+ (",," ","))
 
 (provide 'langs-resnippets-config)

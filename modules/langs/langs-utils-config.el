@@ -43,11 +43,9 @@
     (insert "\\" text "{" (if argument (current-kill 0) "") "}")))
 
 (use-package resnippets
-  :straight (:host github :repo "morazotti/resnippets" :branch "master")
-  ;; :custom (resnippets-expand-env
-  ;;          '((smartparens-mode . nil)
-  ;;            (cdlatex-mode . nil)))
+  :straight (:host github :repo "morazotti/resnippets.el" :branch "master")
   :hook (org-mode . resnippets-mode))
+
 
 (with-eval-after-load 'resnippets
   (require 'langs-resnippets-config))
