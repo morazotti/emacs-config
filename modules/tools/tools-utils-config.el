@@ -23,6 +23,12 @@
   :config (elfeed-org)
   :custom (rmh-elfeed-org-files (list (file-name-concat org-directory "elfeed.org"))))
 
+;; casual
+;; adds transient menu to calc
+(use-package casual
+  :bind (:map calc-mode-map
+	      ("C-c C-c" . casual-calc-tmenu)))
+
 ;;jinx
 (use-package jinx
   :hook (emacs-startup . global-jinx-mode)
@@ -167,34 +173,6 @@
   :bind (("M-z" . zoom-window-zoom)
 	 ("C-M-z" . zoom-window-next)))
 
-;; (defvar zoom-register ?z
-;;   "the register to store the window configuration for zooming/unzooming.")
-
-;; (defvar zoomed-in-p nil
-;;   "a flag to track if the window is currently zoomed in.")
-
-;; (defun toggle-zoom-window ()
-;;   "toggle zooming the current window: maximize or restore."
-;;   (interactive)
-;;   (if zoomed-in-p
-;;       (restore-window-configuration-from-zoom-register)
-;;     (save-window-configuration-to-zoom-register)
-;;     (delete-other-windows))
-;;   (setq zoomed-in-p (not zoomed-in-p)))
-
-;; (defun save-window-configuration-to-zoom-register ()
-;;   "save the current window configuration to a register for zooming/unzooming."
-;;   (window-configuration-to-register zoom-register)
-;;   (message "Window configuration saved for zooming."))
-
-;; (defun restore-window-configuration-from-zoom-register ()
-;;   "restore the window configuration from the zoom register."
-;;   (jump-to-register zoom-register)
-;;   (message "Window configuration restored."))
-
-;; (global-set-key (kbd "M-z") 'toggle-zoom-window)
-
-;; jump to label definition on org-mode
 (defun my/org-jump-smart ()
   "Pula para o link org, referência LaTeX ou definição LSP no ponto."
   (interactive)
