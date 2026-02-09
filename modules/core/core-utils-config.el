@@ -48,9 +48,20 @@
 
 ;; avy
 (use-package avy
-    :config (setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
-    :bind (("M-s M-s" . avy-goto-char)
+    :config ((setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
+	     (setf (alist-get ?. avy-dispatch-alist) 'avy-action-embark))
+    :bind (("M-s M-s" . avy-goto-char-timer)
            ("M-g M-g" . avy-goto-line)))
+
+(defun avy-action-embark (pt)
+    (unwind-protect
+        (save-excursion
+          (goto-char pt)
+          (embark-act))
+      (select-window
+       (cdr (ring-ref avy-ring 0))))
+    t)
+
 
 ;; ivy - some things need it
 ;; (use-package ivy

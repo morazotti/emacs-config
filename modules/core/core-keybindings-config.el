@@ -22,8 +22,8 @@
   :config
   (define-key evil-visual-state-map (kbd "=") 'er/expand-region)
   (define-key evil-visual-state-map (kbd "-") 'er/contract-region)
-  (define-key evil-normal-state-map (kbd "/") 'avy-flash-jump)
-  (define-key evil-visual-state-map (kbd "/") 'avy-flash-jump)
+  (define-key evil-normal-state-map (kbd "/") 'avy-goto-char-timer)
+  (define-key evil-visual-state-map (kbd "/") 'avy-goto-char-timer)
 
   :hook
   (delve-mode . turn-off-evil-mode))
