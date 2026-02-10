@@ -149,10 +149,14 @@
       (2 font-lock-constant-face))))
 
 ;; Faces
-(add-hook 'org-mode-hook '(lambda ()
-			    (TeX-fold-mode)
-			    (set-face-attribute 'TeX-fold-folded-face nil :foreground nil :inherit 'shadow)
-			    (TeX-fold-buffer)))
+(defun org--TeX-fold-setup ()
+  (TeX-fold-mode)
+  (unless (get 'org--TeX-fold-setup 'face-attribute-set)
+    (set-face-attribute 'TeX-fold-folded-face nil :foreground nil :inherit 'shadow)
+    (put 'org--TeX-fold-setup 'face-attribute-set t))
+  (TeX-fold-buffer))
+
+(add-hook 'org-mode-hook 'org--TeX-fold-setup)
 
 ;; Custom folded display for labels and refs
 
