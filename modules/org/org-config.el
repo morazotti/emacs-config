@@ -7,5 +7,6 @@
 (require 'org-capture-config)
 (require 'org-latex-config)
 (require 'org-ox-config)
+(provide 'org-references-config.el)
 
 (provide 'org-config)

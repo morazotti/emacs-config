@@ -177,46 +177,5 @@
   :bind (("M-z" . zoom-window-zoom)
 	 ("C-M-z" . zoom-window-next)))
 
-(defun my/org-jump-smart ()
-  "Pula para o link org, referência LaTeX ou definição LSP no ponto."
-  (interactive)
-  (let* ((context (org-element-context))
-         (type (car context))
-         ;; Regex captura o conteúdo dentro de \ref{...} ou \eqref{...}
-         (latex-ref (thing-at-point-looking-at "\\\\\\(?:eq\\)?ref{\\([^}]+\\)}")))
-
-    (cond
-     ;; 1. Caso seja um Link do Org-mode
-     ((eq type 'link)
-      (xref-push-marker-stack)
-      (org-open-at-point))
-
-     ;; 2. Caso seja uma referência LaTeX
-     (latex-ref
-      (let ((label (match-string-no-properties 1)))
-        (xref-push-marker-stack)
-        (goto-char (point-min))
-        ;; Procuramos pela label
-        (if (re-search-forward (concat "\\\\label{" (regexp-quote label) "}") nil t)
-            (progn
-              ;; AJUSTE AQUI: Move o cursor para o início da label encontrada
-              (goto-char (match-beginning 0))
-              ;; Garante que o local não esteja escondido (ex: dentro de um header fechado)
-              (org-reveal)
-              (recenter)
-              (message "Pulou para label: %s" label))
-          ;; Se não achar, volta o marcador para não poluir a pilha e avisa
-          (progn
-            (xref-pop-marker-stack)
-            (user-error "Label '%s' não encontrada neste arquivo" label)))))
-
-     ;; 3. Fallback para LSP / Xref
-     (t
-      (call-interactively #'xref-find-definitions)))))
-
-;; Configura o atalho apenas no org-mode
-(with-eval-after-load 'org
-  (define-key org-mode-map (kbd "M-.") #'my/org-jump-smart))
-
 
 (provide 'tools-utils-config)
