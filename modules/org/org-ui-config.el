@@ -14,14 +14,20 @@
   "Alist mapping macro names to display colors in Emacs.")
 
 (defun my/org-fontify-color-macros ()
-  "Aplica cores reais às macros {{{cor(texto)}}} no buffer."
-  (setq font-lock-extra-managed-props (append '(invisible display) font-lock-extra-managed-props))
+  "Aplica cores às macros {{{cor(texto)}}} e adiciona lógica de revelar ao cursor."
+  ;; Adicionamos 'my/org-color-macro' à lista de propriedades gerenciadas para limpeza correta
+  (setq font-lock-extra-managed-props (append '(invisible display my/org-color-macro) font-lock-extra-managed-props))
   (let ((color-list-aux (list)))
     (dolist (color-entry my/latex-colors-alist)
       (let ((macro-name (car color-entry))
             (color-value (cdr color-entry)))
         (push `(,(format "{{{%s(\\(.*?\\))}}}" macro-name)
                 (0 (progn
+                     ;; Marcamos a região inteira com uma propriedade única (o ponto de início)
+                     ;; Isso permite detectar limites mesmo entre macros adjacentes
+                     (put-text-property (match-beginning 0) (match-end 0)
+                                        'my/org-color-macro (match-beginning 0))
+                     ;; Aplica invisibilidade e cores
                      (put-text-property (match-beginning 0) (match-beginning 1)
                                         'invisible t)
                      (put-text-property (match-beginning 1) (match-end 1)
@@ -30,6 +36,39 @@
                                         'invisible t))))
               color-list-aux)))
     (font-lock-add-keywords nil color-list-aux 'append)))
+
+;; Variável para rastrear a última região revelada
+(defvar-local my/org-color-macro-last-region nil)
+
+(defun my/org-color-macro-auto-reveal ()
+  "Revela macros de cor quando o cursor está sobre elas."
+  (when (eq major-mode 'org-mode)
+    (let* ((point (point))
+           ;; Verifica se estamos sobre um macro
+           (prop (get-text-property point 'my/org-color-macro))
+           ;; Encontra os limites do macro atual (start e end)
+           (start (if prop (or (previous-single-property-change (1+ point) 'my/org-color-macro) (point-min))))
+           (end (if prop (or (next-single-property-change point 'my/org-color-macro) (point-max)))))
+
+      ;; 1. Se saímos de um macro ou mudamos de macro, esconder o anterior
+      (when (and my/org-color-macro-last-region
+                 (or (not prop)
+                     (not (equal (cons start end) my/org-color-macro-last-region))))
+        (let ((reg-start (car my/org-color-macro-last-region))
+              (reg-end (cdr my/org-color-macro-last-region)))
+          ;; font-lock-flush força o Emacs a reaplicar as regras (re-escondendo o macro)
+          (when (< reg-start reg-end)
+            (font-lock-flush reg-start reg-end)))
+        (setq my/org-color-macro-last-region nil))
+
+      ;; 2. Se estamos dentro de um macro, revelar (remover invisibilidade)
+      (when (and prop start end (not (equal (cons start end) my/org-color-macro-last-region)))
+        (with-silent-modifications
+          (remove-text-properties start end '(invisible nil)))
+        (setq my/org-color-macro-last-region (cons start end))))))
+
+;; Adiciona o hook globalmente (ou apenas no hook do org-mode se preferir)
+(add-hook 'post-command-hook #'my/org-color-macro-auto-reveal)
 
 (defun my/org--color-macro-header (backend)
   (pcase backend
@@ -90,6 +129,7 @@
 
 (add-hook 'org-mode-hook #'my/org-fontify-color-macros)
 
+;; Restante das configurações (org-modern, mixed-pitch, etc)
 (use-package org-modern
   :after org
   :straight (:host github :repo "minad/org-modern" :branch "main")
