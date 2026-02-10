@@ -1,8 +1,6 @@
 ;; auctex enhances usability in latex
 (use-package auctex
   :init (require 'latex)
-  :custom ((TeX-source-correlate-mode t)
-	   (TeX-source-correlate-method-active 'synctex))
   :bind (:map LaTeX-mode-map
 	      ("C-S-e" . latex-math-from-calc)
   	      :map org-mode-map
@@ -28,7 +26,9 @@
                                     calc-language latex
                                     calc-prefer-frac t
                                     calc-angle-mode rad)))))))
-  :custom ((TeX-auto-save t)
+  :custom ((TeX-source-correlate-mode t)
+	   (TeX-source-correlate-method-active 'synctex)
+	   (TeX-auto-save t)
 	   (TeX-parse-self t)
 	   (font-latex-fontify-script nil)))
 

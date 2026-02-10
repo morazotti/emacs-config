@@ -62,7 +62,6 @@
        (cdr (ring-ref avy-ring 0))))
     t)
 
-
 ;; ivy - some things need it
 ;; (use-package ivy
 ;;   :demand t
@@ -71,6 +70,7 @@
 ;;   (ivy-mode -1))
 
 ;;consult - embark: better framework to find and act on things
+
 (use-package consult
   ;; Replace bindings. Lazily loaded due by `use-package'.
   :bind (;; C-c bindings in `mode-specific-map'

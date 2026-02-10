@@ -91,7 +91,69 @@ without interrupting your session.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(TeX-fold-command-prefix "\3o")
+ '(bibtex-autokey-name-year-separator "_")
+ '(bibtex-autokey-titlewords 2)
+ '(bibtex-autokey-year-length 4)
+ '(bibtex-autokey-year-title-separator "_")
  '(ebib-file-associations '(("pdf") ("ps" . "gv")))
+ '(ebib-keywords
+   '("Quantum Computation" "Computer Science - Cryptography and Security"
+     "Lie groups" "Lie algebras" "Physics - Optics"
+     "Technical writing" "Technical English" "Style" "Rhetoric"
+     "English language" "Business writing" "Business English"
+     "Computer Science - Information Theory"
+     "Mathematics - Mathematical Physics" "Attention Network"
+     "Molecular evolution" "Computational models"
+     "Quantitative Biology - Quantitative Methods"
+     "Quantitative Biology - Populations and Evolution"
+     "Quantitative Biology - Biomolecules" "81Q93"
+     "Quantum Physics (quant-ph)"
+     "Nonlinear Sciences - Cellular Automata and Lattice Gases"
+     "Structural Biology"
+     "Computer Science - Computer Vision and Pattern Recognition"
+     "Geodesics (Mathematics)" "Riemannian}"
+     "Physics - Atomic Physics"
+     "Computer Science - Emerging Technologies"
+     "Physics - Chemical Physics"
+     "Condensed Matter - Disordered Systems and Neural Networks"
+     "Quantum States Geometry" "Quantum Circuits"
+     "Physics - Applied Physics" "Rafael"
+     "Exterior differential systems" "Control theory" "Congresses"
+     "Unread" "Biotechnology" "Mathematics - Statistics Theory"
+     "Physics - Computational Physics"
+     "FOS: Computer and information sciences"
+     "FOS: Computer and information\12                  sciences"
+     "Computational Physics\12                  (physics.comp-ph)"
+     "Applied Physics\12                  (physics.app-ph)"
+     "Machine Learning (cs.LG)" "Physics - Physics and Society"
+     "Computer Science - Social and Information Networks"
+     "FOS: Physical sciences"
+     "FOS: Physical\12                  sciences"
+     "Classical Physics (physics.class-ph)"
+     "Statistical Mechanics (cond-mat.stat-mech)"
+     "Astrophysics - Earth and Planetary Astrophysics"
+     "Python (Computer program language)"
+     "Neural networks (Computer science)" "Mathematical Physics"
+     "Computer Science - Neural and Evolutionary Computing"
+     "Computer Science - Computation and Language"
+     "Condensed Matter - Mesoscale and Nanoscale Physics"
+     "Open systems (Physics)" "Computer Science - Robotics"
+     "Quantum theory" "Nonlinear Sciences - Chaotic Dynamics"
+     "Condensed Matter - Statistical Mechanics"
+     "Computer Science - Artificial Intelligence"
+     "Mathematics - Differential Geometry" "58A32}" "58A20" "58A05"
+     "53C35" "53B05" "{22E65"
+     "Condensed Matter - Other Condensed Matter"
+     "Condensed Matter - Strongly Correlated Electrons"
+     "Condensed Matter - Quantum Gases" "Quantum computers"
+     "Statistics - Machine Learning" "Metabolomics"
+     "Quantum Complexity" "High Energy Physics - Theory"
+     "Finsler spaces" "Differential}" "{Geometry" "Quantum Tomography"
+     "Quantitative Biology - Genomics" "Synthetic Biology"
+     "Computer Science - Machine Learning" "Biology" "Quantum Physics"
+     "General Relativity and Quantum Cosmology"
+     "Computer Science - Computational Complexity"))
  '(ebib-reading-list-template "* %M %T\12\12\12:PROPERTIES:\12%K\12:END:\12")
  '(org-hide-emphasis-markers t)
  '(org-hide-leading-stars t)
@@ -362,21 +424,23 @@ management to the visual theme and keybinding philosophy.
   :config
   (define-key evil-visual-state-map (kbd "=") 'er/expand-region)
   (define-key evil-visual-state-map (kbd "-") 'er/contract-region)
+  (define-key evil-normal-state-map (kbd "/") 'avy-goto-char-timer)
+  (define-key evil-visual-state-map (kbd "/") 'avy-goto-char-timer)
+  (evil-set-initial-state 'dired-mode 'emacs)
+  (evil-set-initial-state 'vterm-mode 'emacs)
+  (evil-set-initial-state 'delve-mode 'emacs)
+  (evil-set-initial-state 'elfeed-search-mode 'emacs)
+  (evil-set-initial-state 'elfeed-show-mode 'emacs)
+  (evil-set-initial-state 'ebib-log-mode 'emacs)
+  (evil-set-initial-state 'ebib-index-mode 'emacs)
+  (evil-set-initial-state 'ebib-entry-mode 'emacs)
+  (evil-set-initial-state 'ebib-strings-mode 'emacs)
+  (evil-set-initial-state 'ebib-multiline-mode 'emacs)
+
 
   :hook
   (delve-mode . turn-off-evil-mode))
 (evil-mode)
-
-(evil-set-initial-state 'dired-mode 'emacs)
-(evil-set-initial-state 'vterm-mode 'emacs)
-(evil-set-initial-state 'delve-mode 'emacs)
-(evil-set-initial-state 'elfeed-search-mode 'emacs)
-(evil-set-initial-state 'elfeed-show-mode 'emacs)
-(evil-set-initial-state 'ebib-log-mode 'emacs)
-(evil-set-initial-state 'ebib-index-mode 'emacs)
-(evil-set-initial-state 'ebib-entry-mode 'emacs)
-(evil-set-initial-state 'ebib-strings-mode 'emacs)
-(evil-set-initial-state 'ebib-multiline-mode 'emacs)
 
 (use-package evil-numbers
   :bind (:map evil-normal-state-map
@@ -409,7 +473,7 @@ management to the visual theme and keybinding philosophy.
 
   ;; commands
   "x" 'execute-extended-command
-  ":" 'eval-expression
+  ":" 'consult-complex-command
   ";" 'avy-goto-line
   "j" 'my/duplicate-line
 
@@ -426,6 +490,7 @@ management to the visual theme and keybinding philosophy.
   "gb" 'gptel-buffer
   "gq" 'gptel-abort
   "gc" 'gptel-commit
+  "gk" 'gptel-quick
 
   ;; jinx
   "tb" 'jinx-correct-all
@@ -616,9 +681,19 @@ management to the visual theme and keybinding philosophy.
 
 ;; avy
 (use-package avy
-    :config (setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
-    :bind (("M-s M-s" . avy-goto-char)
+    :config ((setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
+	     (setf (alist-get ?. avy-dispatch-alist) 'avy-action-embark))
+    :bind (("M-s M-s" . avy-goto-char-timer)
            ("M-g M-g" . avy-goto-line)))
+
+(defun avy-action-embark (pt)
+    (unwind-protect
+        (save-excursion
+          (goto-char pt)
+          (embark-act))
+      (select-window
+       (cdr (ring-ref avy-ring 0))))
+    t)
 
 ;; ivy - some things need it
 ;; (use-package ivy
@@ -628,6 +703,7 @@ management to the visual theme and keybinding philosophy.
 ;;   (ivy-mode -1))
 
 ;;consult - embark: better framework to find and act on things
+
 (use-package consult
   ;; Replace bindings. Lazily loaded due by `use-package'.
   :bind (;; C-c bindings in `mode-specific-map'
@@ -638,24 +714,24 @@ management to the visual theme and keybinding philosophy.
          ("C-c i" . consult-info)
          ([remap Info-search] . consult-info)
          ;; C-x bindings in `ctl-x-map'
-         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
+         ("C-x b" . consult-buffer) ;; orig. switch-to-buffer
          ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
-         ("C-c p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
+         ("C-x r b" . consult-bookmark)	;; orig. bookmark-jump
+         ("C-c p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
          ;; Custom M-# bindings for fast register access
          ("M-#" . consult-register-load)
-         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ("M-'" . consult-register-store) ;; orig. abbrev-prefix-mark (unrelated)
          ("C-M-#" . consult-register)
          ;; Other custom bindings
-         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ("M-y" . consult-yank-pop) ;; orig. yank-pop
          ;; M-g bindings in `goto-map'
          ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-make)               ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)             ;; orig. goto-line
+         ("M-g f" . consult-make) ;; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line) ;; orig. goto-line
          ;; ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
-         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g o" . consult-outline) ;; Alternative: consult-org-heading
          ("M-g m" . consult-mark)
          ("M-g k" . consult-global-mark)
          ("M-g i" . consult-imenu)
@@ -673,14 +749,14 @@ management to the visual theme and keybinding philosophy.
          ;; Isearch integration
          ("M-s e" . consult-isearch-history)
          :map isearch-mode-map
-         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
-         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
-         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ("M-e" . consult-isearch-history) ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
+         ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)	;; needed by consult-line to detect isearch
          ;; Minibuffer history
          :map minibuffer-local-map
-         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+         ("M-s" . consult-history) ;; orig. next-matching-history-element
+         ("M-r" . consult-history)) ;; orig. previous-matching-history-element
 
   ;; Enable automatic preview at point in the *Completions* buffer. This is
   ;; relevant when you use the default completion UI.
@@ -733,16 +809,16 @@ management to the visual theme and keybinding philosophy.
 
   ;; By default `consult-project-function' uses `project-root' from project.el.
   ;; Optionally configure a different project root function.
-  ;;;; 1. project.el (the default)
+;;;; 1. project.el (the default)
   ;; (setq consult-project-function #'consult--default-project--function)
-    ;;;; 2. vc.el (vc-root-dir)
+;;;; 2. vc.el (vc-root-dir)
   ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
-    ;;;; 3. locate-dominating-file
+;;;; 3. locate-dominating-file
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
-    ;;;; 4. projectile.el (projectile-project-root)
+;;;; 4. projectile.el (projectile-project-root)
   ;; (autoload 'projectile-project-root "projectile")
   ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
-    ;;;; 5. No project support
+;;;; 5. No project support
   ;; (setq consult-project-function nil)
   )
 
@@ -890,7 +966,9 @@ research, note-taking, and scientific publishing.
            (org-latex-packages-alist '(("AUTO" "babel" t)
                                        ("" "physics" t)
                                        ("" "framed" t)
+                                       ("style=american" "csquotes" t)
                                        ("" "tikz" t)))
+
            (org-latex-pdf-process '("latexmk -synctex=1 -shell-escape -bibtex -interaction=nonstopmode -pdf -f -8bit %f"))
            (org-latex-prefer-user-labels t)
            (org-format-latex-options
@@ -918,8 +996,12 @@ research, note-taking, and scientific publishing.
                         'after-save-hook
                         'my/org-export-run-on-save
                         nil 'make-it-local))))
+
   :bind (("C-c l" . org-store-link)
-         (:map org-mode-map ("<f7>" . my/org-export-and-set-async-hook))))
+	 (:map org-mode-map
+	       ("<f7>" . my/org-export-and-set-async-hook)
+	       ("M-g R" . my/previous-reference-or-label)
+	       ("M-g r" . my/next-reference-or-label))))
 
 ;; some extra configs to org and org-export
 (use-package org-contrib)
@@ -947,9 +1029,9 @@ research, note-taking, and scientific publishing.
     ("brown"   . "brown")
     ("blood"   . "#aa2233")
     ("orange"  . "orange"))
-  "Lista associativa (Alist) mapeando o nome da macro para a cor de exibição no Emacs.")
+  "Alist mapping macro names to display colors in Emacs.")
 
-(defun my/org-fontify-macros ()
+(defun my/org-fontify-color-macros ()
   "Aplica cores reais às macros {{{cor(texto)}}} no buffer."
   (setq font-lock-extra-managed-props (append '(invisible display) font-lock-extra-managed-props))
   (let ((color-list-aux (list)))
@@ -1010,8 +1092,7 @@ research, note-taking, and scientific publishing.
         (let* ((name (car entry))
                (color (cdr entry))
                (body (my/org--color-macro-render backend color mapping)))
-          (insert (format "#+MACRO: %s %s\n" name body)))))
-    (message "Arquivo %s atualizado com sucesso!" file-path)))
+          (insert (format "#+MACRO: %s %s\n" name body)))))))
 
 (defun my/update-latex-colors-org-file ()
   (interactive)
@@ -1025,7 +1106,7 @@ research, note-taking, and scientific publishing.
   (progn (my/update-latex-colors-org-file)
 	 (my/update-html-colors-org-file)))
 
-(add-hook 'org-mode-hook #'my/org-fontify-macros)
+(add-hook 'org-mode-hook #'my/org-fontify-color-macros)
 
 (use-package org-modern
   :after org
@@ -1037,6 +1118,13 @@ research, note-taking, and scientific publishing.
 
 (use-package mixed-pitch
   :hook (org-mode . mixed-pitch-mode))
+
+;; enhance latex stuff in org
+(font-lock-add-keywords
+   'org-mode
+   '(("\\(\\(?:\\\\\\(?:label\\|ref\\|eqref\\)\\)\\){\\(.+?\\)}"
+      (1 font-lock-keyword-face)
+      (2 font-lock-constant-face))))
 
 ;; svg-tags: create buttons with svg
 ;; (use-package svg-lib)
@@ -1178,12 +1266,17 @@ research, note-taking, and scientific publishing.
    '("r" "reference" plain
      "%?"
      :if-new
-     (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                "#+title: ${citar-title}\n#+roam_key: ${citar-citekey}\n")
-     :node-properties (:ROAM_ALIASES "${citar-citekey}")
+     (file+head "%<%Y%m%d%H%M%S>-${citar-citekey}.org"
+		":PROPERTIES:\n:ROAM_ALIASES: ${citar-citekey}\n:END:\n
+#+title: ${citar-title}\n#+roam_key: ${citar-citekey}\n")
      :unnarrowed t)))
 
 (provide 'org-roam-config)
+
+(setq org-roam-capture-templates '(("d" "default" plain "%?" :target (file+head
+				    "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
+")
+  :unnarrowed t)))
 ```
 
 `org-capture-config.el`
@@ -1351,6 +1444,7 @@ research, note-taking, and scientific publishing.
       :config (add-to-list 'cdlatex-math-modify-alist '(?s "\\mathscr" nil t nil nil))
               (add-to-list 'cdlatex-math-modify-alist '(?B "\\mathbb" nil t nil nil))
               (add-to-list 'cdlatex-math-modify-alist '(?k "\\mathfrak" nil t nil nil))
+              (add-to-list 'cdlatex-math-symbol-alist '(?E ("\\mathcal{E}" "\\exists")))
               (add-to-list 'cdlatex-math-symbol-alist '(?* ("\\times" "\\otimes")))
               (add-to-list 'cdlatex-math-symbol-alist '(?d ("\\delta" "\\partial" "^{\\dag}")))
 	      (add-to-list 'cdlatex-math-symbol-alist '(?> ("\\to" "\\longrightarrow")))
@@ -1469,6 +1563,39 @@ and insert a link to it in the buffer. Supports Org-mode and LaTeX."
   :after (org-reveal))
 (load-library "ox-reveal")
 
+;; fixes preview with #+cite_export malforming
+(defun my/fix-org-cite-export-parsing (info)
+  "Fix the :cite-export data type before Org attempts to process it.
+Converts strings (\"biblatex opt\") or symbols ('bibtex) into lists."
+  (let ((cite-export (plist-get info :cite-export)))
+    (cond
+     ;; Case 1: It is a string (Yu Huang's email bug)
+     ;; Ex: "biblatex backend=biber" -> (biblatex "backend=biber")
+     ((stringp cite-export)
+      (let* ((parts (split-string cite-export))
+             (processor (intern (car parts)))
+             (args (cdr parts)))
+        (plist-put info :cite-export (cons processor args))))
+
+     ;; Case 2: It is a loose symbol (Your initial error)
+     ;; Ex: 'bibtex -> (bibtex)
+     ((symbolp cite-export)
+      (plist-put info :cite-export (list cite-export)))))
+  info)
+
+;; Apply the advice to run BEFORE feature processing
+(advice-add 'org-export-process-features :before #'my/fix-org-cite-export-parsing)
+
+;; allows correct quotation on portuguese export
+(add-to-list 'org-export-smart-quotes-alist
+	     '("pt"
+	       (primary-opening   :utf-8 "“" :html "&ldquo;" :latex "\\enquote{"  :texinfo "``")
+	       (primary-closing   :utf-8 "”" :html "&rdquo;" :latex "}"           :texinfo "''")
+	       (secondary-opening :utf-8 "‘" :html "&lsquo;" :latex "\\enquote*{" :texinfo "`")
+	       (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "}"           :texinfo "'")
+	       (apostrophe        :utf-8 "’" :html "&rsquo;")))
+
+
 (provide 'org-ox-config)
 ```
 
@@ -1496,7 +1623,7 @@ AI-related tooling and configuration.
               :host "generativelanguage.googleapis.com"
               :user "apikey"))
       :stream t))
-  :custom ((gptel-default-mode #'org-mode)
+  :custom ((gptel-default-mode #'markdown-mode)
            (gptel-track-media t)
            (gptel-use-tools t)
            (gptel-model 'gemini-flash-latest)))
@@ -1515,6 +1642,10 @@ AI-related tooling and configuration.
 
 (use-package gptel-org-tools
   :straight (:host codeberg :repo "bajsicki/gptel-got" :branch "main"))
+
+(use-package gptel-quick
+  :straight (:host github :repo "karthink/gptel-quick" :branch "master")
+  :bind (:map embark-general-map ("?" . gptel-quick)))
 
 (use-package ragmacs
    :straight (:host github :repo "positron-solutions/ragmacs":branch "master")
@@ -1670,6 +1801,7 @@ Guidelines:
 (require 'org-capture-config)
 (require 'org-latex-config)
 (require 'org-ox-config)
+(provide 'org-references-config.el)
 
 (provide 'org-config)
 ```
@@ -1765,9 +1897,9 @@ directly into the Emacs workflow.
 
 (use-package citar-embark
   :after (citar embark)
-  :no-require
-  :demand t
-  :config (citar-embark-mode))
+  :no-require)
+
+(citar-embark-mode)
 
 (use-package bibtex-completion
   :custom
@@ -1781,6 +1913,7 @@ directly into the Emacs workflow.
 
 (use-package biblio-openlibrary
   :straight (:host github :repo "fabcontigiani/biblio-openlibrary" :branch "master"))
+
 (use-package biblio-gbooks
   :straight (:host github :repo "jrasband/biblio-gbooks" :branch "main"))
 
@@ -1805,9 +1938,10 @@ directly into the Emacs workflow.
   :after biblio
 
   :custom ((ebib-default-directory my/library-directory)
-	   (ebib-bib-search-dirs (file-name-concat my/library-directory "pdfs"))
-	   (ebib-preload-bib-files `(,my/bibliography-file))
-	   (ebib-import-source-directory ebib-bib-search-dirs)
+	   (ebib-bib-search-dirs (list my/library-directory))
+	   (ebib-preload-bib-files (list my/bibliography-file))
+	   (ebib-import-source-directory (file-name-concat home "Downloads"))
+	   (ebib-import-target-directory (file-name-concat ebib-default-directory "pdfs"))
 	   (ebib-reading-list-file (file-name-concat ebib-default-directory "reading-list.org")))
   :config
   (require 'ebib-biblio)
@@ -1825,6 +1959,7 @@ directly into the Emacs workflow.
 
 ``` elisp
 ;; box instead of dedicated buffer
+(use-package posframe)
 (use-package eldoc-box)
 
 ;; expand-region increases region by semantic expressions
@@ -1849,6 +1984,14 @@ directly into the Emacs workflow.
   :config (elfeed-org)
   :custom (rmh-elfeed-org-files (list (file-name-concat org-directory "elfeed.org"))))
 
+;; casual
+;; adds transient menu to calc
+(use-package casual
+  :bind (:map calc-mode-map
+	      ("C-c C-c" . casual-calc-tmenu)
+	 :map dired-mode-map
+	      ("C-c C-c" . casual-dired-tmenu)))
+
 ;;jinx
 (use-package jinx
   :hook (emacs-startup . global-jinx-mode)
@@ -1857,6 +2000,7 @@ directly into the Emacs workflow.
          ("C-M-$" . jinx-languages)))
 (add-to-list 'vertico-multiform-categories
                '(jinx grid (vertico-grid-annotate . 20) (vertico-count . 4)))
+
 ;;ledger
 (use-package ledger-mode
   :custom
@@ -1975,9 +2119,10 @@ directly into the Emacs workflow.
 (defun my/split-and-follow (direction)
   (interactive "c")
   (catch 'my-tag
-    (cond ((= direction ?h) (split-window-below))
-  	((= direction ?v) (split-window-right))
-  	(t (throw 'my-tag "no correct character pressed")))
+    (cond
+     ((= direction ?h) (split-window-below))
+     ((= direction ?v) (split-window-right))
+     (t (throw 'my-tag "no correct character pressed")))
     (other-window 1)))
 
 (defun my/split-and-follow-horizontally ()
@@ -1993,32 +2138,6 @@ directly into the Emacs workflow.
   :bind (("M-z" . zoom-window-zoom)
 	 ("C-M-z" . zoom-window-next)))
 
-;; (defvar zoom-register ?z
-;;   "the register to store the window configuration for zooming/unzooming.")
-
-;; (defvar zoomed-in-p nil
-;;   "a flag to track if the window is currently zoomed in.")
-
-;; (defun toggle-zoom-window ()
-;;   "toggle zooming the current window: maximize or restore."
-;;   (interactive)
-;;   (if zoomed-in-p
-;;       (restore-window-configuration-from-zoom-register)
-;;     (save-window-configuration-to-zoom-register)
-;;     (delete-other-windows))
-;;   (setq zoomed-in-p (not zoomed-in-p)))
-
-;; (defun save-window-configuration-to-zoom-register ()
-;;   "save the current window configuration to a register for zooming/unzooming."
-;;   (window-configuration-to-register zoom-register)
-;;   (message "Window configuration saved for zooming."))
-
-;; (defun restore-window-configuration-from-zoom-register ()
-;;   "restore the window configuration from the zoom register."
-;;   (jump-to-register zoom-register)
-;;   (message "Window configuration restored."))
-
-;; (global-set-key (kbd "M-z") 'toggle-zoom-window)
 
 (provide 'tools-utils-config)
 ```
@@ -2093,8 +2212,6 @@ features, REPLs, and formatting tools.
 ;; auctex enhances usability in latex
 (use-package auctex
   :init (require 'latex)
-  :custom ((TeX-source-correlate-mode t)
-	   (TeX-source-correlate-method-active 'synctex))
   :bind (:map LaTeX-mode-map
 	      ("C-S-e" . latex-math-from-calc)
   	      :map org-mode-map
@@ -2120,7 +2237,9 @@ features, REPLs, and formatting tools.
                                     calc-language latex
                                     calc-prefer-frac t
                                     calc-angle-mode rad)))))))
-  :custom ((TeX-auto-save t)
+  :custom ((TeX-source-correlate-mode t)
+	   (TeX-source-correlate-method-active 'synctex)
+	   (TeX-auto-save t)
 	   (TeX-parse-self t)
 	   (font-latex-fontify-script nil)))
 
@@ -2200,11 +2319,9 @@ features, REPLs, and formatting tools.
     (insert "\\" text "{" (if argument (current-kill 0) "") "}")))
 
 (use-package resnippets
-  :straight (:host github :repo "morazotti/resnippets" :branch "master")
-  ;; :custom (resnippets-expand-env
-  ;;          '((smartparens-mode . nil)
-  ;;            (cdlatex-mode . nil)))
+  :straight (:host github :repo "morazotti/resnippets.el" :branch "master")
   :hook (org-mode . resnippets-mode))
+
 
 (with-eval-after-load 'resnippets
   (require 'langs-resnippets-config))
@@ -2222,44 +2339,126 @@ features, REPLs, and formatting tools.
 
 ``` elisp
 (resnippets-define
-   "math-mode"
-   '(:mode (LaTeX-mode org-mode)
-     :condition (or (texmathp) (org-inside-LaTeX-fragment-p)))
-   ("\\([a-zA-Z\\]+\\)hat" '("\\hat{" 1 "}"))
-   ("\\([a-zA-Z\\]+\\)bar" '("\\bar{" 1 "}"))
-   ("\\([a-zA-Z\\]+\\)til" '("\\tilde{" 1 "}"))
-   ("\\([a-zA-Z\\]+\\)vec" '("\\vec{" 1 "}"))
-   ("\\([a-zA-Z\\]+\\)<-" '("\\overleftarrow{" 1 "}"))
-   ("\\([a-zA-Z\\]+\\)cnc" '("\\cancel{" 1 "}"))
-   ("\\([a-zA-Z\\]+\\)dag" '(1 "^{\\dag}"))
-   ("\\([a-zA-Z{\\]+\\)hh" '(1 "\\hbar"))
-   ("\\([0-9a-zA-Z(){\\]+\\)ll" '(1 "\\ell"))
-   ("\\([a-zA-Z\\]+\\)conj" '(1 "^{*}"))
-   ("\\([a-zA-Z\\]+\\)trans" '(1 "^{T}"))
-   ("\\([a-zA-Z\\]+\\)comp" '(1 "^{\\perp}"))
-   ("\\([a-zA-Z\\]+\\)inv" '(1 "^{-1}"))
+ "math-mode"
+ '(:mode (LaTeX-mode org-mode)
+	 :condition (or (texmathp) (org-inside-LaTeX-fragment-p))
+	 :priority 10)
+ ("hat" '("\\hat{" (resnippets-cursor) "}") :priority 1)
+ ("bar" '("\\bar{" (resnippets-cursor) "}") :priority 1)
+ ("dot" '("\\dot{" (resnippets-cursor) "}") :priority 1)
+ ("ddot" '("\\ddot{" (resnippets-cursor) "}") :priority 20)
+ ("til" '("\\tilde{" (resnippets-cursor) "}") :priority 1)
+ ("vec" '("\\vec{" (resnippets-cursor) "}") :priority 1)
+ ("cnc" '("\\cancel{" (resnippets-cursor) "}") :priority 1)
+ ("ck" '("\\check{" (resnippets-cursor) "}") :priority 1)
+ ("\\([a-zA-Z\\]+\\)hat" '("\\hat{" 1 "}"))
+ ("\\([a-zA-Z\\]+\\)bar" '("\\bar{" 1 "}"))
+ ("\\([a-zA-Z\\]+\\)dot" '("\\dot{" 1 "}"))
+ ("\\([a-zA-Z\\]+\\)ddot" '("\\ddot{" 1 "}"))
+ ("\\([a-zA-Z\\]+\\)til" '("\\tilde{" 1 "}"))
+ ("\\([a-zA-Z\\]+\\)vec" '("\\vec{" 1 "}"))
+ ("\\([a-zA-Z\\]+\\)<-" '("\\overleftarrow{" 1 "}"))
+ ("\\([a-zA-Z\\]+\\)cnc" '("\\cancel{" 1 "}"))
+ ("\\([a-zA-Z\\]+\\)ck" '("\\check{" 1 "}"))
+ ("\\([a-zA-Z\\]+\\)dag" '(1 "^{\\dag}"))
+ ("\\([a-zA-Z{\\]+\\)hh" '(1 "\\hbar"))
+ ("\\([0-9a-zA-Z(){\\]+\\)ll" '(1 "\\ell"))
+ ("\\([a-zA-Z0-9 \\]+\\)conj" '(1 "^{*}"))
+ ("\\([a-zA-Z\\]+\\)trans" '(1 "^{T}"))
+ ("\\([a-zA-Z\\]+\\)comp" '(1 "^{\\perp}"))
+ ("\\([a-zA-Z\\]+\\)perp" '(1 "^{\\perp}"))
+ ("\\([a-zA-Z\\]+\\)inv" '(1 "^{-1}"))
+ ((rx (or ",." ".,")) "\\to")
 
-   ("\\(.[a-zA-Z0-9\\\\{}]+\\)\\(_{[^]]+}\\)!"
-    '(1 2 "\\!^{" (resnippets-cursor)))
-   ("\\(.[a-zA-Z0-9\\\\{}]+\\)\\(\\^{[^]]+}\\)!"
-    '(1 2 "\\!_{" (resnippets-cursor)))
+ ("\\(.[a-zA-Z0-9\\\\{}]+\\)\\(_{[^]]+}\\)!"
+  '(1 2 "\\!^{" (resnippets-cursor) "}"))
+ ("\\(.[a-zA-Z0-9\\\\{}]+\\)\\(\\^{[^]]+}\\)!"
+  '(1 2 "\\!_{" (resnippets-cursor) "}"))
 
-   ("<\\([a-zA-Z0-9_^{}\\\\]+\\)|" '("\\bra{" 1 "}"))
-   ("<\\([a-zA-Z0-9_^{}\\\\]+\\) ?|\\([a-zA-Z0-9_^{}\\\\]+\\) ?>"
-    '("\\braket{" 1 "}{" 2 "}"))
+ ("\\(\\mqty.\\)\\([^])}]*\\);" '(1 2 "\\\\ " (resnippets-cursor)))
+ ("lr\\([({[]\\)" '("\\left"
+		    (if (string= "{" (resnippets-group 1))
+			"\\{" (resnippets-group 1))
+		    " " (resnippets-cursor) " \\right"
+		    (when (string= "{" (resnippets-group 1)) "\\")))
 
-   ("\\([\(]?\\)\\([ ]?\\)//" '(1 "\\frac{" (resnippets-cursor) "}{}"))
-   ("\\([a-zA-Z0-9{}\\\\]+\\)/" '("\\frac{" 1 "}{" (resnippets-cursor)))
-   ("\\([a-zA-Z}]\\)\\([0-9]\\)" '(1 "_" 2))
-   ("_\\([0-9][0-9]\\)" '("_{" 1 (resnippets-cursor) "}"))
+ ("lr<" '("\\left\\langle " (resnippets-cursor) " \\right\\rangle"))
 
-   ;; fun call
-   ;; any elisp function ~fun~ with a numeric argument
-   ;; can be called by ;fun=argument;
-   (";\\([^=]+\\)=\\([\-0-9.]+\\);"
-    '((number-to-string
-       (funcall (intern (resnippets-group 1))
-                (string-to-number (resnippets-group 2)))))))
+ ("^," "&")
+ ("\\ket{bra" '("\ketbra{" (resnippets-cursor) "}{"))
+ ("<\\([a-zA-Z0-9_^{}\\\\]+\\)|" '("\\bra{" 1 "}"))
+ ("<\\([a-zA-Z0-9_^{}\\\\]+\\) ?|\\([a-zA-Z0-9_^{}\\\\]+\\) ?>"
+  '("\\braket{" 1 "}{" 2 "}"))
+
+ ("\\([\(]?\\)\\([ ]?\\)//" '(1 "\\frac{" (resnippets-cursor) "}{}"))
+ ("\\([a-zA-Z0-9{}_\\^\\\\]+\\)/" '("\\frac{" 1 "}{" (resnippets-cursor) "}"))
+ ("\\([a-zA-Z}]\\)\\([0-9]\\)" '(1 "_" 2))
+ ("_\\([0-9][0-9]\\)" '("_{" 1 (resnippets-cursor) "}"))
+
+ ;; fun call
+ ;; any elisp function ~fun~ with a numeric argument
+ ;; can be called by ;fun=argument;
+ (";\\([^=]+\\)=\\([\-0-9.]+\\);"
+  '((number-to-string
+     (funcall (intern (resnippets-group 1))
+              (string-to-number (resnippets-group 2)))))))
+
+(resnippets-define
+ "text-mode-enus"
+ '(:mode text-mode
+	 :condition (and
+		     (not (or (texmathp) (org-inside-LaTeX-fragment-p)))
+		     (or
+		      (string= "en" (cadar (org-collect-keywords '("LANGUAGE"))))
+		      (string= "en_US" jinx-languages)))
+
+	 :match-case t
+	 :priority 20)
+ ("freq\\(s?\\) " '("frequenc" (if (string= "s" (resnippets-group 1)) "ies " "y ")))
+ ("sn " "tion "))
+
+(resnippets-define
+ "text-mode-ptbr"
+ '(:mode text-mode
+	 :condition (and
+		     (not (or (texmathp) (org-inside-LaTeX-fragment-p)))
+		     (or
+		      (string= "pt" (cadar (org-collect-keywords '("LANGUAGE"))))
+		      (string= "pt_BR" jinx-languages)))
+
+	 :match-case t
+	 :priority 10)
+ ("cao " '(1 "ção ") :priority 1)
+ ("cao " "cão " :priority 2 :word-boundary t)
+ ("coes " '(1 "ções "))
+ ("aa " "à " :word-boundary t)
+ ("apos " "após " :word-boundary t)
+ ("e\\([he]\\) " "é " :word-boundary t)
+ ("estah" "está")
+ ("quencia\\(s?\\) " '("quência" 1 " "))
+ ("freq\\(s?\\) " '("frequência" 1 " "))
+ ("msm " "mesmo ")
+ ("tbm" "também")
+ ("mt\\(s?\\) " '("muito" 1 " "))
+ ("rapido " "rápido ")
+ ("ruido " "ruído ")
+ ("port\\(i?\\)f\\([oó]\\)lio " "portfólio ")
+ ((rx (or "voce " "vc ")) "você "))
+
+(resnippets-define
+ "text-mode"
+ '(:mode text-mode
+	 :condition (not (or (texmathp) (org-inside-LaTeX-fragment-p)))
+	 :match-case t)
+ ("mk" '("\\(" (resnippets-cursor) "\\)") :word-boundary t)
+ ("dm" '("\\[" (resnippets-cursor) "\\]") :word-boundary t)
+ ("qt\\(s?\\) " '("qubit" 1 " "))
+ ("qi " "qubit ")
+ ("qii " "qubits ")
+ ("ali\\*" '((cdlatex-environment "align*")))
+ ("cite " '(citar-insert-keys))
+ ("schro " "Schrödinger " :match-case nil)
+ (",," ","))
 
 (provide 'langs-resnippets-config)
 ```
