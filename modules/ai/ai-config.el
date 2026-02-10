@@ -10,7 +10,7 @@
               :host "generativelanguage.googleapis.com"
               :user "apikey"))
       :stream t))
-  :custom ((gptel-default-mode #'org-mode)
+  :custom ((gptel-default-mode #'markdown-mode)
            (gptel-track-media t)
            (gptel-use-tools t)
            (gptel-model 'gemini-flash-latest)))
@@ -29,6 +29,10 @@
 
 (use-package gptel-org-tools
   :straight (:host codeberg :repo "bajsicki/gptel-got" :branch "main"))
+
+(use-package gptel-quick
+  :straight (:host github :repo "karthink/gptel-quick" :branch "master")
+  :bind (:map embark-general-map ("?" . gptel-quick)))
 
 (use-package ragmacs
    :straight (:host github :repo "positron-solutions/ragmacs":branch "master")

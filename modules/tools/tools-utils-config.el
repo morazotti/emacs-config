@@ -1,4 +1,5 @@
 ;; box instead of dedicated buffer
+(use-package posframe)
 (use-package eldoc-box)
 
 ;; expand-region increases region by semantic expressions

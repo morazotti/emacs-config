@@ -24,21 +24,21 @@
   (define-key evil-visual-state-map (kbd "-") 'er/contract-region)
   (define-key evil-normal-state-map (kbd "/") 'avy-goto-char-timer)
   (define-key evil-visual-state-map (kbd "/") 'avy-goto-char-timer)
+  (evil-set-initial-state 'dired-mode 'emacs)
+  (evil-set-initial-state 'vterm-mode 'emacs)
+  (evil-set-initial-state 'delve-mode 'emacs)
+  (evil-set-initial-state 'elfeed-search-mode 'emacs)
+  (evil-set-initial-state 'elfeed-show-mode 'emacs)
+  (evil-set-initial-state 'ebib-log-mode 'emacs)
+  (evil-set-initial-state 'ebib-index-mode 'emacs)
+  (evil-set-initial-state 'ebib-entry-mode 'emacs)
+  (evil-set-initial-state 'ebib-strings-mode 'emacs)
+  (evil-set-initial-state 'ebib-multiline-mode 'emacs)
+
 
   :hook
   (delve-mode . turn-off-evil-mode))
 (evil-mode)
-
-(evil-set-initial-state 'dired-mode 'emacs)
-(evil-set-initial-state 'vterm-mode 'emacs)
-(evil-set-initial-state 'delve-mode 'emacs)
-(evil-set-initial-state 'elfeed-search-mode 'emacs)
-(evil-set-initial-state 'elfeed-show-mode 'emacs)
-(evil-set-initial-state 'ebib-log-mode 'emacs)
-(evil-set-initial-state 'ebib-index-mode 'emacs)
-(evil-set-initial-state 'ebib-entry-mode 'emacs)
-(evil-set-initial-state 'ebib-strings-mode 'emacs)
-(evil-set-initial-state 'ebib-multiline-mode 'emacs)
 
 (use-package evil-numbers
   :bind (:map evil-normal-state-map
@@ -88,6 +88,7 @@
   "gb" 'gptel-buffer
   "gq" 'gptel-abort
   "gc" 'gptel-commit
+  "gk" 'gptel-quick
 
   ;; jinx
   "tb" 'jinx-correct-all

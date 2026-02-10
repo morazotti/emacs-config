@@ -117,6 +117,7 @@
  ("qii " "qubits ")
  ("ali\\*" '((cdlatex-environment "align*")))
  ("cite " '(citar-insert-keys))
+ ("schro " "Schrödinger " :match-case nil)
  (",," ","))
 
 (provide 'langs-resnippets-config)
