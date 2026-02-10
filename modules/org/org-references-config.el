@@ -48,13 +48,16 @@
            (get-char-property-and-overlay (point) 'TeX-fold-type)))
        (when ov (TeX-fold-show-item ov)))))
 
-(keymap-set org-mode-map "M-g r" 'my/next-reference-or-label)
-(keymap-set org-mode-map "M-g R" 'my/previous-reference-or-label)
 (defvar-keymap my/TeX-ref-map
   :repeat t
   "r" 'my/next-reference-or-label
   "R" 'my/previous-reference-or-label)
 
-(add-hook 'org-mode-hook 'reftex-xref-activate)
+(use-package reftex-xref
+  :straight '(:host github :repo "karthink/reftex-xref" :branch "master")
+  :after org
+  :hook
+  (org-mode . reftex-xref-activate)
+  (org-mode . reftex-eldoc-activate))
 
-(provide 'org-references-config.el)
+(provide 'org-references-config)

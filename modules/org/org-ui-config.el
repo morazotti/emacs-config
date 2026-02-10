@@ -109,8 +109,13 @@
       (2 font-lock-constant-face))))
 
 ;; Faces
-(set-face-attribute 'TeX-fold-folded-face nil :foreground nil :inherit 'shadow)
+(add-hook 'org-mode-hook '(lambda ()
+			    (TeX-fold-mode)
+			    (set-face-attribute 'TeX-fold-folded-face nil :foreground nil :inherit 'shadow)
+			    (TeX-fold-buffer)))
+
 ;; Custom folded display for labels and refs
+
 (defun my/TeX-fold-ref (text)
   (let* ((m (string-match "^\\([^:]+:\\)\\(.*\\)" text))
          (cat (or (match-string 1 text) ""))
@@ -118,6 +123,7 @@
     (when (> (length ref) 13)
         (setq ref (concat (substring ref 0 6) "..." (substring ref -6))))
     (concat "[" (propertize cat 'face 'shadow) ref "]")))
+
 (defun my/TeX-fold-label (&rest texts)
   (cl-loop for text in texts
            for m = (string-match "^\\([^:]+:\\)\\(.*\\)" text)
@@ -125,6 +131,7 @@
            for ref = (or (match-string 2 text) text)
            collect (concat "[" (propertize cat 'face 'shadow) ref "]") into labels
            finally return (mapconcat #'identity labels ",")))
+
 (setq-default TeX-fold-macro-spec-list
               '((my/TeX-fold-label ("cite"))
                 (my/TeX-fold-label ("label"))

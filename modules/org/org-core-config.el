@@ -76,7 +76,10 @@
                         nil 'make-it-local))))
 
   :bind (("C-c l" . org-store-link)
-         (:map org-mode-map ("<f7>" . my/org-export-and-set-async-hook))))
+	 (:map org-mode-map
+	       ("<f7>" . my/org-export-and-set-async-hook)
+	       ("M-g R" . my/previous-reference-or-label)
+	       ("M-g r" . my/next-reference-or-label))))
 
 ;; some extra configs to org and org-export
 (use-package org-contrib)
