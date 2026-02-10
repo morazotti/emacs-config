@@ -231,6 +231,9 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+;; recentf
+(recentf-mode)
+
 ;; vertico - marginalia - orderless: minibuffer framework
 (use-package vertico
   :init
