@@ -1,5 +1,6 @@
 (require 'org-core-config)
 (require 'org-ui-config)
+(require 'org-references-config)
 (require 'org-babel-config)
 (require 'org-link-config)
 (require 'org-agenda-config)
@@ -7,6 +8,5 @@
 (require 'org-capture-config)
 (require 'org-latex-config)
 (require 'org-ox-config)
-(provide 'org-references-config.el)
 
 (provide 'org-config)

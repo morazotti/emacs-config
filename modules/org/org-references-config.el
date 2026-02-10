@@ -54,8 +54,10 @@
   "R" 'my/previous-reference-or-label)
 
 (use-package reftex-xref
+  :init (require 'latex)
   :straight '(:host github :repo "karthink/reftex-xref" :branch "master")
-  :after org
+  :after (latex org)
+  :demand t
   :hook
   (org-mode . reftex-xref-activate)
   (org-mode . reftex-eldoc-activate))
