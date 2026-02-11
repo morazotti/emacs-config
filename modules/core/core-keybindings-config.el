@@ -64,7 +64,7 @@
   "bs" 'save-buffer
   "." 'dired
   "z" 'zoom-window-zoom
-  "fr" 'consult-recent-file
+  "fr" 'recentf
 
   ;; commands
   "x" 'execute-extended-command
@@ -105,7 +105,9 @@
   ;; open - general
   "om" 'notmuch
   "of" 'find-file-other-window
-  "o," 'consult-buffer-other-window
+  "Of" 'find-file-other-frame
+  "ob" 'consult-buffer-other-window
+  "Ob" 'consult-buffer-other-frame
 
   ;; project.el
   "pf" 'project-find-file
@@ -121,6 +123,8 @@
   "hf" 'describe-function
   "hk" 'describe-key
   "hv" 'describe-variable
+  "hm" 'describe-mode
+  "hR" 'info-display-manual
   "hd" 'eldoc
   "h." 'eldoc-box-help-at-point
 
