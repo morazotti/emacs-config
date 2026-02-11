@@ -44,12 +44,11 @@
   :after (citar org-roam)
   :custom (citar-org-roam-capture-template-key "r"))
 
-(citar-org-roam-mode)
-
 (use-package citar-embark
   :after (citar embark)
   :no-require)
 
+(citar-org-roam-mode)
 (citar-embark-mode)
 
 (use-package bibtex-completion
@@ -88,17 +87,22 @@
 (use-package ebib
   :after biblio
 
-  :custom ((ebib-default-directory my/library-directory)
-	   (ebib-bib-search-dirs (list my/library-directory))
-	   (ebib-preload-bib-files (list my/bibliography-file))
-	   (ebib-import-source-directory (file-name-concat home "Downloads"))
-	   (ebib-import-target-directory (file-name-concat ebib-default-directory "pdfs"))
-	   (ebib-reading-list-file (file-name-concat ebib-default-directory "reading-list.org")))
+  :custom
+  (ebib-default-directory my/library-directory)
+  (ebib-bib-search-dirs (list my/library-directory))
+  (ebib-preload-bib-files (list my/bibliography-file))
+  (ebib-import-source-directory (file-name-concat home "Downloads"))
+  (ebib-import-target-directory (file-name-concat ebib-default-directory "pdfs"))
+  (ebib-reading-list-file (file-name-concat ebib-default-directory "reading-list.org"))
+
+  :bind
+  (:map ebib-index-mode-map ("B" . ebib-biblio-import-doi))
+  (:map biblio-selection-mode-map ("e" . ebib-biblio-selection-import))
+
   :config
   (require 'ebib-biblio)
-  (define-key ebib-index-mode-map (kbd "B") #'ebib-biblio-import-doi)
-  (define-key biblio-selection-mode-map (kbd "e") #'ebib-biblio-selection-import))
+  (add-to-list 'org-agenda-files ebib-reading-list-file)
 
-(add-hook 'ebib-reading-list-new-item-hook #'my/ebib-reading-list-add-org-cite)
+  :hook (ebib-reading-list-new-item . my/ebib-reading-list-add-org-cite))
 
 (provide 'tools-references-config)
