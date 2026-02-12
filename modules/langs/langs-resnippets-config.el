@@ -35,6 +35,7 @@
  ("\\(.[a-zA-Z0-9\\\\{}]+\\)\\(\\^{[^]]+}\\)!"
   '(1 2 "\\!_{" (resnippets-cursor) "}"))
 
+ ("<-> " "\\leftrightarrow ")
  ("\\(\\mqty.\\)\\([^])}]*\\);" '(1 2 "\\\\ " (resnippets-cursor)))
  ("lr\\([({[]\\)" '("\\left"
 		    (if (string= "{" (resnippets-group 1))
@@ -98,6 +99,8 @@
  ("estah" "está")
  ("quencia\\(s?\\) " '("quência" 1 " "))
  ("freq\\(s?\\) " '("frequência" 1 " "))
+ ("eq " "equação ")
+ ("eqs " "equações ")
  ("msm " "mesmo ")
  ("tbm" "também")
  ("mt\\(s?\\) " '("muito" 1 " "))
@@ -119,6 +122,7 @@
  ("ali\\*" '((cdlatex-environment "align*")))
  ("cite " '(citar-insert-keys))
  ("schro " "Schrödinger " :match-case nil)
+ ("hamilton\\([^a-zA-Z]\\)" '("Hamilton" 1) :match-case nil)
  (",," ","))
 
 (provide 'langs-resnippets-config)
