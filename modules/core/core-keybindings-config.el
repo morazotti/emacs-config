@@ -18,6 +18,7 @@
   (setq evil-respect-visual-line-mode t)
   (setq evil-want-C-i-jump nil)
   (setq evil-want-C-u-scroll t)
+  (evil-mode)
 
   :config
   (define-key evil-visual-state-map (kbd "=") 'er/expand-region)
@@ -34,7 +35,7 @@
   (evil-set-initial-state 'ebib-strings-mode 'emacs)
   (evil-set-initial-state 'ebib-multiline-mode 'emacs))
 
-(evil-mode)
+;; (evil-mode)
 
 (use-package evil-numbers
   :bind (:map evil-normal-state-map
