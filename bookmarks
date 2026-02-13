@@ -21,21 +21,21 @@
  (position . 1)
  (last-modified 26976 5171 818308 930000))
 ("finances"
- (filename . "~/.config/emacs/private/gastos.ledger")
+ (filename . "~/Documents/expenses/gastos.ledger")
  (front-context-string . ";; A titulo de c")
  (rear-context-string)
  (position . 1))
 ("goals"
- (filename . "~/.config/emacs/private/org/goals.org")
+ (filename . "~/Documents/org/goals.org")
  (front-context-string . "#+TITLE: Plano d")
  (rear-context-string)
  (position . 1))
 ("tasks"
- (filename . "~/.config/emacs/private/org/tasks.org")
+ (filename . "~/Documents/org/tasks.org")
  (front-context-string . "#+AUTHOR: nmoraz")
  (rear-context-string)
  (position . 1)
- (last-modified 25818 30371 61311 42000))
+ (last-modified 27023 10825 730468 810000))
 ("init"
  (filename . "~/.config/emacs/init.el")
  (front-context-string . "#+TITLE: emacs o")
@@ -43,7 +43,7 @@
  (position . 1)
  (last-modified 26976 4350 604420 523000))
 ("notes"
- (filename . "~/.config/emacs/private/org/notes.org")
+ (filename . "~/Documents/org/notes.org")
  (front-context-string . "#+EMAIL: nicolas")
  (rear-context-string . "HOR: nmorazotti\n")
  (position . 22))
