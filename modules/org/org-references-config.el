@@ -62,4 +62,12 @@
   (org-mode . reftex-xref-activate)
   (org-mode . reftex-eldoc-activate))
 
+(use-package org-noter
+  :custom
+  (org-noter-default-insertion-template
+        (list (quote org-noter-insert-under-heading) 
+              "Notes"))
+  (org-noter-highlight-selected-text t)
+  (org-noter-notes-insert-below-target t))
+
 (provide 'org-references-config)
