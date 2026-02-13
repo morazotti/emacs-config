@@ -89,6 +89,7 @@
  ("org" . "1ef59f0aa02e3cff40bae68b756a29bc2001739e")
  ("org-contrib" . "90e1d6bd6288615233dae273f0525a43a9d8779d")
  ("org-modern" . "9bbc44cc7e085dea24e96f0cc0332ed7fcf349ca")
+ ("org-noter" . "81765d267e51efd8b4f5b7276000332ba3eabbf5")
  ("org-reveal" . "f55c851bf6aeb1bb2a7f6cf0f2b7bd0e79c4a5a0")
  ("org-roam" . "c72702cf27891899ea6321fe6505ff04befaf43e")
  ("org-roam-ui" . "2894dcbf56d2eca8d3cae2b1ae183f51724b5db6")

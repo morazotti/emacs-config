@@ -40,15 +40,31 @@
           ("\\dv" . "\\frac{\\mathrm{d}{#1}}{\\mathrm{d}{#2}}")
           ("\\olra" . "\\overleftrightarrow{#1}"))))
 
+(defun my/citar-get-noter-path (key)
+  "Procura por um pdf ou djvu associado à KEY e retorna a string de propriedade."
+  (let* ((dir (or (bound-and-true-p ebib-import-target-directory)
+		  my/pdf-library))
+         (extensions '(".pdf" ".djvu")))
+    (or (seq-some (lambda (ext)
+                    (let ((f (expand-file-name (concat key ext) dir)))
+                      (when (file-exists-p f)
+                        (format ":NOTER_DOCUMENT: %s" f))))
+                  extensions)
+        "")))
+
 (with-eval-after-load 'org-roam
   (add-to-list
    'org-roam-capture-templates
    '("r" "reference" plain
      "%?"
      :if-new
-     (file+head "%<%Y%m%d%H%M%S>-${citar-citekey}.org"
-		":PROPERTIES:\n:ROAM_ALIASES: ${citar-citekey}\n:END:\n
-#+title: ${citar-title}\n#+roam_key: ${citar-citekey}\n")
-     :unnarrowed t)))
+     (file+head
+      "%<%Y%m%d%H%M%S>-${citar-citekey}.org"
+      ":PROPERTIES:
+:ROAM_ALIASES: ${citar-citekey}
+%(my/citar-get-noter-path \"${citar-citekey}\")
+:END:
+#+title: ${citar-title}
+") :unnarrowed t)))
 
 (provide 'org-roam-config)
