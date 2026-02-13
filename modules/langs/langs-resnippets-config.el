@@ -77,6 +77,7 @@
 	 :match-case t
 	 :priority 20)
  ("freq\\(s?\\) " '("frequenc" (if (string= "s" (resnippets-group 1)) "ies " "y ")))
+ ("dyd " "dynamical decoupling ")
  ("sn " "tion "))
 
 (resnippets-define
@@ -105,7 +106,9 @@
  ("tbm" "também")
  ("mt\\(s?\\) " '("muito" 1 " "))
  ("rapido " "rápido ")
- ("ruido " "ruído ")
+ ("ruido\\(s?\\)\\([^a-zA-Z]\\)" '( "ruído" 1 2))
+ ("dinamico " "dinâmico ")
+ ("dyd " "desacoplamento dinâmico " :word-boundary t)
  ("port\\(i?\\)f\\([oó]\\)lio " "portfólio ")
  ((rx (or "voce " "vc ")) "você "))
 
