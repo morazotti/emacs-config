@@ -18,6 +18,16 @@
 (with-eval-after-load 'gptel
   (require 'ai-presets-config))
 
+(defun my/gptel-mode-auto ()
+  "Ensure that this file opens with `gptel-mode' enabled."
+  (save-excursion
+    (modify-file-local-variable-prop-line
+     'eval nil 'delete)
+    (add-file-local-variable-prop-line
+     'eval '(and (fboundp 'gptel-mode) (gptel-mode 1)))))
+
+(add-hook 'gptel-save-state-hook #'my/gptel-mode-auto)
+
 (use-package gptel-commit
   :straight (:host github :repo "lakkiy/gptel-commit")
   :after (gptel magit)
