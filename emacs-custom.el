@@ -4,7 +4,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(TeX-fold-command-prefix "\3o")
- '(auth-sources '("~/.authinfo.gpg"))
  '(bibtex-autokey-name-year-separator "_")
  '(bibtex-autokey-titlewords 2)
  '(bibtex-autokey-year-length 4)
