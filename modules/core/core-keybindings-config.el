@@ -26,6 +26,7 @@
   (define-key evil-normal-state-map (kbd "/") 'avy-goto-char-timer)
   (define-key evil-visual-state-map (kbd "/") 'avy-goto-char-timer)
   (evil-set-initial-state 'dired-mode 'emacs)
+  (evil-set-initial-state 'ibuffer-mode 'emacs)
   (evil-set-initial-state 'vterm-mode 'emacs)
   (evil-set-initial-state 'eshell-mode 'emacs)
   (evil-set-initial-state 'elfeed-search-mode 'emacs)
