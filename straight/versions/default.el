@@ -115,7 +115,7 @@
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
  ("smartparens" . "b629b4e893ba21ba5a381f6c0054bb72f8e96df2")
  ("spinner" . "fa117f0893788f3fe24673715a6b83bb34d238dd")
- ("straight.el" . "4b6289f42a4da0c1bae694ba918b43c72daf0330")
+ ("straight.el" . "644ba036611d5952ec49f1a8abfb6851c19ac86a")
  ("string-inflection" . "4a2f87d7b47f5efe702a78f8a40a98df36eeba13")
  ("tablist" . "fcd37147121fabdf003a70279cf86fbe08cfac6f")
  ("transient" . "5d4a7e718c56cb1b3f99a4cd04d204d627f124b0")
