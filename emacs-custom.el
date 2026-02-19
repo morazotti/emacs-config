@@ -5,6 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(TeX-fold-command-prefix "\3o")
  '(bibtex-autokey-name-year-separator "_")
+ '(bibtex-autokey-titleword-length 'infty)
  '(bibtex-autokey-titlewords 2)
  '(bibtex-autokey-year-length 4)
  '(bibtex-autokey-year-title-separator "_")
@@ -72,11 +73,6 @@
  '(org-hide-macro-markers t)
  '(org-image-actual-width '(350))
  '(org-image-align 'center)
- '(org-latex-preview-appearance-options
-   '(:foreground default :background default :scale 2.0 :html-foreground
-		 "Black" :html-background "Transparent" :html-scale
-		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")) nil nil "Customized with use-package org")
- '(org-latex-src-block-backend 'minted nil nil "Customized with use-package org")
  '(org-modern-hide-stars " ")
  '(org-modern-star 'replace)
  '(org-pretty-entities-include-sub-superscripts nil)
