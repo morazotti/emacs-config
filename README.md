@@ -12,33 +12,17 @@ The startup process begins with the early-init file to optimize the UI
 and memory management, followed by the main init file which orchestrates
 the loading of all sub-modules.
 
-## init-async (silent background org export)
+## async-init (silent background org export)
 
-This config includes `init-async.el`, a small helper that can run some
+This config includes `async-init.el`, a small helper that can run some
 tasks in the background after startup. In particular, it can export Org
 files **silently** (without popping buffers/windows) so you can, for
 example, regenerate documentation like `README.md` from `README.org`
 without interrupting your session.
 
--   Config / entry point: `init-async.el`
+-   Config / entry point: `async-init.el`
 
 ``` elisp
-(setq custom-file (expand-file-name "emacs-custom.el" user-emacs-directory))
-(when (file-exists-p custom-file) (load custom-file))
-
-(dolist (module '("core" "org" "langs"))
-  (add-to-list 'load-path
-	       (expand-file-name
-		(format "modules/%s" module)
-		user-emacs-directory)))
-
-(require 'core-packages-config)
-(require 'core-variables-config)
-(require 'org-core-config)
-(require 'org-babel-config)
-(require 'org-link-config)
-(require 'org-ox-config)
-(require 'langs-latex-config)
 ```
 
 `early-init.el`
@@ -93,6 +77,7 @@ without interrupting your session.
  ;; If there is more than one, they won't work right.
  '(TeX-fold-command-prefix "\3o")
  '(bibtex-autokey-name-year-separator "_")
+ '(bibtex-autokey-titleword-length 'infty)
  '(bibtex-autokey-titlewords 2)
  '(bibtex-autokey-year-length 4)
  '(bibtex-autokey-year-title-separator "_")
@@ -160,12 +145,8 @@ without interrupting your session.
  '(org-hide-macro-markers t)
  '(org-image-actual-width '(350))
  '(org-image-align 'center)
- '(org-latex-preview-appearance-options
-   '(:foreground default :background default :scale 2.0 :html-foreground
-		 "Black" :html-background "Transparent" :html-scale
-		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")) nil nil "Customized with use-package org")
- '(org-latex-src-block-backend 'minted nil nil "Customized with use-package org")
- '(org-modern-star 'fold)
+ '(org-modern-hide-stars " ")
+ '(org-modern-star 'replace)
  '(org-pretty-entities-include-sub-superscripts nil)
  '(org-safe-remote-resources '("\\`\\[\\[file:early-init\\.el]]\\'"))
  '(org-startup-with-latex-preview t)
@@ -183,7 +164,13 @@ without interrupting your session.
  '(italic ((t (:slant italic))))
  '(jinx-misspelled ((t (:underline (:color "red" :style wave :position nil)))))
  '(org-document-title ((t (:weight bold :height 1.0))))
- '(org-drawer ((t (:foreground "Blue1" :family "Ligamonacop"))))
+ '(org-drawer ((t (:inherit fixed-pitch :foreground "Blue1"))))
+ '(org-modern-date-active ((t (:inherit (default fixed-pitch) :background "gray90" :foreground "black" :height 0.8 :family "Ligamonacop"))))
+ '(org-modern-date-inactive ((t (:inherit (default fixed-pitch) :background "gray90" :foreground "gray30" :height 0.8))))
+ '(org-modern-time-active ((t (0.8 (default fixed-pitch) :inherit :height :background "gray35" :foreground "white" :weight semibold))))
+ '(org-modern-time-inactive ((t (:inherit (default fixed-pitch) :background "gray50" :foreground "gray95" :height 0.8))))
+ '(org-property-value ((t (:inherit fixed-pitch))))
+ '(org-special-keyword ((t (:inherit fixed-pitch :foreground "#fe640b"))))
  '(visual-shorthands-face ((t (:inherit font-lock-keyword-face :extend nil :background "#e0e0e0")))))
 ```
 
@@ -420,6 +407,7 @@ management to the visual theme and keybinding philosophy.
   (setq evil-respect-visual-line-mode t)
   (setq evil-want-C-i-jump nil)
   (setq evil-want-C-u-scroll t)
+  (evil-mode)
 
   :config
   (define-key evil-visual-state-map (kbd "=") 'er/expand-region)
@@ -427,20 +415,18 @@ management to the visual theme and keybinding philosophy.
   (define-key evil-normal-state-map (kbd "/") 'avy-goto-char-timer)
   (define-key evil-visual-state-map (kbd "/") 'avy-goto-char-timer)
   (evil-set-initial-state 'dired-mode 'emacs)
+  (evil-set-initial-state 'ibuffer-mode 'emacs)
   (evil-set-initial-state 'vterm-mode 'emacs)
-  (evil-set-initial-state 'delve-mode 'emacs)
+  (evil-set-initial-state 'eshell-mode 'emacs)
   (evil-set-initial-state 'elfeed-search-mode 'emacs)
   (evil-set-initial-state 'elfeed-show-mode 'emacs)
   (evil-set-initial-state 'ebib-log-mode 'emacs)
   (evil-set-initial-state 'ebib-index-mode 'emacs)
   (evil-set-initial-state 'ebib-entry-mode 'emacs)
   (evil-set-initial-state 'ebib-strings-mode 'emacs)
-  (evil-set-initial-state 'ebib-multiline-mode 'emacs)
+  (evil-set-initial-state 'ebib-multiline-mode 'emacs))
 
-
-  :hook
-  (delve-mode . turn-off-evil-mode))
-(evil-mode)
+;; (evil-mode)
 
 (use-package evil-numbers
   :bind (:map evil-normal-state-map
@@ -470,10 +456,11 @@ management to the visual theme and keybinding philosophy.
   "bs" 'save-buffer
   "." 'dired
   "z" 'zoom-window-zoom
+  "fr" 'recentf
 
   ;; commands
   "x" 'execute-extended-command
-  ":" 'consult-complex-command
+  ":" 'eval-expression
   ";" 'avy-goto-line
   "j" 'my/duplicate-line
 
@@ -510,7 +497,9 @@ management to the visual theme and keybinding philosophy.
   ;; open - general
   "om" 'notmuch
   "of" 'find-file-other-window
-  "o," 'consult-buffer-other-window
+  "Of" 'find-file-other-frame
+  "ob" 'consult-buffer-other-window
+  "Ob" 'consult-buffer-other-frame
 
   ;; project.el
   "pf" 'project-find-file
@@ -526,6 +515,8 @@ management to the visual theme and keybinding philosophy.
   "hf" 'describe-function
   "hk" 'describe-key
   "hv" 'describe-variable
+  "hm" 'describe-mode
+  "hR" 'info-display-manual
   "hd" 'eldoc
   "h." 'eldoc-box-help-at-point
 
@@ -864,6 +855,9 @@ management to the visual theme and keybinding philosophy.
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+;; recentf
+(recentf-mode)
+
 ;; vertico - marginalia - orderless: minibuffer framework
 (use-package vertico
   :init
@@ -984,7 +978,7 @@ research, note-taking, and scientific publishing.
             (file-name-concat home ".cache" "ltximg"))
 
            ;; ox
-           (org-export-async-init-file (expand-file-name "init-async.el" user-emacs-directory)))
+           (org-export-async-init-file (expand-file-name "async-init.el" user-emacs-directory)))
 
   :hook ((org-babel-after-execute . display-ansi-colors)
          (org-mode . org-indent-mode)
@@ -1032,14 +1026,20 @@ research, note-taking, and scientific publishing.
   "Alist mapping macro names to display colors in Emacs.")
 
 (defun my/org-fontify-color-macros ()
-  "Aplica cores reais às macros {{{cor(texto)}}} no buffer."
-  (setq font-lock-extra-managed-props (append '(invisible display) font-lock-extra-managed-props))
+  "Aplica cores às macros {{{cor(texto)}}} e adiciona lógica de revelar ao cursor."
+  ;; Adicionamos 'my/org-color-macro' à lista de propriedades gerenciadas para limpeza correta
+  (setq font-lock-extra-managed-props (append '(invisible display my/org-color-macro) font-lock-extra-managed-props))
   (let ((color-list-aux (list)))
     (dolist (color-entry my/latex-colors-alist)
       (let ((macro-name (car color-entry))
             (color-value (cdr color-entry)))
         (push `(,(format "{{{%s(\\(.*?\\))}}}" macro-name)
                 (0 (progn
+                     ;; Marcamos a região inteira com uma propriedade única (o ponto de início)
+                     ;; Isso permite detectar limites mesmo entre macros adjacentes
+                     (put-text-property (match-beginning 0) (match-end 0)
+                                        'my/org-color-macro (match-beginning 0))
+                     ;; Aplica invisibilidade e cores
                      (put-text-property (match-beginning 0) (match-beginning 1)
                                         'invisible t)
                      (put-text-property (match-beginning 1) (match-end 1)
@@ -1048,6 +1048,39 @@ research, note-taking, and scientific publishing.
                                         'invisible t))))
               color-list-aux)))
     (font-lock-add-keywords nil color-list-aux 'append)))
+
+;; Variável para rastrear a última região revelada
+(defvar-local my/org-color-macro-last-region nil)
+
+(defun my/org-color-macro-auto-reveal ()
+  "Revela macros de cor quando o cursor está sobre elas."
+  (when (eq major-mode 'org-mode)
+    (let* ((point (point))
+           ;; Verifica se estamos sobre um macro
+           (prop (get-text-property point 'my/org-color-macro))
+           ;; Encontra os limites do macro atual (start e end)
+           (start (if prop (or (previous-single-property-change (1+ point) 'my/org-color-macro) (point-min))))
+           (end (if prop (or (next-single-property-change point 'my/org-color-macro) (point-max)))))
+
+      ;; 1. Se saímos de um macro ou mudamos de macro, esconder o anterior
+      (when (and my/org-color-macro-last-region
+                 (or (not prop)
+                     (not (equal (cons start end) my/org-color-macro-last-region))))
+        (let ((reg-start (car my/org-color-macro-last-region))
+              (reg-end (cdr my/org-color-macro-last-region)))
+          ;; font-lock-flush força o Emacs a reaplicar as regras (re-escondendo o macro)
+          (when (< reg-start reg-end)
+            (font-lock-flush reg-start reg-end)))
+        (setq my/org-color-macro-last-region nil))
+
+      ;; 2. Se estamos dentro de um macro, revelar (remover invisibilidade)
+      (when (and prop start end (not (equal (cons start end) my/org-color-macro-last-region)))
+        (with-silent-modifications
+          (remove-text-properties start end '(invisible nil)))
+        (setq my/org-color-macro-last-region (cons start end))))))
+
+;; Adiciona o hook globalmente (ou apenas no hook do org-mode se preferir)
+(add-hook 'post-command-hook #'my/org-color-macro-auto-reveal)
 
 (defun my/org--color-macro-header (backend)
   (pcase backend
@@ -1108,6 +1141,7 @@ research, note-taking, and scientific publishing.
 
 (add-hook 'org-mode-hook #'my/org-fontify-color-macros)
 
+;; Restante das configurações (org-modern, mixed-pitch, etc)
 (use-package org-modern
   :after org
   :straight (:host github :repo "minad/org-modern" :branch "main")
@@ -1125,6 +1159,39 @@ research, note-taking, and scientific publishing.
    '(("\\(\\(?:\\\\\\(?:label\\|ref\\|eqref\\)\\)\\){\\(.+?\\)}"
       (1 font-lock-keyword-face)
       (2 font-lock-constant-face))))
+
+;; Faces
+(defun my/org--TeX-fold-setup ()
+  (TeX-fold-mode)
+  (unless (get 'my/org--TeX-fold-setup 'face-attribute-set)
+    (set-face-attribute 'TeX-fold-folded-face nil :foreground nil :inherit 'shadow)
+    (put 'my/org--TeX-fold-setup 'face-attribute-set t))
+  (TeX-fold-buffer))
+
+(add-hook 'org-mode-hook 'my/org--TeX-fold-setup)
+
+;; Custom folded display for labels and refs
+
+(defun my/TeX-fold-ref (text)
+  (let* ((m (string-match "^\\([^:]+:\\)\\(.*\\)" text))
+         (cat (or (match-string 1 text) ""))
+         (ref (or (match-string 2 text) text)))
+    (when (> (length ref) 13)
+        (setq ref (concat (substring ref 0 6) "..." (substring ref -6))))
+    (concat "[" (propertize cat 'face 'shadow) ref "]")))
+
+(defun my/TeX-fold-label (&rest texts)
+  (cl-loop for text in texts
+           for m = (string-match "^\\([^:]+:\\)\\(.*\\)" text)
+           for cat = (or (match-string 1 text) "")
+           for ref = (or (match-string 2 text) text)
+           collect (concat "[" (propertize cat 'face 'shadow) ref "]") into labels
+           finally return (mapconcat #'identity labels ",")))
+
+(setq-default TeX-fold-macro-spec-list
+              '((my/TeX-fold-label ("cite"))
+                (my/TeX-fold-label ("label"))
+                (my/TeX-fold-ref ("ref" "pageref" "eqref" "footref"))))
 
 ;; svg-tags: create buttons with svg
 ;; (use-package svg-lib)
@@ -1259,6 +1326,17 @@ research, note-taking, and scientific publishing.
           ("\\dv" . "\\frac{\\mathrm{d}{#1}}{\\mathrm{d}{#2}}")
           ("\\olra" . "\\overleftrightarrow{#1}"))))
 
+(defun my/citar-get-noter-path (key)
+  "Procura por um pdf ou djvu associado à KEY e retorna a string de propriedade."
+  (let* ((dir (or (bound-and-true-p ebib-import-target-directory)
+		  my/pdf-library))
+         (extensions '(".pdf" ".djvu")))
+    (or (seq-some (lambda (ext)
+                    (let ((f (expand-file-name (concat key ext) dir)))
+                      (when (file-exists-p f)
+                        (format ":NOTER_DOCUMENT: %s" f))))
+                  extensions)
+        "")))
 
 (with-eval-after-load 'org-roam
   (add-to-list
@@ -1266,17 +1344,16 @@ research, note-taking, and scientific publishing.
    '("r" "reference" plain
      "%?"
      :if-new
-     (file+head "%<%Y%m%d%H%M%S>-${citar-citekey}.org"
-		":PROPERTIES:\n:ROAM_ALIASES: ${citar-citekey}\n:END:\n
-#+title: ${citar-title}\n#+roam_key: ${citar-citekey}\n")
-     :unnarrowed t)))
+     (file+head
+      "%<%Y%m%d%H%M%S>-${citar-citekey}.org"
+      ":PROPERTIES:
+:ROAM_ALIASES: ${citar-citekey}
+%(my/citar-get-noter-path \"${citar-citekey}\")
+:END:
+#+title: ${citar-title}
+") :unnarrowed t)))
 
 (provide 'org-roam-config)
-
-(setq org-roam-capture-templates '(("d" "default" plain "%?" :target (file+head
-				    "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
-")
-  :unnarrowed t)))
 ```
 
 `org-capture-config.el`
@@ -1291,8 +1368,18 @@ research, note-taking, and scientific publishing.
          "* TODO %?\n")
         ("i" "Inbox" entry (file+headline "~/Documents/org/notes.org" "Inbox")
          "* TODO <%<%Y-%m-%d %H:%M:%S>> \n %?\n")
-  	("t" "Tasks" entry (file+headline "~/Documents/org/tasks.org" "Tarefas")
+        ("v" "Grupo de Virtudes" entry
+	 (file+olp "~/Documents/org/tasks.org" "Religião" "Grupo de Virtudes")
+	 "* TODO [N] Grupo de Virtudes\n SCHEDULED: %^T"
+	 :immediate-finish t)
+	("r" "Recolhimento" entry
+	 (file+olp "~/Documents/org/tasks.org" "Religião" "Recolhimento")
+	 "* TODO [N] Recolhimento\n SCHEDULED: %^T"
+	 :immediate-finish t)
+
+	("t" "Tasks" entry (file+headline "~/Documents/org/tasks.org" "Tarefas")
          "* TODO %?\n")))
+
 (global-set-key (kbd "C-c c") 'org-capture)
 (provide 'org-capture-config)
 ```
@@ -1623,13 +1710,23 @@ AI-related tooling and configuration.
               :host "generativelanguage.googleapis.com"
               :user "apikey"))
       :stream t))
-  :custom ((gptel-default-mode #'markdown-mode)
+  :custom ((gptel-default-mode #'org-mode)
            (gptel-track-media t)
            (gptel-use-tools t)
            (gptel-model 'gemini-flash-latest)))
 
 (with-eval-after-load 'gptel
   (require 'ai-presets-config))
+
+(defun my/gptel-mode-auto ()
+  "Ensure that this file opens with `gptel-mode' enabled."
+  (save-excursion
+    (modify-file-local-variable-prop-line
+     'eval nil 'delete)
+    (add-file-local-variable-prop-line
+     'eval '(and (fboundp 'gptel-mode) (gptel-mode 1)))))
+
+(add-hook 'gptel-save-state-hook #'my/gptel-mode-auto)
 
 (use-package gptel-commit
   :straight (:host github :repo "lakkiy/gptel-commit")
@@ -1794,6 +1891,7 @@ Guidelines:
 ``` elisp
 (require 'org-core-config)
 (require 'org-ui-config)
+(require 'org-references-config)
 (require 'org-babel-config)
 (require 'org-link-config)
 (require 'org-agenda-config)
@@ -1801,7 +1899,6 @@ Guidelines:
 (require 'org-capture-config)
 (require 'org-latex-config)
 (require 'org-ox-config)
-(provide 'org-references-config.el)
 
 (provide 'org-config)
 ```
@@ -1893,12 +1990,11 @@ directly into the Emacs workflow.
   :after (citar org-roam)
   :custom (citar-org-roam-capture-template-key "r"))
 
-(citar-org-roam-mode)
-
 (use-package citar-embark
   :after (citar embark)
   :no-require)
 
+(citar-org-roam-mode)
 (citar-embark-mode)
 
 (use-package bibtex-completion
@@ -1937,18 +2033,23 @@ directly into the Emacs workflow.
 (use-package ebib
   :after biblio
 
-  :custom ((ebib-default-directory my/library-directory)
-	   (ebib-bib-search-dirs (list my/library-directory))
-	   (ebib-preload-bib-files (list my/bibliography-file))
-	   (ebib-import-source-directory (file-name-concat home "Downloads"))
-	   (ebib-import-target-directory (file-name-concat ebib-default-directory "pdfs"))
-	   (ebib-reading-list-file (file-name-concat ebib-default-directory "reading-list.org")))
+  :custom
+  (ebib-default-directory my/library-directory)
+  (ebib-bib-search-dirs (list my/library-directory))
+  (ebib-preload-bib-files (list my/bibliography-file))
+  (ebib-import-source-directory (file-name-concat home "Downloads"))
+  (ebib-import-target-directory (file-name-concat ebib-default-directory "pdfs"))
+  (ebib-reading-list-file (file-name-concat ebib-default-directory "reading-list.org"))
+
+  :bind
+  (:map ebib-index-mode-map ("B" . ebib-biblio-import-doi))
+  (:map biblio-selection-mode-map ("e" . ebib-biblio-selection-import))
+
   :config
   (require 'ebib-biblio)
-  (define-key ebib-index-mode-map (kbd "B") #'ebib-biblio-import-doi)
-  (define-key biblio-selection-mode-map (kbd "e") #'ebib-biblio-selection-import))
+  (add-to-list 'org-agenda-files ebib-reading-list-file)
 
-(add-hook 'ebib-reading-list-new-item-hook #'my/ebib-reading-list-add-org-cite)
+  :hook (ebib-reading-list-new-item . my/ebib-reading-list-add-org-cite))
 
 (provide 'tools-references-config)
 ```
@@ -2364,7 +2465,7 @@ features, REPLs, and formatting tools.
  ("\\([a-zA-Z{\\]+\\)hh" '(1 "\\hbar"))
  ("\\([0-9a-zA-Z(){\\]+\\)ll" '(1 "\\ell"))
  ("\\([a-zA-Z0-9 \\]+\\)conj" '(1 "^{*}"))
- ("\\([a-zA-Z\\]+\\)trans" '(1 "^{T}"))
+ ("\\([a-zA-Z\\]+\\)T" '(1 "^{T}"))
  ("\\([a-zA-Z\\]+\\)comp" '(1 "^{\\perp}"))
  ("\\([a-zA-Z\\]+\\)perp" '(1 "^{\\perp}"))
  ("\\([a-zA-Z\\]+\\)inv" '(1 "^{-1}"))
@@ -2375,6 +2476,7 @@ features, REPLs, and formatting tools.
  ("\\(.[a-zA-Z0-9\\\\{}]+\\)\\(\\^{[^]]+}\\)!"
   '(1 2 "\\!_{" (resnippets-cursor) "}"))
 
+ ("<-> " "\\leftrightarrow ")
  ("\\(\\mqty.\\)\\([^])}]*\\);" '(1 2 "\\\\ " (resnippets-cursor)))
  ("lr\\([({[]\\)" '("\\left"
 		    (if (string= "{" (resnippets-group 1))
@@ -2385,6 +2487,7 @@ features, REPLs, and formatting tools.
  ("lr<" '("\\left\\langle " (resnippets-cursor) " \\right\\rangle"))
 
  ("^," "&")
+ ("\\([&,]+\\)=" "&=")
  ("\\ket{bra" '("\ketbra{" (resnippets-cursor) "}{"))
  ("<\\([a-zA-Z0-9_^{}\\\\]+\\)|" '("\\bra{" 1 "}"))
  ("<\\([a-zA-Z0-9_^{}\\\\]+\\) ?|\\([a-zA-Z0-9_^{}\\\\]+\\) ?>"
@@ -2413,9 +2516,15 @@ features, REPLs, and formatting tools.
 		      (string= "en_US" jinx-languages)))
 
 	 :match-case t
-	 :priority 20)
- ("freq\\(s?\\) " '("frequenc" (if (string= "s" (resnippets-group 1)) "ies " "y ")))
- ("sn " "tion "))
+	 :priority 20
+	 :suffix t)
+ ("freq\\(s?\\)" '("frequenc" (if (string= "s" (resnippets-group 1)) "ies " "y")))
+ ("dyd" "dynamical decoupling")
+ ("qk" "quick")
+ ("theyr" "they're")
+ ("r" "are" :word-boundary t)
+ ("cont" "continuous" :word-boundary t)
+ ("sn" "tion"))
 
 (resnippets-define
  "text-mode-ptbr"
@@ -2427,38 +2536,47 @@ features, REPLs, and formatting tools.
 		      (string= "pt_BR" jinx-languages)))
 
 	 :match-case t
-	 :priority 10)
- ("cao " '(1 "ção ") :priority 1)
- ("cao " "cão " :priority 2 :word-boundary t)
- ("coes " '(1 "ções "))
- ("aa " "à " :word-boundary t)
- ("apos " "após " :word-boundary t)
- ("e\\([he]\\) " "é " :word-boundary t)
+	 :priority 10
+	 :suffix t)
+ ("cao" '(1 "ção") :priority 1)
+ ("sao" '(1 "são") :priority 1)
+ ("cao" "cão" :priority 2 :word-boundary t)
+ ("coes" '(1 "ções"))
+ ("aa\\(s?\\)" '("à" 1) :word-boundary t)
+ ("apos" "após" :word-boundary t)
+ ("e\\([he]\\)" "é" :word-boundary t)
  ("estah" "está")
- ("quencia\\(s?\\) " '("quência" 1 " "))
- ("freq\\(s?\\) " '("frequência" 1 " "))
- ("msm " "mesmo ")
+ ("quencia\\(s?\\)" '("quência" 1))
+ ("freq\\(s?\\)" '("frequência" 1))
+ ("eq" "equação")
+ ("eqs" "equações")
+ ("msm" "mesmo")
  ("tbm" "também")
- ("mt\\(s?\\) " '("muito" 1 " "))
- ("rapido " "rápido ")
- ("ruido " "ruído ")
- ("port\\(i?\\)f\\([oó]\\)lio " "portfólio ")
- ((rx (or "voce " "vc ")) "você "))
+ ("mt\\(s?\\)" '("muito" 1))
+ ("rapido" "rápido ")
+ ("ruido\\(s?\\)\\([^a-zA-Z]\\)" '( "ruído" 1 2))
+ ("dinamico" "dinâmico" :suffix t)
+ ("dyd" "desacoplamento dinâmico" :word-boundary t)
+ ("port\\(i?\\)f\\([oó]\\)lio" "portfólio")
+ ((rx (or "voce" "vc")) "você")
+ ((rx (or "voces" "vcs")) "vocês"))
 
 (resnippets-define
  "text-mode"
  '(:mode text-mode
 	 :condition (not (or (texmathp) (org-inside-LaTeX-fragment-p)))
-	 :match-case t)
- ("mk" '("\\(" (resnippets-cursor) "\\)") :word-boundary t)
- ("dm" '("\\[" (resnippets-cursor) "\\]") :word-boundary t)
- ("qt\\(s?\\) " '("qubit" 1 " "))
- ("qi " "qubit ")
- ("qii " "qubits ")
+	 :match-case t
+	 :suffix t)
+ ("mk" '("\\(" (resnippets-cursor) "\\)") :word-boundary t :suffix nil)
+ ("dm" '("\\[" (resnippets-cursor) "\\]") :word-boundary t :suffix nil)
+ ("qt\\(s?\\)" '("qubit" 1))
+ ("qi" "qubit")
+ ("qii" "qubits")
  ("ali\\*" '((cdlatex-environment "align*")))
- ("cite " '(citar-insert-keys))
- ("schro " "Schrödinger " :match-case nil)
- (",," ","))
+ ("cite" '(citar-insert-keys))
+ ("schro" "Schrödinger" :match-case nil)
+ ("hamilton\\([^a-zA-Z]\\)" '("Hamilton" 1) :match-case nil)
+ (",," "," :suffix nil))
 
 (provide 'langs-resnippets-config)
 ```
