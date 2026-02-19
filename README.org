@@ -9,11 +9,11 @@ This is a modular Emacs configuration designed for performance, scientific writi
 * Initialization
 The startup process begins with the early-init file to optimize the UI and memory management, followed by the main init file which orchestrates the loading of all sub-modules.
 
-** init-async (silent background org export)
-This config includes ~init-async.el~, a small helper that can run some tasks in the background after startup. In particular, it can export Org files *silently* (without popping buffers/windows) so you can, for example, regenerate documentation like ~README.md~ from ~README.org~ without interrupting your session.
+** async-init (silent background org export)
+This config includes ~async-init.el~, a small helper that can run some tasks in the background after startup. In particular, it can export Org files *silently* (without popping buffers/windows) so you can, for example, regenerate documentation like ~README.md~ from ~README.org~ without interrupting your session.
 
-- Config / entry point: ~init-async.el~
-#+include: "init-async.el" src elisp
+- Config / entry point: ~async-init.el~
+#+include: "async-init.el" src elisp
 
 - ~early-init.el~ :: Configures the frame UI before it's created and maximizes garbage collection thresholds for a faster startup.
 
