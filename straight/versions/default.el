@@ -108,7 +108,7 @@
  ("ragmacs" . "d3ad46ded557a651faa959f1545ca4df48da78f0")
  ("rainbow-delimiters" . "f40ece58df8b2f0fb6c8576b527755a552a5e763")
  ("reftex-xref" . "27d9aa569546b7f4afcf47d2af9e31a6bc745055")
- ("resnippets.el" . "f5f703fae4be3ae624b896c3f9811824e21f15d1")
+ ("resnippets.el" . "52c46934b6635597d32d7794986757272061640b")
  ("s.el" . "dda84d38fffdaf0c9b12837b504b402af910d01d")
  ("seq" . "da86da9bf111f68fb81efd466d76d53af5aebc00")
  ("sesman" . "7bca68dbbab0af26a6a23be1ff5fa97f9a18e022")
