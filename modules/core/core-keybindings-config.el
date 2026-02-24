@@ -51,178 +51,182 @@
 
 ;; leader-key
 (use-package general
-    :config (general-evil-setup t)
-    (general-create-definer my/leader-keys
-      :keymaps '(normal visual)
-      :prefix "SPC"))
+  :config
+  (general-evil-setup t)
+  (general-create-definer my/leader-keys
+    :keymaps '(normal visual)
+    :prefix "SPC")
 
-(my/leader-keys
-  ;; file and buffer general usage
-  "SPC" 'find-file 
-  "RET" 'consult-bookmark
-  "," 'consult-buffer
-  "be" 'eval-buffer
-  "bb" 'ibuffer
-  "bk" 'kill-buffer
-  "bs" 'save-buffer
-  "." 'dired
-  "z" 'zoom-window-zoom
-  "fr" 'recentf
+  (my/leader-keys
+   ;; file and buffer general usage
+   "SPC" 'find-file
+   "RET" 'consult-bookmark
+   "," 'consult-buffer
+   "be" 'eval-buffer
+   "bb" 'ibuffer
+   "bk" 'kill-buffer
+   "bs" 'save-buffer
+   "." 'dired
+   "z" 'zoom-window-zoom
+   "fr" 'recentf
+   "hh" 'beginning-of-buffer
+   "kk" 'end-of-buffer
 
-  ;; commands
-  "x" 'execute-extended-command
-  ":" 'eval-expression
-  ";" 'avy-goto-line
-  "j" 'my/duplicate-line
+   ;; commands
+   "x" 'execute-extended-command
+   ":" 'eval-expression
+   ";" 'avy-goto-line
+   "j" 'my/duplicate-line
 
-  ;; movement
-  "TAB" 'other-window
-  "s" 'avy-goto-char
+   ;; movement
+   "TAB" 'other-window
+   "s" 'avy-goto-char
 
-  ;; gptel
-  "gg" 'gptel
-  "ga" 'gptel-add
-  "gm" 'gptel-menu
-  "gr" 'gptel-rewrite
-  "gs" 'gptel-send
-  "gb" 'gptel-buffer
-  "gq" 'gptel-abort
-  "gc" 'gptel-commit
-  "gk" 'gptel-quick
+   ;; gptel
+   "gg" 'gptel
+   "ga" 'gptel-add
+   "gm" 'gptel-menu
+   "gr" 'gptel-rewrite
+   "gs" 'gptel-send
+   "gb" 'gptel-buffer
+   "gq" 'gptel-abort
+   "gc" 'gptel-commit
+   "gk" 'gptel-quick
 
-  ;; jinx
-  "tb" 'jinx-correct-all
-  "tw" 'jinx-correct-nearest
+   ;; jinx
+   "tb" 'jinx-correct-all
+   "tw" 'jinx-correct-nearest
 
-  ;; windows
-  "wk" 'delete-window
-  "ww" 'delete-other-windows
-  "wh" 'my/split-and-follow-horizontally
-  "wv" 'my/split-and-follow-vertically
-  "wp" 'winner-undo
-  "wn" 'winner-redo
-  "w-" 'balance-windows
-  ;; "wt" 'transpose-frame
-  "wo" 'ace-window
+   ;; windows
+   "wk" 'delete-window
+   "ww" 'delete-other-windows
+   "wh" 'my/split-and-follow-horizontally
+   "wv" 'my/split-and-follow-vertically
+   "wp" 'winner-undo
+   "wn" 'winner-redo
+   "w-" 'balance-windows
+   ;; "wt" 'transpose-frame
+   "wo" 'ace-window
 
-  ;; open - general
-  "om" 'notmuch
-  "of" 'find-file-other-window
-  "Of" 'find-file-other-frame
-  "ob" 'consult-buffer-other-window
-  "Ob" 'consult-buffer-other-frame
+   ;; open - general
+   "om" 'notmuch
+   "of" 'find-file-other-window
+   "Of" 'find-file-other-frame
+   "ob" 'consult-buffer-other-window
+   "Ob" 'consult-buffer-other-frame
 
-  ;; project.el
-  "pf" 'project-find-file
-  "pb" 'consult-project-buffer
-  "pc" 'project-compile
-  "pp" 'project-switch-project
-  "pk" 'project-kill-buffers
-  "ps" 'project-shell
-  "p!" 'project-shell-command
+   ;; project.el
+   "pf" 'project-find-file
+   "pb" 'consult-project-buffer
+   "pc" 'project-compile
+   "pp" 'project-switch-project
+   "pk" 'project-kill-buffers
+   "ps" 'project-shell
+   "p!" 'project-shell-command
 
-  ;; help
-  "ha" 'apropos-command
-  "hf" 'describe-function
-  "hk" 'describe-key
-  "hv" 'describe-variable
-  "hm" 'describe-mode
-  "hR" 'info-display-manual
-  "hd" 'eldoc
-  "h." 'eldoc-box-help-at-point
+   ;; help
+   "ha" 'apropos-command
+   "hf" 'describe-function
+   "hk" 'describe-key
+   "hv" 'describe-variable
+   "hm" 'describe-mode
+   "hR" 'info-display-manual
+   "hd" 'eldoc
+   "h." 'eldoc-box-help-at-point
 
-  ;; register
-  "rs" 'consult-register-store
-  "rl" 'consult-register-load
-  "rr" 'consult-register
+   ;; register
+   "rs" 'consult-register-store
+   "rl" 'consult-register-load
+   "rr" 'consult-register
 
-  ;; org roam
-  "rf" 'org-roam-node-find
-  "rc" 'org-roam-capture
-  "rb" 'org-roam-buffer-toggle
-  "rI" 'org-roam-node-insert-immediate
-  "ri" 'org-roam-node-insert
-  "ra" 'org-roam-alias-add
-  "r]" 'org-roam-ref-find
-  ;; "rd" 'org-roam-dailies-goto-today
-  ;; "rg" 'org-roam-dailies-find-date
-  "rt" 'org-transclusion-add
+   ;; org roam
+   "rf" 'org-roam-node-find
+   "rc" 'org-roam-capture
+   "rb" 'org-roam-buffer-toggle
+   "rI" 'org-roam-node-insert-immediate
+   "ri" 'org-roam-node-insert
+   "ra" 'org-roam-alias-add
+   "r]" 'org-roam-ref-find
+   ;; "rd" 'org-roam-dailies-goto-today
+   ;; "rg" 'org-roam-dailies-find-date
+   "rt" 'org-transclusion-add
 
-  ;; consult
-  "/"  'consult-ripgrep
-  "cd" 'consult-find
-  "cG" 'consult-git-grep
+   ;; consult
+   "/"  'consult-ripgrep
+   "cd" 'consult-find
+   "cG" 'consult-git-grep
 
-  ;; org ref
-  "[" 'citar-open
-  "]" 'org-cite-insert
-  ")" 'consult-reftex-insert-reference
+   ;; org ref
+   "[" 'citar-open
+   "]" 'org-cite-insert
+   ")" 'consult-reftex-insert-reference
 
-  ;; snippets
-  "yi" 'yas-insert-snippet
-  "yn" 'yas-new-snippet
-  "yv" 'yas-visit-snippet-file
+   ;; snippets
+   "yi" 'yas-insert-snippet
+   "yn" 'yas-new-snippet
+   "yv" 'yas-visit-snippet-file
 
-  ;; agenda
-  "aa" 'org-agenda
-  "a[" 'org-agenda-file-to-front
-  "a]" 'org-remove-file
+   ;; agenda
+   "aa" 'org-agenda
+   "a[" 'org-agenda-file-to-front
+   "a]" 'org-remove-file
 
-  ;; store link
-  "ls" 'org-store-link
-  "li" 'org-insert-link
+   ;; store link
+   "ls" 'org-store-link
+   "li" 'org-insert-link
 
-  ;; smart-parens
-  "(k" 'sp-unwrap-sexp
-  "((" 'sp-rewrap-sexp
+   ;; smart-parens
+   "(k" 'sp-unwrap-sexp
+   "((" 'sp-rewrap-sexp
 
-  ;; ;; multiple cursors
-  ;; "@" 'evil-multiedit-toggle-marker-here
-  ;; "m@" 'evil-multiedit-match-all
-  ;; "mn" 'evil-multiedit-match-and-next
-  ;; "mp" 'evil-multiedit-match-and-prev
+   ;; ;; multiple cursors
+   ;; "@" 'evil-multiedit-toggle-marker-here
+   ;; "m@" 'evil-multiedit-match-all
+   ;; "mn" 'evil-multiedit-match-and-next
+   ;; "mp" 'evil-multiedit-match-and-prev
 
-  ;; narrow
-  "ns" 'org-narrow-to-subtree
-  "nn" 'narrow-to-region
-  "np" 'narrow-to-page
-  "nd" 'narrow-to-defun
-  "nw" 'widen
+   ;; narrow
+   "ns" 'org-narrow-to-subtree
+   "nn" 'narrow-to-region
+   "np" 'narrow-to-page
+   "nd" 'narrow-to-defun
+   "nw" 'widen
 
-  ;; vundo
-  "u" 'vundo
+   ;; vundo
+   "u" 'vundo
 
-  ;; elfeed
-  "ee" 'elfeed
+   ;; elfeed
+   "ee" 'elfeed
 
-  ;; ebib
-  "eb" 'ebib
+   ;; ebib
+   "eb" 'ebib
 
-  ;; terminal
-  "tt" 'vterm
-  "et" 'eshell
+   ;; terminal
+   "tt" 'vterm
+   "et" 'eshell
 
-  ;; dape
-  "dd" 'dape
-  "di" 'dape-info
-  "dk" 'dape-kill
-  "dn" 'dape-next
-  "dr" 'dape-restart
-  "db" 'dape-breakpoint-toggle
-  "dl" 'dape-breakpoint-log
-  "dh" 'dape-breakpoint-hits
-  "de" 'dape-breakpoint-expression
-  "dB" 'dape-breakpoint-remove-all
-  "dq" 'dape-quit
-  "dR" 'dape-repl
-  "dc" 'dape-continue
-  "dw" 'dape-watch-dwim
-  "dx" 'dape-evaluate-expression
-  
-  ;; other commands
-  "ie" 'emoji-search
-  "ip" 'org-paste-image
-  "ev" 'org-babel-tangle
-  "ex" 'org-export-dispatch)
+   ;; dape
+   "dd" 'dape
+   "di" 'dape-info
+   "dk" 'dape-kill
+   "dn" 'dape-next
+   "dr" 'dape-restart
+   "db" 'dape-breakpoint-toggle
+   "dl" 'dape-breakpoint-log
+   "dh" 'dape-breakpoint-hits
+   "de" 'dape-breakpoint-expression
+   "dB" 'dape-breakpoint-remove-all
+   "dq" 'dape-quit
+   "dR" 'dape-repl
+   "dc" 'dape-continue
+   "dw" 'dape-watch-dwim
+   "dx" 'dape-evaluate-expression
+
+   ;; other commands
+   "ie" 'emoji-search
+   "ip" 'org-paste-image
+   "ev" 'org-babel-tangle
+   "ex" 'org-export-dispatch))
 
 (provide 'core-keybindings-config)
+
