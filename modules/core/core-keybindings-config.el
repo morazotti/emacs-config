@@ -11,51 +11,63 @@
 (global-set-key (kbd "C-,") 'my/duplicate-line)
 
 ;; vim-keybindings
-(use-package evil
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-respect-visual-line-mode t)
-  (setq evil-want-C-i-jump nil)
-  (setq evil-want-C-u-scroll t)
-  (evil-mode)
+;; (use-package evil
+;;   :init
+;;   (setq evil-want-integration t)
+;;   (setq evil-want-keybinding nil)
+;;   (setq evil-respect-visual-line-mode t)
+;;   (setq evil-want-C-i-jump nil)
+;;   (setq evil-want-C-u-scroll t)
+;;   (evil-mode)
 
-  :config
-  (define-key evil-visual-state-map (kbd "=") 'er/expand-region)
-  (define-key evil-visual-state-map (kbd "-") 'er/contract-region)
-  (define-key evil-normal-state-map (kbd "/") 'avy-goto-char-timer)
-  (define-key evil-visual-state-map (kbd "/") 'avy-goto-char-timer)
-  (evil-set-initial-state 'dired-mode 'emacs)
-  (evil-set-initial-state 'ibuffer-mode 'emacs)
-  (evil-set-initial-state 'vterm-mode 'emacs)
-  (evil-set-initial-state 'eshell-mode 'emacs)
-  (evil-set-initial-state 'elfeed-search-mode 'emacs)
-  (evil-set-initial-state 'elfeed-show-mode 'emacs)
-  (evil-set-initial-state 'ebib-log-mode 'emacs)
-  (evil-set-initial-state 'ebib-index-mode 'emacs)
-  (evil-set-initial-state 'ebib-entry-mode 'emacs)
-  (evil-set-initial-state 'ebib-strings-mode 'emacs)
-  (evil-set-initial-state 'ebib-multiline-mode 'emacs))
+;;   :config
+;;   (define-key evil-visual-state-map (kbd "=") 'er/expand-region)
+;;   (define-key evil-visual-state-map (kbd "-") 'er/contract-region)
+;;   (define-key evil-normal-state-map (kbd "/") 'avy-goto-char-timer)
+;;   (define-key evil-visual-state-map (kbd "/") 'avy-goto-char-timer)
+;;   (evil-set-initial-state 'dired-mode 'emacs)
+;;   (evil-set-initial-state 'ibuffer-mode 'emacs)
+;;   (evil-set-initial-state 'vterm-mode 'emacs)
+;;   (evil-set-initial-state 'eshell-mode 'emacs)
+;;   (evil-set-initial-state 'elfeed-search-mode 'emacs)
+;;   (evil-set-initial-state 'elfeed-show-mode 'emacs)
+;;   (evil-set-initial-state 'ebib-log-mode 'emacs)
+;;   (evil-set-initial-state 'ebib-index-mode 'emacs)
+;;   (evil-set-initial-state 'ebib-entry-mode 'emacs)
+;;   (evil-set-initial-state 'ebib-strings-mode 'emacs)
+;;   (evil-set-initial-state 'ebib-multiline-mode 'emacs))
 
-;; (evil-mode)
+;; ;; (evil-mode)
 
-(use-package evil-numbers
-  :bind (:map evil-normal-state-map
-              ("C-c +" . evil-numbers/inc-at-pt)
-              ("C-c -" . evil-numbers/dec-at-pt)))
+;; (use-package evil-numbers
+;;   :bind (:map evil-normal-state-map
+;;               ("C-c +" . evil-numbers/inc-at-pt)
+;;               ("C-c -" . evil-numbers/dec-at-pt)))
 
-(use-package evil-mc
+;; (use-package evil-mc
+;;   :demand t
+;;   :after evil
+;;   :init (global-evil-mc-mode 1))
+
+(use-package xah-fly-keys
   :demand t
-  :after evil
-  :init (global-evil-mc-mode 1))
-
-;; leader-key
-(use-package general
   :config
-  (general-evil-setup t)
+  (xah-fly-keys-set-layout "colemak")
+  (xah-fly-keys 1)
+  (define-key xah-fly-command-map (kbd "SPC") nil)
+  (global-set-key (kbd "C-SPC") xah-fly-leader-key-map)
+  (define-key xah-fly-command-map (kbd "k") 'avy-goto-char-timer)
+  (define-key xah-fly-command-map (kbd "<f7>") nil))
+
+(use-package general
+  :ensure t
+  :demand t
+  :after xah-fly-keys
+  :config
   (general-create-definer my/leader-keys
-    :keymaps '(normal visual)
+    :keymaps 'xah-fly-command-map
     :prefix "SPC")
+  (define-key xah-fly-command-map (kbd "SPC") (make-sparse-keymap))
 
   (my/leader-keys
    ;; file and buffer general usage
@@ -156,16 +168,14 @@
    "cd" 'consult-find
    "cG" 'consult-git-grep
 
-   ;; org ref
-   "[" 'citar-open
-   "]" 'org-cite-insert
-   ")" 'consult-reftex-insert-reference
-
-   ;; snippets
-   "yi" 'yas-insert-snippet
-   "yn" 'yas-new-snippet
-   "yv" 'yas-visit-snippet-file
-
+  ;; org ref
+  "[" 'citar-open
+  "]" 'org-cite-insert
+  ")" 'consult-reftex-insert-reference
+  ;; snippets
+  "yi" 'yas-insert-snippet
+  "yn" 'yas-new-snippet
+  "yv" 'yas-visit-snippet-file
    ;; agenda
    "aa" 'org-agenda
    "a[" 'org-agenda-file-to-front
@@ -179,18 +189,12 @@
    "(k" 'sp-unwrap-sexp
    "((" 'sp-rewrap-sexp
 
-   ;; ;; multiple cursors
-   ;; "@" 'evil-multiedit-toggle-marker-here
-   ;; "m@" 'evil-multiedit-match-all
-   ;; "mn" 'evil-multiedit-match-and-next
-   ;; "mp" 'evil-multiedit-match-and-prev
-
-   ;; narrow
-   "ns" 'org-narrow-to-subtree
-   "nn" 'narrow-to-region
-   "np" 'narrow-to-page
-   "nd" 'narrow-to-defun
-   "nw" 'widen
+  ;; narrow
+  "ns" 'org-narrow-to-subtree
+  "nn" 'narrow-to-region
+  "np" 'narrow-to-page
+  "nd" 'narrow-to-defun
+  "nw" 'widen
 
    ;; vundo
    "u" 'vundo
