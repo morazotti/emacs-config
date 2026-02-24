@@ -132,7 +132,7 @@
 ;; Restante das configurações (org-modern, mixed-pitch, etc)
 (use-package org-modern
   :after org
-  :straight (:host github :repo "minad/org-modern" :branch "main")
+  :ensure (:host github :repo "minad/org-modern" :branch "main")
   :custom ((org-modern-table nil)
 	   (org-modern-label-border nil))
   :hook ((org-mode . org-modern-mode)
@@ -185,7 +185,7 @@
 ;; (use-package svg-lib)
 ;; (use-package svg-tag
 ;;   :ensure svg-lib
-;;   :straight (:host github :repo "rougier/svg-tag-mode" :branch "main")
+;;   :ensure (:host github :repo "rougier/svg-tag-mode" :branch "main")
 ;;   :hook (org-mode . svg-tag-mode))
 ;; (setq svg-tag-tags
 ;;       '(("\\(:@[A-Za-z0-9]+\\)" . ((lambda (tag)

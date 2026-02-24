@@ -11,7 +11,8 @@ image-dired/
 /tramp
 *.elc
 /modules/tools/img/
-/straight/build-cache.el
+/elpaca/
 /straight/build/
+/straight/modified/
 /straight/repos/
-/straight/modified
+/straight/build-cache.el

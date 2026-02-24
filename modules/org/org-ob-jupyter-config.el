@@ -1,9 +1,9 @@
 (use-package jupyter
-  :straight
+  :ensure
   (:host github
          :repo "emacs-jupyter/jupyter"
          :branch "master"
-         :commit "f97f4b5d8c83e0b901020f835183dde8a2bf649e")
+         :ref "f97f4b5d8c83e0b901020f835183dde8a2bf649e")
   :bind ("C-M-s-h" . jupyter-org-hydra/body))
 
 

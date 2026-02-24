@@ -1,5 +1,6 @@
 ;; Ibuffer
 (use-package ibuffer
+    :ensure nil
     :bind  ("C-x C-b" . ibuffer)
     :config (setq ibuffer-saved-filter-groups
           (quote (("default"
@@ -191,7 +192,7 @@
 
 (use-package consult-reftex
   :after consult
-  :straight (:host github :repo "karthink/consult-reftex" :branch "master"))
+  :ensure (:host github :repo "karthink/consult-reftex" :branch "master"))
 
 (use-package embark
     :bind
@@ -242,7 +243,7 @@
 
   :config
   (add-to-list 'vertico-multiform-categories '(embark-keybinding grid))
-  :straight (:files (:defaults "extensions/*"))
+  :ensure (:files (:defaults "extensions/*"))
   :bind (:map vertico-map
               ("RET" . vertico-directory-enter)
               ("DEL" . vertico-directory-delete-char)

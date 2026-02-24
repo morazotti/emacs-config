@@ -1,6 +1,6 @@
 ;; autoload org package
 (defun my/org-generate-version-file ()
-  "Generate org-version.el for straight.el build process."
+  "Generate org-version.el for elpaca build process."
   (require 'lisp-mnt)
   (let ((version
          (with-temp-buffer
@@ -18,13 +18,10 @@
        "(provide 'org-version)\n"))))
 
 (use-package org
-  :straight (:host nil
-             :repo "https://git.tecosaur.net/tec/org-mode.git"
-             :branch "dev"
-             :remote "tecosaur"
-             :files (:defaults "etc")
-             :build t
-             :pre-build (my/org-generate-version-file))
+  :ensure (:repo "https://git.tecosaur.net/tec/org-mode.git"
+           :branch "dev"
+           :files (:defaults "etc")
+           :pre-build (my/org-generate-version-file))
   :demand t
   :init
   (setq org-directory (file-name-concat home "Documents" "org"))

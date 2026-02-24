@@ -5,7 +5,7 @@
 ;;   :hook (org-mode . (lambda () (require 'org-ref)))
 ;;   ;; :init (require 'org-ref-ivy)
 ;;   ;; :config (require 'org-ref-ivy)
-;;   ;; (load-file "~/.config/emacs/straight/build/org-ref/org-ref-ivy.el") ;; talvez nao precise
+;;   ;; (load-file "~/.config/emacs/elpaca/builds/org-ref/org-ref-ivy.el") ;; talvez nao precise
 ;;   :config 
 ;;   (setq org-file-apps '((auto-mode . emacs)
 ;;                         (directory . emacs)
@@ -32,6 +32,7 @@
 ;;     :init (org-roam-bibtex-mode))
 
 (use-package citar
+  :demand t
   :custom
   (citar-bibliography (list my/bibliography-file))
   (citar-notes-paths (list org-roam-directory))
@@ -42,14 +43,13 @@
 ;; not sure if this should be on
 (use-package citar-org-roam
   :after (citar org-roam)
-  :custom (citar-org-roam-capture-template-key "r"))
+  :custom (citar-org-roam-capture-template-key "r")
+  :config (citar-org-roam-mode))
 
 (use-package citar-embark
   :after (citar embark)
-  :no-require)
-
-(citar-org-roam-mode)
-(citar-embark-mode)
+  :no-require
+  :config (citar-embark-mode))
 
 (use-package bibtex-completion
   :custom
@@ -62,10 +62,10 @@
   :demand t)
 
 (use-package biblio-openlibrary
-  :straight (:host github :repo "fabcontigiani/biblio-openlibrary" :branch "master"))
+  :ensure (:host github :repo "fabcontigiani/biblio-openlibrary" :branch "master"))
 
 (use-package biblio-gbooks
-  :straight (:host github :repo "jrasband/biblio-gbooks" :branch "main"))
+  :ensure (:host github :repo "jrasband/biblio-gbooks" :branch "main"))
 
 (defun my/ebib-reading-list-add-org-cite ()
   "Add an Org-cite citation to the newly created Ebib reading-list item."

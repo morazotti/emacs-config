@@ -51,6 +51,7 @@
 
 ;; leader-key
 (use-package general
+  :demand t
   :config
   (general-evil-setup t)
   (general-create-definer my/leader-keys

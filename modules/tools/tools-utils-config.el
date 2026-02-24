@@ -20,7 +20,7 @@
   :bind ("C-c e" . elfeed))
 
 (use-package elfeed-org
-  :straight (:host github :repo "remyhonig/elfeed-org" :branch "master")
+  :ensure (:host github :repo "remyhonig/elfeed-org" :branch "master")
   :config (elfeed-org)
   :custom (rmh-elfeed-org-files (list (file-name-concat org-directory "elfeed.org"))))
 

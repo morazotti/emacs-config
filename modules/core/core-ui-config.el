@@ -41,28 +41,28 @@
 
 ;; all-the-icons
 ;; (use-package all-the-icons
-;;   :straight (:host github :repo "domtronn/all-the-icons.el" :branch "master"))
+;;   :ensure (:host github :repo "domtronn/all-the-icons.el" :branch "master"))
 
 ;; (use-package all-the-icons-dired
 ;;   :hook (dired-mode . all-the-icons-dired-mode))
 
 ;; theme
-(use-package base16-theme)
-;; (use-package doom-themes)
-;; (use-package modus-themes
-;;   :straight (:host gitlab :repo "protesilaos/modus-themes" :branch "main"))
 (defvar my/theme 'base16-catppuccin-latte) ;;anterior: 'doom-tokyo-night
-(load-theme my/theme t nil)
+(use-package base16-theme
+  :demand t
+  :config (load-theme my/theme t nil))
 
 ;; visual-shorthands-mode - hide long prefixes made easy
 (use-package visual-shorthands-mode
-  :straight (:host github
-	     :repo "morazotti/visual-shorthands.el"
-	     :branch "feat/region-as-default-longhand")
+  :ensure (:host github
+	   :repo "morazotti/visual-shorthands.el"
+	   :branch "feat/region-as-default-longhand"
+	   :main "visual-shorthands.el")
   :config (global-visual-shorthands-mode 1))
 
 ;; ligature
 (use-package ligature
+  :demand t
   :config
   ;; Enable the "www" ligature in every possible major mode
   (ligature-set-ligatures 't '("www"))
@@ -94,15 +94,17 @@
                                        "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
                                        "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
                                        "?=" "?." "??" ";;" "/*" "/=" "/>" "__" "~~" "(*" "*)")))
-(global-ligature-mode)
+  (global-ligature-mode))
 
 ;; doom modeline
 (use-package doom-modeline
-  :straight (:host github :repo "seagle0128/doom-modeline" :branch "master")
+  :demand t
+  :ensure (:host github :repo "seagle0128/doom-modeline" :branch "master")
   :custom ((doom-modeline-buffer-file-name-style 'buffer-name)
 	   (doom-modeline-buffer-encoding nil))
-  :config (add-hook 'after-make-frame-functions (lambda (frame)
+  :config
+  (doom-modeline-mode)
+  (add-hook 'after-make-frame-functions (lambda (frame)
                                                   (setq doom-modeline-icon t))))
-(doom-modeline-mode)
 
 (provide 'core-ui-config)
