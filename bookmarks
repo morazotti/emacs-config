@@ -2,7 +2,13 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-refile-last-stored"
+(("emacs"
+ (filename . "~/repos/dotfiles/emacs/")
+ (front-context-string . "async-init.el\n  ")
+ (rear-context-string . "85 Feb 19 14:10 ")
+ (position . 194)
+ (last-modified 27037 36786 12793 393000))
+("org-refile-last-stored"
  (filename . "~/Dropbox/my_library/reading-list.org")
  (front-context-string . "** DONE [#A] Min")
  (rear-context-string . "va_2025_monte]\n\n")
