@@ -89,24 +89,29 @@
 ;; pdf-tools
 (use-package pdf-tools
   :hook (pdf-view-mode . blink-cursor-mode)
-  
+  :bind
+  (:map pdf-view-mode-map
+	(":" . 'pdf-view-goto-page)
+	("C-s" . 'isearch-forward)
+	("C-r" . 'isearch-backward)
+	("/" . 'isearch-forward)
+	("?" . 'isearch-backward)
+	("j" . 'pdf-view-next-line-or-next-page)
+	("k" . 'pdf-view-previous-line-or-previous-page)
+	("l" . 'image-forward-hscroll)
+	("h" . 'image-backward-hscroll)
+	("J" . 'pdf-view-next-page-command)
+	("K" . 'pdf-view-previous-page-command)
+	("TAB" . 'pdf-outline)
+	("C-S-r" . 'pdf-view-midnight-minor-mode)
+	("T" . 'pdf-view-themed-minor-mode)
+	("s" . 'pdf-view-fit-width-to-window)
+	("a" . 'pdf-view-fit-page-to-window)
+	("o" . 'pdf-occur)
+	("<C-mouse-4>" . #'pdf-view-enlarge)
+	("<C-mouse-5>" . #'pdf-view-shrink))
+
   :config
-  (define-key pdf-view-mode-map (kbd ":") 'pdf-view-goto-page)
-  (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
-  (define-key pdf-view-mode-map (kbd "C-r") 'isearch-backward)
-  (define-key pdf-view-mode-map (kbd "/") 'isearch-forward)
-  (define-key pdf-view-mode-map (kbd "?") 'isearch-backward)
-  (define-key pdf-view-mode-map (kbd "j") 'pdf-view-next-line-or-next-page)
-  (define-key pdf-view-mode-map (kbd "k") 'pdf-view-previous-line-or-previous-page)
-  (define-key pdf-view-mode-map (kbd "l") 'image-forward-hscroll)
-  (define-key pdf-view-mode-map (kbd "h") 'image-backward-hscroll)
-  (define-key pdf-view-mode-map (kbd "J") 'pdf-view-next-page-command)
-  (define-key pdf-view-mode-map (kbd "K") 'pdf-view-previous-page-command)
-  (define-key pdf-view-mode-map (kbd "TAB") 'pdf-outline)
-  (define-key pdf-view-mode-map (kbd "C-S-r") 'pdf-view-midnight-minor-mode)
-  (define-key pdf-view-mode-map (kbd "T") 'pdf-view-themed-minor-mode)
-  (define-key pdf-view-mode-map (kbd "s") 'pdf-view-fit-width-to-window)
-  (define-key pdf-view-mode-map (kbd "a") 'pdf-view-fit-page-to-window)
   (pdf-loader-install)
 
   :mode ("\\.pdf" . pdf-view-mode)
