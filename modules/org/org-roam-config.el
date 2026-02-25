@@ -65,6 +65,7 @@
 %(my/citar-get-noter-path \"${citar-citekey}\")
 :END:
 #+title: ${citar-title}
+[[noter:][|Launch NOTER|]]
 ") :unnarrowed t)))
 
 (provide 'org-roam-config)

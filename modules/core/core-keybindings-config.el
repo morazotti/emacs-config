@@ -49,6 +49,10 @@
   :after evil
   :init (global-evil-mc-mode 1))
 
+(use-package evil-surround
+  :ensure t
+  :config (global-evil-surround-mode 1))
+
 ;; leader-key
 (use-package general
   :config
@@ -73,7 +77,6 @@
    "kk" 'end-of-buffer
 
    ;; commands
-   "x" 'execute-extended-command
    ":" 'eval-expression
    ";" 'avy-goto-line
    "j" 'my/duplicate-line
@@ -175,6 +178,9 @@
    "ls" 'org-store-link
    "li" 'org-insert-link
 
+   ;; excalidraw
+   "xc" 'org-excalidraw-create-drawing
+   
    ;; smart-parens
    "(k" 'sp-unwrap-sexp
    "((" 'sp-rewrap-sexp

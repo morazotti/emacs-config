@@ -24,6 +24,12 @@
                    "{" file "}}")
          (format "\\subfigure[%s]{\\includegraphics{%s}}" desc file))))))
 
+(with-eval-after-load 'org
+  (org-link-set-parameters "noter"
+                           :follow (lambda (path) (org-noter))
+			   :face '(:weight bold :foreground "orange" :underline t)
+                           :help-echo "Abrir Org-noter"))
+
 ;; link files and display everything as a single file
 (use-package org-transclusion
   :after org
@@ -73,6 +79,7 @@ and insert a link to it in the buffer. Supports Org-mode and LaTeX."
 (use-package org-excalidraw
   :after org
   :straight (:host github :repo "wdavew/org-excalidraw" :branch "main")
-  :custom (org-excalidraw-directory "~/Pictures/excalidraw/"))
+  :custom (org-excalidraw-directory "~/Pictures/excalidraw/")
+  :config (org-excalidraw-initialize))
 
 (provide 'org-link-config)
