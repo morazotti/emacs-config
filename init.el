@@ -1,3 +1,4 @@
+; -*-  lexical-binding: t -*-
 (setq custom-file (expand-file-name "emacs-custom.el" user-emacs-directory))
 
 (let ((file-name-handler-alist-original file-name-handler-alist)
@@ -16,3 +17,8 @@
 (add-hook 'emacs-startup-hook
 	  (lambda ()
 	    (setq gc-cons-threshold (* 16 1024 1024))))
+
+(dolist (hook-fn kill-emacs-hook)
+  (advice-add hook-fn :before
+              (lambda (&rest _)
+                (message "Executando %s..." hook-fn))))
