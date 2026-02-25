@@ -1,7 +1,7 @@
 ;; gptel
 (use-package gptel
   :init
-  ;; Avoid eager evaluation during byte-compilation (and before straight has
+  ;; Avoid eager evaluation during byte-compilation (and before elpaca has
   ;; ensured the package is installed).
   (with-eval-after-load 'gptel
     (gptel-make-gemini "Gemini"
@@ -29,7 +29,7 @@
 (add-hook 'gptel-save-state-hook #'my/gptel-mode-auto)
 
 (use-package gptel-commit
-  :straight (:host github :repo "lakkiy/gptel-commit")
+  :ensure (:host github :repo "lakkiy/gptel-commit")
   :after (gptel magit)
   :bind (:map git-commit-mode-map
               ("C-c C-g" . gptel-commit)))
@@ -38,18 +38,18 @@
   :config (gptel-agent-update))
 
 (use-package gptel-org-tools
-  :straight (:host codeberg :repo "bajsicki/gptel-got" :branch "main"))
+  :ensure (:host codeberg :repo "bajsicki/gptel-got" :branch "main"))
 
 (use-package gptel-quick
-  :straight (:host github :repo "karthink/gptel-quick" :branch "master")
+  :ensure (:host github :repo "karthink/gptel-quick" :branch "master")
   :bind (:map embark-general-map ("?" . gptel-quick)))
 
 (use-package ragmacs
-   :straight (:host github :repo "positron-solutions/ragmacs":branch "master")
+   :ensure (:host github :repo "positron-solutions/ragmacs" :branch "master")
    :after gptel)
 
 (use-package llm-tool-collection
-  :straight (:host github :repo "skissue/llm-tool-collection" :branch "main")
+  :ensure (:host github :repo "skissue/llm-tool-collection" :branch "main")
   :config
   (mapc (apply-partially #'apply #'gptel-make-tool)
         (llm-tool-collection-get-all)))

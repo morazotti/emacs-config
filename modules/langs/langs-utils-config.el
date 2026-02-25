@@ -43,7 +43,7 @@
     (insert "\\" text "{" (if argument (current-kill 0) "") "}")))
 
 (use-package resnippets
-  :straight (:host github :repo "morazotti/resnippets.el" :branch "master")
+  :ensure (:host github :repo "morazotti/resnippets.el" :branch "master")
   :hook (org-mode . resnippets-mode))
 
 

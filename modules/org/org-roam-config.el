@@ -1,5 +1,5 @@
 (use-package org-roam
-    :straight (:host github :repo "org-roam/org-roam" :branch "main")
+    :ensure (:host github :repo "org-roam/org-roam" :branch "main" :wait t)
     :config (org-roam-db-autosync-mode)
     :init (setq org-roam-v2-ack t)
 
@@ -14,7 +14,7 @@
            ("C-c r i" . org-roam-node-insert)))
 
 (use-package org-roam-ui
-  :straight (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+  :ensure (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
   :after org-roam
   :custom
   ((org-roam-ui-open-on-start nil)

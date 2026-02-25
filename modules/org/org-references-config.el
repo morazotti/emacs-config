@@ -55,7 +55,7 @@
 
 (use-package reftex-xref
   :init (require 'latex)
-  :straight '(:host github :repo "karthink/reftex-xref" :branch "master")
+  :ensure (:host github :repo "karthink/reftex-xref" :branch "master")
   :after (latex org)
   :demand t
   :hook

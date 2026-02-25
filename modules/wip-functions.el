@@ -9,7 +9,7 @@
         (ansi-color-apply-on-region beg (point))))))
 
 (use-package lazytab
-    :straight (:host github :repo  "karthink/lazytab" :branch "master")
+    :ensure (:host github :repo  "karthink/lazytab" :branch "master")
     :hook ((LaTeX-mode . lazytab-mode) (LaTeX-math-mode . orgtbl-mode)))
 
 ;;;;

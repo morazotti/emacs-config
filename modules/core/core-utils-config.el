@@ -1,44 +1,47 @@
 ;; Ibuffer
 (use-package ibuffer
-    :bind  ("C-x C-b" . ibuffer)
-    :config (setq ibuffer-saved-filter-groups
-          (quote (("default"
-                   ("dired" (mode . dired-mode))
-                   ("org" (mode . org-mode))
-  		 
-                   ("programming" (or
-                                   (mode . sh-mode)
-                                   (mode . c-mode)
-                                   (mode . python-mode)
-                                   (mode . c++-mode)))
-                   ("latex" (mode . latex-mode))
-                   ("document" (mode . pdf-view-mode))
-                   ("image" (mode . image-mode)) 
-                   ("magit" (name . "^\\Magit.*"))
-                   ("IRC" (mode . erc-mode))
-                   ("notmuch" (or
-                               (name . "^.*otmuch.*$")
-                               (mode . notmuch-hello-mode)
-                               (mode . notmuch-search-mode)
-                               (mode . notmuch-show-mode)
-                               (mode . notmuch-tree-mode)
-                               (mode . notmuch-message-mode)))
-                   ("ledger" (or (mode . ledger-mode) (mode . ledger-report-mode)))
-                   ("emms" (name . "^\\*EMMS.*"))
-                   ("emacs" (or
-                             (name . "^\\*scratch\\*$")
-                             (name . "^\\*Messages\\*$")))
-                   ))))
-    :config (add-hook 'ibuffer-mode-hook
-              (lambda ()
-                (ibuffer-auto-mode 1)
-                (ibuffer-switch-to-saved-filter-groups "default")))
-    :config (setq ibuffer-show-empty-filter-groups nil)
-    :config (setq ibuffer-expert t)
-    :hook (ibuffer-mode . (lambda ()
-      (ibuffer-projectile-set-filter-groups)
-      (unless (eq ibuffer-sorting-mode 'alphabetic)
-        (ibuffer-do-sort-by-alphabetic)))))
+  :ensure nil
+  :bind  ("C-x C-b" . ibuffer)
+  :custom
+  (ibuffer-saved-filter-groups
+   (quote (("default"
+	    ("dired" (mode . dired-mode))
+	    ("org" (mode . org-mode))
+  	    
+	    ("programming" (or
+			    (mode . sh-mode)
+			    (mode . c-mode)
+			    (mode . python-mode)
+			    (mode . c++-mode)))
+	    ("latex" (mode . latex-mode))
+	    ("document" (mode . pdf-view-mode))
+	    ("image" (mode . image-mode)) 
+	    ("magit" (name . "^\\Magit.*"))
+	    ("IRC" (mode . erc-mode))
+	    ("notmuch" (or
+			(name . "^.*otmuch.*$")
+			(mode . notmuch-hello-mode)
+			(mode . notmuch-search-mode)
+			(mode . notmuch-show-mode)
+			(mode . notmuch-tree-mode)
+			(mode . notmuch-message-mode)))
+	    ("ledger" (or (mode . ledger-mode) (mode . ledger-report-mode)))
+	    ("emms" (name . "^\\*EMMS.*"))
+	    ("emacs" (or
+		      (name . "^\\*scratch\\*$")
+		      (name . "^\\*Messages\\*$")))
+	    ))))
+  (ibuffer-show-empty-filter-groups nil)
+  (ibuffer-expert t)
+  :hook
+  (ibuffer-mode . (lambda ()
+                    (ibuffer-auto-mode 1)
+                    (ibuffer-switch-to-saved-filter-groups "default")))
+  ;; (ibuffer-mode . (lambda ()
+  ;; 		      (ibuffer-projectile-set-filter-groups)
+  ;; 		      (unless (eq ibuffer-sorting-mode 'alphabetic)
+  ;; 			(ibuffer-do-sort-by-alphabetic))))
+  )
 
 ;; ace-window - avy for windows
 (use-package ace-window
@@ -48,19 +51,19 @@
 
 ;; avy
 (use-package avy
-    :config ((setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
-	     (setf (alist-get ?. avy-dispatch-alist) 'avy-action-embark))
-    :bind (("M-s M-s" . avy-goto-char-timer)
-           ("M-g M-g" . avy-goto-line)))
+  :config ((setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
+	   (setf (alist-get ?. avy-dispatch-alist) 'avy-action-embark))
+  :bind (("M-s M-s" . avy-goto-char-timer)
+         ("M-g M-g" . avy-goto-line)))
 
 (defun avy-action-embark (pt)
-    (unwind-protect
-        (save-excursion
-          (goto-char pt)
-          (embark-act))
-      (select-window
-       (cdr (ring-ref avy-ring 0))))
-    t)
+  (unwind-protect
+      (save-excursion
+        (goto-char pt)
+        (embark-act))
+    (select-window
+     (cdr (ring-ref avy-ring 0))))
+  t)
 
 ;; ivy - some things need it
 ;; (use-package ivy
@@ -191,39 +194,39 @@
 
 (use-package consult-reftex
   :after consult
-  :straight (:host github :repo "karthink/consult-reftex" :branch "master"))
+  :ensure (:host github :repo "karthink/consult-reftex" :branch "master"))
 
 (use-package embark
-    :bind
-    (("C-." . embark-act)         ;; pick some comfortable binding
-     ("C-;" . embark-dwim)        ;; good alternative: M-.
-     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
-    :init
-    ;; Optionally replace the key help with a completing-read interface
-    (setq prefix-help-command #'embark-prefix-help-command)
+  :init
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
 
-    ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
-    ;; strategy, if you want to see the documentation from multiple providers.
-    (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
-    ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+  ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
+  ;; strategy, if you want to see the documentation from multiple providers.
+  (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
 
-    :config
-    ;; Hide the mode line of the Embark live/completions buffers
-    (add-to-list 'display-buffer-alist
-                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                   nil
-                   (window-parameters (mode-line-format . none))))
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none))))
 
-    ;; jinx
-    (keymap-set jinx-repeat-map "RET" 'jinx-correct)
-    (embark-define-overlay-target jinx category (eq %p 'jinx-overlay))
-    (add-to-list 'embark-target-finders 'embark-target-jinx-at-point)
-    (add-to-list 'embark-keymap-alist '(jinx jinx-repeat-map embark-general-map))
-    (add-to-list 'embark-repeat-actions #'jinx-next)
-    (add-to-list 'embark-repeat-actions #'jinx-previous)
-    (add-to-list 'embark-target-injection-hooks (list #'jinx-correct #'embark--ignore-target))
-    (add-to-list 'embark-default-action-overrides (list jinx #'jinx-correct)))
+  ;; jinx
+  (keymap-set jinx-repeat-map "RET" 'jinx-correct)
+  (embark-define-overlay-target jinx category (eq %p 'jinx-overlay))
+  (add-to-list 'embark-target-finders 'embark-target-jinx-at-point)
+  (add-to-list 'embark-keymap-alist '(jinx jinx-repeat-map embark-general-map))
+  (add-to-list 'embark-repeat-actions #'jinx-next)
+  (add-to-list 'embark-repeat-actions #'jinx-previous)
+  (add-to-list 'embark-target-injection-hooks (list #'jinx-correct #'embark--ignore-target))
+  (add-to-list 'embark-default-action-overrides (list jinx #'jinx-correct)))
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
@@ -242,7 +245,7 @@
 
   :config
   (add-to-list 'vertico-multiform-categories '(embark-keybinding grid))
-  :straight (:files (:defaults "extensions/*"))
+  :ensure (:files (:defaults "extensions/*"))
   :bind (:map vertico-map
               ("RET" . vertico-directory-enter)
               ("DEL" . vertico-directory-delete-char)
@@ -256,9 +259,9 @@
   :init (marginalia-mode))
 
 (use-package orderless
-    :custom
-    (completion-styles '(orderless basic flex))
-    (completion-category-overrides '((file (styles basic partial-completion)))))
+  :custom
+  (completion-styles '(orderless basic flex))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
 
 ;; wgrep - allows changing grep buffers
 (use-package wgrep)

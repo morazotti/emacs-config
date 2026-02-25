@@ -62,10 +62,10 @@
   :demand t)
 
 (use-package biblio-openlibrary
-  :straight (:host github :repo "fabcontigiani/biblio-openlibrary" :branch "master"))
+  :ensure (:host github :repo "fabcontigiani/biblio-openlibrary" :branch "master"))
 
 (use-package biblio-gbooks
-  :straight (:host github :repo "jrasband/biblio-gbooks" :branch "main"))
+  :ensure (:host github :repo "jrasband/biblio-gbooks" :branch "main"))
 
 (defun my/ebib-reading-list-add-org-cite ()
   "Add an Org-cite citation to the newly created Ebib reading-list item."

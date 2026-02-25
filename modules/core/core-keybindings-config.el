@@ -12,6 +12,8 @@
 
 ;; vim-keybindings
 (use-package evil
+  :ensure (:wait t)
+  :demand t
   :init
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
@@ -51,6 +53,8 @@
 
 ;; leader-key
 (use-package general
+  :ensure (:wait t)
+  :demand t
   :config
   (general-evil-setup t)
   (general-create-definer my/leader-keys

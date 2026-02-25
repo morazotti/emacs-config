@@ -13,7 +13,7 @@
 (add-to-list 'exec-path "/home/nicolas/.local/bin")
 (use-package eglot-booster
   :after eglot
-  :straight (:host github :repo "jdtsmith/eglot-booster" :branch "main")
+  :ensure (:host github :repo "jdtsmith/eglot-booster" :branch "main")
   :config (eglot-booster-mode))
 
 ;; mason manages lsp servers

@@ -1,30 +1,27 @@
 ;; autoload org package
-(defun my/org-generate-version-file ()
-  "Generate org-version.el for straight.el build process."
-  (require 'lisp-mnt)
-  (let ((version
-         (with-temp-buffer
-           (insert-file-contents "lisp/org.el")
-           (lm-header "version")))
-        (git-version
-         (string-trim
-          (with-temp-buffer
-            (call-process "git" nil t nil "rev-parse" "--short" "HEAD")
-            (buffer-string)))))
-    (with-temp-file "org-version.el"
-      (insert
-       (format "(defun org-release () \"The release version of Org.\" %S)\n" version)
-       (format "(defun org-git-version () \"The truncate git commit hash of Org mode.\" %S)\n" git-version)
-       "(provide 'org-version)\n"))))
-
 (use-package org
-  :straight (:host nil
-             :repo "https://git.tecosaur.net/tec/org-mode.git"
+  :ensure (org :repo "https://git.tecosaur.net/tec/org-mode.git"
              :branch "dev"
-             :remote "tecosaur"
              :files (:defaults "etc")
-             :build t
-             :pre-build (my/org-generate-version-file))
+             :pre-build
+	     (progn
+	       "Generate org-version.el for elpaca build process."
+	       (require 'lisp-mnt)
+	       (let ((version
+		      (with-temp-buffer
+			(insert-file-contents "lisp/org.el")
+			(lm-header "version")))
+		     (git-version
+		      (string-trim
+		       (with-temp-buffer
+			 (call-process "git" nil t nil "rev-parse" "--short" "HEAD")
+			 (buffer-string)))))
+		 (with-temp-file "org-version.el"
+		   (insert
+		    (format "(defun org-release () \"The release version of Org.\" %S)\n" version)
+		    (format "(defun org-git-version () \"The truncate git commit hash of Org mode.\" %S)\n" git-version)
+		    "(provide 'org-version)\n"))))
+	     :wait t)
   :demand t
   :init
   (setq org-directory (file-name-concat home "Documents" "org"))
@@ -84,6 +81,7 @@
 ;; some extra configs to org and org-export
 (use-package org-contrib)
 (use-package ox-extra
+  :ensure nil
   :after (org org-contrib)
   :config (ox-extras-activate '(latex-header-blocks ignore-headlines)))
 
