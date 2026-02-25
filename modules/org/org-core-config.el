@@ -29,10 +29,10 @@
   :init
   (setq org-directory (file-name-concat home "Documents" "org"))
 
-  :config
-  (remove-hook 'kill-emacs-hook 'org-persist-write-all)
-  (remove-hook 'kill-emacs-hook 'org-persist-gc)
-  (run-with-idle-timer 600 t #'org-persist-write-all)
+  ;; :config
+  ;; (remove-hook 'kill-emacs-hook 'org-persist-write-all)
+  ;; (remove-hook 'kill-emacs-hook 'org-persist-gc)
+  ;; (run-with-idle-timer 600 t #'org-persist-write-all)
 
   :custom ((org-src-fontify-natively t)
            (org-src-window-setup 'reorganize-frame)
