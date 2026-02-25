@@ -48,8 +48,8 @@
 
 ;; avy
 (use-package avy
-    :config ((setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
-	     (setf (alist-get ?. avy-dispatch-alist) 'avy-action-embark))
+    :init (setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
+    :config (setf (alist-get ?. avy-dispatch-alist) 'avy-action-embark)
     :bind (("M-s M-s" . avy-goto-char-timer)
            ("M-g M-g" . avy-goto-line)))
 
