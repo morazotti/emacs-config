@@ -42,7 +42,7 @@
   (elpaca-use-package-mode)
   (setq elpaca-use-package-by-default t))
 
-(setq use-package-always-defer t)
+; (setq use-package-always-defer t)
 (setq use-package-always-ensure t)
 (setq use-package-always-demand t)
 

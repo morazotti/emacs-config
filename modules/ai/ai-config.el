@@ -1,5 +1,6 @@
 ;; gptel
 (use-package gptel
+  :ensure (:host github :repo "karthink/gptel")
   :init
   ;; Avoid eager evaluation during byte-compilation (and before elpaca has
   ;; ensured the package is installed).

@@ -1,5 +1,6 @@
 (use-package org-roam
-    :ensure (:host github :repo "org-roam/org-roam" :branch "main" :wait t)
+    :ensure (:host github :repo "org-roam/org-roam" :branch "main" :files (:defaults "extensions/*"))
+    :demand t
     :config (org-roam-db-autosync-mode)
     :init (setq org-roam-v2-ack t)
 
@@ -16,15 +17,15 @@
 (use-package org-roam-ui
   :ensure (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
   :after org-roam
+  :demand t
   :custom
   ((org-roam-ui-open-on-start nil)
    (org-roam-ui-sync-theme t)
    (org-roam-ui-follow t)
    (org-roam-ui-update-on-save t))
-  :init
-  ;; org-roam-ui-mode starts a websocket server; don't start it in batch.
+  :config
   (unless noninteractive
-    (org-roam-ui-mode))
+    (org-roam-ui-mode 1))
   (setq org-roam-ui-latex-macros
         '(("\\Tr" . "\\mathrm{Tr}")
           ("\\tr" . "\\mathrm{Tr}")
