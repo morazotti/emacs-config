@@ -1,5 +1,6 @@
 (require 'org-core-config)
 (require 'org-ui-config)
+(require 'org-table-config)
 (require 'org-references-config)
 (require 'org-babel-config)
 (require 'org-link-config)
