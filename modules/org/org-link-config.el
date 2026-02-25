@@ -70,4 +70,9 @@ and insert a link to it in the buffer. Supports Org-mode and LaTeX."
 ;; add ~framed~ to C-c C-x s // C-c C-,
 (add-to-list 'org-structure-template-alist '("f" . "framed"))
 
+(use-package org-excalidraw
+  :after org
+  :straight (:host github :repo "wdavew/org-excalidraw" :branch "main")
+  :custom (org-excalidraw-directory "~/Pictures/excalidraw/"))
+
 (provide 'org-link-config)
