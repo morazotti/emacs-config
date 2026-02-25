@@ -2,7 +2,13 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("emacs"
+(("resnippets"
+ (filename . "~/repos/dotfiles/emacs/modules/langs/langs-resnippets-config.el")
+ (front-context-string . "(resnippets-defi")
+ (rear-context-string)
+ (position . 1)
+ (last-modified 27038 61832 602544 590000))
+("emacs"
  (filename . "~/repos/dotfiles/emacs/")
  (front-context-string . "async-init.el\n  ")
  (rear-context-string . "85 Feb 19 14:10 ")
@@ -10,16 +16,16 @@
  (last-modified 27037 36786 12793 393000))
 ("org-refile-last-stored"
  (filename . "~/Dropbox/my_library/reading-list.org")
- (front-context-string . "** DONE [#A] Min")
- (rear-context-string . "va_2025_monte]\n\n")
- (position . 1568)
- (last-modified 27003 20751 691678 681000))
+ (front-context-string . "** DONE [#A] Noi")
+ (rear-context-string . "_2026_minimal]\n\n")
+ (position . 785)
+ (last-modified 27039 74 805327 186000))
 ("org-capture-last-stored"
- (filename . "~/Documents/roam/20260126142151-minimal_energy_optimal_control_of_tunable_two_qubit_gates_in_superconducting_platforms_using_continuous_dynamical_decoupling.org")
- (front-context-string)
- (rear-context-string . "va_minimal_2026\n")
- (position . 305)
- (last-modified 26999 41757 140334 268000))
+ (filename . "~/Documents/roam/20260225111105-como_ler_um_artigo.org")
+ (front-context-string . "#+filetags: :sis")
+ (rear-context-string . "o ler um artigo\n")
+ (position . 96)
+ (last-modified 27039 1199 718331 276000))
 ("info"
  (filename . "~/Documents/org/info.org")
  (front-context-string . "#+TITLE: Informa")
