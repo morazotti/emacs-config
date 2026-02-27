@@ -34,7 +34,9 @@
   ;; (remove-hook 'kill-emacs-hook 'org-persist-gc)
   ;; (run-with-idle-timer 600 t #'org-persist-write-all)
 
-  :custom ((org-src-fontify-natively t)
+  :custom ((org-id-track-globally t)
+	   (org-id-locations-file "~/.config/emacs/.org-id-locations")
+	   (org-src-fontify-natively t)
            (org-src-window-setup 'reorganize-frame)
            (org-confirm-babel-evaluate nil)
 

@@ -17,8 +17,6 @@
       (expand-file-name my/local-project-target-file (project-root project))
     (user-error "Not inside a project!")))
 
-;; ------------------------------------------
-
 (defvar my/org-capture--source-buffer nil)
 (defvar my/org-capture--region-beg-marker nil)
 (defvar my/org-capture--region-end-marker nil)
@@ -68,8 +66,14 @@
 (add-hook 'org-capture-mode-hook  #'my/org-capture--store-key)
 (add-hook 'org-capture-after-finalize-hook #'my/org-capture--insert-link t)
 (add-hook 'org-capture-after-finalize-hook #'my/org-capture--cleanup t)
+(add-hook 'org-capture-after-finalize-hook
+          (lambda ()
+            (when (and my/org-capture--key
+                       (string-prefix-p "p" my/org-capture--key))
+              (org-id-update-id-locations
+               (list (my/project-org-find-file)))))
+          t)
 
-;; ------------------------------------------
 
 (setq org-capture-templates-contexts
       '(("p"  ((lambda () (project-current))))
