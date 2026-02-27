@@ -73,9 +73,9 @@
     (interactive)
     (when (org-at-heading-p)
       (let* ((title (org-get-heading t t t t))
-	     (hash (md5 title))
-	     (ordered-id (my/org-get-max-ordered-id)))
+	     (hash (md5 title)))
 	(org-set-property "ID" hash))))
+
   (defun my/org-capture--next-task-num (buffer)
     "Returns the next TASK_NUM for the project in BUFFER."
     (with-current-buffer buffer
