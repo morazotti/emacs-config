@@ -1,5 +1,6 @@
 (use-package org
   :after org
+  :straight nil
   :config
   (defcustom my/local-project-target-file "project.org"
     "Default Org file where project information and tracking are stored"
@@ -9,14 +10,36 @@
   (defvar my/org-capture--region-end-marker nil)
   (defvar my/org-capture--key nil)
 
+  (defun my/org-get-max-ordered-id (&optional buffer)
+    (interactive)
+    (save-excursion
+      (when buffer (switch-to-buffer buffer))
+      (let* ((string-ordered-id (org-property-values "ORDERED"))
+  	     (ordered-id (mapcar 'string-to-number string-ordered-id))
+  	     (id (seq-max ordered-id)))
+	id)))
   (defun my/org-capture-set-id-from-heading ()
     "Add an ID property based on a hash algorithm."
     (interactive)
     (when (org-at-heading-p)
       (let* ((title (org-get-heading t t t t))
-	     (hash (md5 title)))
+	     (hash (md5 title))
+	     (ordered-id (my/org-get-max-ordered-id)))
 	(org-set-property "ID" hash))))
-  (defun my/project-org-find-file ()
+  ;; (defun my/org-open-at-point ()
+  ;;   "Segue link org se em org-mode, senão usa o binding padrão."
+  ;;   (interactive)
+  ;;   (if (derived-mode-p 'org-mode)
+  ;; 	(org-open-at-point)
+  ;;     (let* ((link-re "\\[\\[id:\\([^]]+\\)\\]")
+  ;;            (link (save-excursion
+  ;;                    (and (re-search-backward "\\[\\[" (line-beginning-position) t)
+  ;;                         (looking-at link-re)
+  ;;                         (match-string 1)))))
+  ;; 	(if link
+  ;;           (org-id-goto link)
+  ;;         (user-error "No org link at point")))))
+  (defun my/org-capture-find-project-file ()
     "Returns the path for `my/local-project-target-file'."
     (require 'project)
     (if-let ((project (project-current)))
@@ -42,7 +65,8 @@
 	  (org-back-to-heading t)
 	  (unless (org-entry-get nil "ID")
 	    (my/org-capture-set-id-from-heading))
-	  (setq id (org-entry-get nil "ID")))
+	  (setq id (org-entry-get nil "ID"))
+	  (save-buffer))
 	(with-current-buffer my/org-capture--source-buffer
 	  (setq region-text
 		(buffer-substring-no-properties
@@ -58,6 +82,12 @@
 	  my/org-capture--region-beg-marker nil
 	  my/org-capture--region-end-marker nil
 	  my/org-capture--key nil))
+  (defun my/org-capture--update-id-locations ()
+    "Atualiza o índice de IDs para o project.org atual após capture de projeto."
+    (when (and my/org-capture--key
+               (string-prefix-p "p" my/org-capture--key))
+      (org-id-update-id-locations
+       (list (my/org-capture-find-project-file)))))
   (advice-add 'org-capture :before #'my/org-capture--store-region-before)
 
   :custom 
@@ -73,10 +103,10 @@
         ("i" "Inbox" entry (file+headline "~/Documents/org/notes.org" "Inbox")
          "* TODO <%<%Y-%m-%d %H:%M:%S>> \n %?\n")
         ("p" "Project")
-        ("pt" "Tasks" entry (file+headline my/project-org-find-file "Tasks")
+        ("pt" "Tasks" entry (file+headline my/org-capture-find-project-file "Tasks")
          "* TODO %<%Y%m%d%H%M%S> %?%i \n"
          :after-finalize my/org-capture-set-id-from-heading)
-        ("pb" "Bugs" entry (file+headline my/project-org-find-file "Bugs")
+        ("pb" "Bugs" entry (file+headline my/org-capture-find-project-file "Bugs")
          "* TODO %<%Y%m%d%H%M%S> %?%i \n"
          :after-finalize my/org-capture-set-id-from-heading)
         ("v" "Grupo de Virtudes" entry
@@ -93,20 +123,11 @@
   :bind
   ("C-c c" . org-capture)
   (:map prog-mode-map
-	("C-c C-o" . org-open-at-point))
-  )
-
+	("C-c C-o" . org-open-at-point-global)))
 
 (add-hook 'org-capture-mode-hook  #'my/org-capture--store-key)
 (add-hook 'org-capture-after-finalize-hook #'my/org-capture--insert-link t)
+(add-hook 'org-capture-after-finalize-hook #'my/org-capture--update-id-locations t)
 (add-hook 'org-capture-after-finalize-hook #'my/org-capture--cleanup t)
-(add-hook 'org-capture-after-finalize-hook
-          (lambda ()
-            (when (and my/org-capture--key
-                       (string-prefix-p "p" my/org-capture--key))
-              (org-id-update-id-locations
-               (list (my/project-org-find-file)))))
-          t)
-
 
 (provide 'org-capture-config)
