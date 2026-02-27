@@ -34,13 +34,22 @@
     (remove-overlays (point-min) (point-max) 'my/org-link t))
 
   (defun my/org-link--cursor-sensor (window old-pos action)
-    "Mostra link verdadeiro quando cursor entra, restaura overlay ao sair."
-    (if (eq action 'entered)
-	(my/org-link--clear-overlays)
-      (my/org-link--make-overlays)))
+  "Shows real link when cursor inside, restores overlay when exit."
+  (if (eq action 'entered)
+      (dolist (ov (overlays-at (point)))
+        (when (overlay-get ov 'my/org-link)
+          (overlay-put ov 'display nil)))
+    (dolist (ov (overlays-at old-pos))
+      (when (overlay-get ov 'my/org-link)
+        (save-excursion
+          (goto-char (overlay-start ov))
+          (when (looking-at my/org-link-overlay-regexp)
+            (overlay-put ov 'display
+                         (propertize (format "[%s]" (match-string 1))
+                                     'face 'my/org-link-face))))))))
 
   (define-minor-mode my/org-link-mode
-    "Renderiza links org como overlays em buffers não-org."
+    "Renders org link as overlays in non-org buffers."
     :lighter " OrgLink"
     (if my/org-link-mode
 	(progn
