@@ -10,14 +10,6 @@
   (defvar my/org-capture--region-end-marker nil)
   (defvar my/org-capture--key nil)
 
-  (defun my/org-get-max-ordered-id (&optional buffer)
-    (interactive)
-    (save-excursion
-      (when buffer (switch-to-buffer buffer))
-      (let* ((string-ordered-id (org-property-values "ORDERED"))
-  	     (ordered-id (mapcar 'string-to-number string-ordered-id))
-  	     (id (seq-max ordered-id)))
-	id)))
   (defun my/org-capture-set-id-from-heading ()
     "Add an ID property based on a hash algorithm."
     (interactive)
@@ -26,19 +18,16 @@
 	     (hash (md5 title))
 	     (ordered-id (my/org-get-max-ordered-id)))
 	(org-set-property "ID" hash))))
-  ;; (defun my/org-open-at-point ()
-  ;;   "Segue link org se em org-mode, senão usa o binding padrão."
-  ;;   (interactive)
-  ;;   (if (derived-mode-p 'org-mode)
-  ;; 	(org-open-at-point)
-  ;;     (let* ((link-re "\\[\\[id:\\([^]]+\\)\\]")
-  ;;            (link (save-excursion
-  ;;                    (and (re-search-backward "\\[\\[" (line-beginning-position) t)
-  ;;                         (looking-at link-re)
-  ;;                         (match-string 1)))))
-  ;; 	(if link
-  ;;           (org-id-goto link)
-  ;;         (user-error "No org link at point")))))
+  (defun my/org-capture--next-task-num (buffer)
+  "Returns the next TASK_NUM for the project in BUFFER."
+  (with-current-buffer buffer
+    (let ((max-num 0))
+      (org-map-entries
+       (lambda ()
+         (when-let ((num (org-entry-get nil "TASK_NUM")))
+           (setq max-num (max max-num (string-to-number num)))))
+       nil 'file)
+      (1+ max-num))))
   (defun my/org-capture-find-project-file ()
     "Returns the path for `my/local-project-target-file'."
     (require 'project)
@@ -53,30 +42,35 @@
   (defun my/org-capture--store-key ()
     (setq my/org-capture--key (plist-get org-capture-current-plist :key)))
   (defun my/org-capture--insert-link ()
-    (when (and my/org-capture--source-buffer
-	       my/org-capture--region-beg-marker
-	       my/org-capture--region-end-marker
-	       (markerp org-capture-last-stored-marker)
-	       (marker-buffer org-capture-last-stored-marker)
-	       (string-prefix-p "p" (or my/org-capture--key "")))
-      (let (id region-text)
-	(with-current-buffer (marker-buffer org-capture-last-stored-marker)
-	  (goto-char org-capture-last-stored-marker)
-	  (org-back-to-heading t)
-	  (unless (org-entry-get nil "ID")
-	    (my/org-capture-set-id-from-heading))
-	  (setq id (org-entry-get nil "ID"))
-	  (save-buffer))
-	(with-current-buffer my/org-capture--source-buffer
-	  (setq region-text
-		(buffer-substring-no-properties
-		 my/org-capture--region-beg-marker
-		 my/org-capture--region-end-marker))
-	  (save-excursion
-	    (goto-char my/org-capture--region-beg-marker)
-	    (delete-region my/org-capture--region-beg-marker
-			   my/org-capture--region-end-marker)
-	    (insert (format "[[id:%s][%s]]" id region-text)))))))
+  (when (and my/org-capture--source-buffer
+             my/org-capture--region-beg-marker
+             my/org-capture--region-end-marker
+             (markerp org-capture-last-stored-marker)
+             (marker-buffer org-capture-last-stored-marker)
+             (string-prefix-p "p" (or my/org-capture--key "")))
+    (let (id task-num region-text)
+      (with-current-buffer (marker-buffer org-capture-last-stored-marker)
+        (goto-char org-capture-last-stored-marker)
+        (org-back-to-heading t)
+        ;; ID
+        (unless (org-entry-get nil "ID")
+          (my/org-id-from-heading))
+        (setq id (org-entry-get nil "ID"))
+        ;; TASK_NUM
+        (setq task-num (my/org-capture--next-task-num (current-buffer)))
+        (org-set-property "TASK_NUM" (number-to-string task-num))
+        (save-buffer))
+      (with-current-buffer my/org-capture--source-buffer
+        (setq region-text
+              (buffer-substring-no-properties
+               my/org-capture--region-beg-marker
+               my/org-capture--region-end-marker))
+        (save-excursion
+          (goto-char my/org-capture--region-beg-marker)
+          (delete-region my/org-capture--region-beg-marker
+                         my/org-capture--region-end-marker)
+          (insert (format "(#%d) [[id:%s][%s]]"
+                           task-num id region-text)))))))
   (defun my/org-capture--cleanup ()
     (setq my/org-capture--source-buffer nil
 	  my/org-capture--region-beg-marker nil
