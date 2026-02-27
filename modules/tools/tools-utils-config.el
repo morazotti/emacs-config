@@ -86,6 +86,11 @@
 	    (file-name-concat user-emacs-directory "private" "signature")))
   :bind ("C-c m" . notmuch))
 
+;; nutrition
+(use-package org-nutrition
+  :config (require 'org-nutrition-taco)
+  :straight (:host github :repo "morazotti/org-nutrition" :branch "master"))
+
 ;; pdf-tools
 (use-package pdf-tools
   :hook (pdf-view-mode . blink-cursor-mode)

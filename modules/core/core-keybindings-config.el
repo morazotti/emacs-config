@@ -157,7 +157,8 @@
    ;; consult
    "/"  'consult-ripgrep
    "cd" 'consult-find
-   "cG" 'consult-git-grep
+   "cg" 'consult-git-grep
+   "cu" 'consult-focus-lines
 
    ;; org ref
    "[" 'citar-open

@@ -17,6 +17,13 @@
        (format "(defun org-git-version () \"The truncate git commit hash of Org mode.\" %S)\n" git-version)
        "(provide 'org-version)\n"))))
 
+(defun my/org-id-from-heading ()
+  "Add an ID property based on a hash algorithm"
+    (interactive)
+    (when (org-at-heading-p)
+      (let ((str (thing-at-point 'line t)))
+      (org-set-property "ID" (cadr (split-string (embark-hash-md5 str) " "))))))
+
 (use-package org
   :straight (:host nil
              :repo "https://git.tecosaur.net/tec/org-mode.git"
