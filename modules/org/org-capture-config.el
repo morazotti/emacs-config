@@ -106,7 +106,7 @@
           (org-back-to-heading t)
           ;; ID
           (unless (org-entry-get nil "ID")
-            (my/org-id-from-heading))
+            (my/org-capture-set-id-from-heading))
           (setq id (org-entry-get nil "ID"))
           ;; TASK_NUM
           (setq task-num (my/org-capture--next-task-num (current-buffer)))
