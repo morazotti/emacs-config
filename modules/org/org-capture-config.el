@@ -12,13 +12,20 @@
   (defvar my/org-link-overlay-regexp
     (rx "[[" (one-or-more (not "]")) "][" (group (one-or-more (not "]"))) "]]"))
 
+  (defface my/org-link-face
+  '((t :foreground "orange"
+       :weight light
+       :underline t))
+  "Face for org links rendered in non-org buffers.")
+
   (defun my/org-link--make-overlays ()
     (save-excursion
       (goto-char (point-min))
       (while (re-search-forward my/org-link-overlay-regexp nil t)
 	(let ((ov (make-overlay (match-beginning 0) (match-end 0))))
           (overlay-put ov 'display
-                       (format "[%s]" (match-string 1)))
+                       (propertize (format "[%s]" (match-string 1))
+                                   'face 'my/org-link-face))
           (overlay-put ov 'my/org-link t)
           (overlay-put ov 'cursor-sensor-functions
                        (list #'my/org-link--cursor-sensor))))))
@@ -70,12 +77,6 @@
              (setq max-num (max max-num (string-to-number num)))))
 	 nil 'file)
 	(1+ max-num))))
-  (defun my/org-capture-find-project-file ()
-    "Returns the path for `my/local-project-target-file'."
-    (require 'project)
-    (if-let ((project (project-current)))
-	(expand-file-name my/local-project-target-file (project-root project))
-      (user-error "Not inside a project!")))
   (defun my/org-capture--store-region-before (&rest _)
     (when (and (use-region-p) (null my/org-capture--source-buffer))
       (setq my/org-capture--source-buffer (current-buffer)
@@ -123,7 +124,13 @@
     (when (and my/org-capture--key
                (string-prefix-p "p" my/org-capture--key))
       (org-id-update-id-locations
-       (list (my/org-capture-find-project-file)))))
+       (list (my/org-capture--find-project-file)))))
+  (defun my/org-capture--find-project-file ()
+    "Returns the path for `my/local-project-target-file'."
+    (require 'project)
+    (if-let ((project (project-current)))
+	(expand-file-name my/local-project-target-file (project-root project))
+      (user-error "Not inside a project!")))
   (advice-add 'org-capture :before #'my/org-capture--store-region-before)
 
   :hook
@@ -142,10 +149,10 @@
      ("i" "Inbox" entry (file+headline "~/Documents/org/notes.org" "Inbox")
       "* TODO <%<%Y-%m-%d %H:%M:%S>> \n %?\n")
      ("p" "Project")
-     ("pt" "Tasks" entry (file+headline my/org-capture-find-project-file "Tasks")
+     ("pt" "Tasks" entry (file+headline my/org-capture--find-project-file "Tasks")
       "* TODO %<%Y%m%d%H%M%S> %?%i \n"
       :after-finalize my/org-capture-set-id-from-heading)
-     ("pb" "Bugs" entry (file+headline my/org-capture-find-project-file "Bugs")
+     ("pb" "Bugs" entry (file+headline my/org-capture--find-project-file "Bugs")
       "* TODO %<%Y%m%d%H%M%S> %?%i \n"
       :after-finalize my/org-capture-set-id-from-heading)
      ("v" "Grupo de Virtudes" entry
