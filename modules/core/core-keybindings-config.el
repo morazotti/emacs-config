@@ -235,5 +235,7 @@
    "ev" 'org-babel-tangle
    "ex" 'org-export-dispatch))
 
+(advice-add 'eval-buffer :after (lambda (&rest _) (message "Buffer evaluated")))
+
 (provide 'core-keybindings-config)
 
