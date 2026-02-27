@@ -9,7 +9,9 @@
     :bind (("C-c r f" . org-roam-node-find)
            ("C-c r c" . org-roam-capture)
            ("C-c r b" . org-roam-buffer-toggle)
-           ("C-c r I" . org-roam-node-insert-immediate)
+           ("C-c r t a" . org-roam-tag-add)
+           ("C-c r t r" . org-roam-tag-remove)
+           ;; ("C-c r I" . org-roam-node-insert-immediate)
            :map org-mode-map
            ("C-c r i" . org-roam-node-insert)))
 
