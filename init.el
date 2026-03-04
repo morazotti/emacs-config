@@ -7,7 +7,11 @@
 
   (when (file-exists-p custom-file) (load custom-file))
 
-  (dolist (module '("core" "org" "tools" "langs" "ai"))
+  (dolist (module '("core"
+		    "org"
+		    "tools"
+		    "langs"
+		    "ai"))
     (add-to-list 'load-path
                  (expand-file-name (format "modules/%s" module)
                                    user-emacs-directory))

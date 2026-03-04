@@ -27,12 +27,12 @@
 (when (display-graphic-p)
   (set-face-attribute 'default nil
                       :font my/fixed-font
-                      :height 120))
+                      :height my/fixed-font-height))
 
 (when (display-graphic-p)
   (set-face-attribute 'variable-pitch nil
                       :font my/variable-font
-                      :height 140))
+                      :height my/variable-font-height))
 
 ;; old
 ;; (setq default-font "Ligamonacop 12")

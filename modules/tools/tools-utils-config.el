@@ -2,9 +2,12 @@
 (use-package posframe)
 (use-package eldoc-box)
 
+(use-package dired+
+  :demand t)
+
 ;; expand-region increases region by semantic expressions
 (use-package expand-region
-    :bind ("C-=" . er/expand-region))
+  :bind ("C-=" . er/expand-region))
 
 ;; hide-show-mode folds code
 ;; in evil:
@@ -29,6 +32,8 @@
 (use-package casual
   :bind (:map calc-mode-map
 	      ("C-c C-c" . casual-calc-tmenu)
+	 :map ibuffer-mode-map
+	      ("C-c C-c" . casual-ibuffer-tmenu)
 	 :map dired-mode-map
 	      ("C-c C-c" . casual-dired-tmenu)))
 

@@ -6,6 +6,7 @@
   (org-capture-templates
    '(("n" "Notes" entry (file+headline "~/Documents/org/notes.org" "Unsorted")
       "* UNSEEN %?\n")
+     ("f" "Nutrition" )
      ("g" "Goals" entry (file+headline "~/Documents/org/goals.org" "Unsorted")
       "* TODO %?\n")
      ("i" "Inbox" entry (file+headline "~/Documents/org/notes.org" "Inbox")
