@@ -2,8 +2,24 @@
 (use-package posframe)
 (use-package eldoc-box)
 
-(use-package dired+
-  :demand t)
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+(use-package dired-plus
+    ;; :straight (:host github :repo "emacsmirror/dired-plus"
+    ;;                  :branch "master")
+    :bind
+    ("C-x C-j" . dired-jump)
+
+    :custom
+    (dired-kill-when-opening-new-dired-buffer t)
+
+    :init
+    (setq dired-listing-switches "-glh --group-directories-first")
+    (setq dired-dwim-target t)
+
+    :hook
+    (dired-mode . dired-hide-details-mode))
 
 ;; expand-region increases region by semantic expressions
 (use-package expand-region
