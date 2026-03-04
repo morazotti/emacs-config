@@ -88,6 +88,7 @@
  ("qk" "quick")
  ("lab" "laboratory")
  ("r" "are")
+ ("dont" "do not" :suffix nil)
  ("thr" "there")
  ("cont" "continuous")
  ("sn" "tion" :word-boundary nil))
