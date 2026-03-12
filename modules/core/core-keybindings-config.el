@@ -12,8 +12,6 @@
 
 ; NOTES: (#NICOLAS-1) [[id:527c82273cee6813c7a15affb3f68eab][Colocar num lugar melhor]] 
 
-(global-set-key (kbd "C-M-s-s") 'straight-main-dispatch)
-
 ;; vim-keybindings
 
 (use-package evil
