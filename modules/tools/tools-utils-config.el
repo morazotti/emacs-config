@@ -167,10 +167,6 @@
   (popper-mode +1)
   (popper-echo-mode +1))
 
-;; straight transient
-(require 'transient-straight-config)
-;; (global-set-key (kbd "C-M-s-s") 'straight-main-dispatch)
-
 (use-package vterm)
 
 ;;vundo
