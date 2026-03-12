@@ -8,7 +8,11 @@
 (global-set-key (kbd "<f5>") 'revert-buffer)
 (global-set-key (kbd "C-x 2") 'my/split-and-follow-horizontally)
 (global-set-key (kbd "C-x 3") 'my/split-and-follow-vertically)
-(global-set-key (kbd "C-,") 'my/duplicate-line)
+(global-set-key (kbd "C-M-s-<") 'my/duplicate-line)
+
+; NOTES: (#NICOLAS-1) [[id:527c82273cee6813c7a15affb3f68eab][Colocar num lugar melhor]] 
+
+(global-set-key (kbd "C-M-s-s") 'straight-main-dispatch)
 
 ;; vim-keybindings
 
