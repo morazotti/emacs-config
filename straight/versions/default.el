@@ -131,6 +131,7 @@
  ("string-inflection" . "4a2f87d7b47f5efe702a78f8a40a98df36eeba13")
  ("tablist" . "fcd37147121fabdf003a70279cf86fbe08cfac6f")
  ("transient" . "5d4a7e718c56cb1b3f99a4cd04d204d627f124b0")
+ ("transient-straight" . "4419e830855899ceddecb6bd65860e17bfa8ad35")
  ("treepy.el" . "651e2634f01f346da9ec8a64613c51f54b444bc3")
  ("ts.el" . "552936017cfdec89f7fc20c254ae6b37c3f22c5b")
  ("use-package" . "039b721a4d24b93adc3170e39a6cba7a8200ed43")
