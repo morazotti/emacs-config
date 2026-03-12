@@ -30,6 +30,12 @@
   :config
   (org-snitch-setup)
   (org-snitch-mode 1)
+
+  :bind
+  (("C-c s" . org-snitch-dispatch)
+   :map org-snitch-link-mode-map
+   ("C-c C-o" . org-open-at-point-global)
+   ("C-c C-d" . org-snitch-mark-done))
   
   :hook
   (prog-mode . org-snitch-link-mode))

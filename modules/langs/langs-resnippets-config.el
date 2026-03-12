@@ -12,6 +12,7 @@
  ("cnc" '("\\cancel{" (resnippets-cursor) "\\}" ) :priority 1)
  ("ck" '("\\check{" (resnippets-cursor) "\\}") :priority 1)
  ("exp" "\\exp")
+ ("int" "\\int")
  ("\\([a-zA-Z\\]+\\)hat" '("\\hat{" 1 "}"))
  ("\\([a-zA-Z\\]+\\)bar" '("\\bar{" 1 "}"))
  ("\\([a-zA-Z\\]+\\)dot" '("\\dot{" 1 "}"))
@@ -91,6 +92,7 @@
  ("dont" "do not" :suffix nil)
  ("thr" "there")
  ("cont" "continuous")
+ ("qc" "quantum computing")
  ("sn" "tion" :word-boundary nil))
 
 (resnippets-define
@@ -106,6 +108,7 @@
 	 :priority 10
 	 :suffix t)
  ("aa\\(s?\\)" '("à" 1) :word-boundary t)
+ ("\\([a-z]+\\)ah" '(1 "á"))
  ("aaquela" "àquela")
  ("apos" "após" :word-boundary t)
  ("cao" "cão" :priority 2 :word-boundary t)
@@ -114,6 +117,7 @@
  ("diferenca" "diferença")
  ("dinamico" "dinâmico" :suffix t)
  ("dyd" "desacoplamento dinâmico" :word-boundary t)
+ ("classico" "clássico")
  ("e\\([he]\\)" "é" :word-boundary t)
  ("eq" "equação" :word-boundary t)
  ("eqs" "equações" :word-boundary t)
@@ -122,9 +126,10 @@
  ("msm" "mesmo")
  ("mt\\(s?\\)" '("muito" 1))
  ("nao" '(1 "não") :priority 1)
- ("nn" '(1 "não") :priority 1)
+ ("nn" '(1 "não") :priority 1 :word-boundary t)
  ("port\\(i?\\)f\\([oó]\\)lio" "portfólio")
  ("quencia\\(s?\\)" '("quência" 1))
+ ("qc" "computação quântica")
  ("rapido" "rápido ")
  ("ruido\\(s?\\)" '( "ruído" 1))
  ("sao" '(1 "são") :priority 1)

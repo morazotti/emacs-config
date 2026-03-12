@@ -11,6 +11,7 @@
 (global-set-key (kbd "C-,") 'my/duplicate-line)
 
 ;; vim-keybindings
+
 (use-package evil
   :init
   (setq evil-want-integration t)
@@ -37,8 +38,6 @@
   (evil-set-initial-state 'ebib-strings-mode 'emacs)
   (evil-set-initial-state 'ebib-multiline-mode 'emacs))
 
-;; (evil-mode)
-
 (use-package evil-numbers
   :bind (:map evil-normal-state-map
               ("C-c +" . evil-numbers/inc-at-pt)
@@ -55,11 +54,14 @@
 
 ;; leader-key
 (use-package general
+  :init
+  (define-key key-translation-map (kbd "C-M-s-<f12>") (kbd "<leader>"))
   :config
   (general-evil-setup t)
   (general-create-definer my/leader-keys
-    :keymaps '(normal visual)
-    :prefix "SPC")
+    :keymaps '(normal visual insert)
+    ;; :keymaps 'global-map
+    :prefix "<leader>")
 
   (my/leader-keys
    ;; file and buffer general usage
@@ -178,6 +180,7 @@
    ;; store link
    "ls" 'org-store-link
    "li" 'org-insert-link
+   "ln" 'org-snitch-insert-link
 
    ;; excalidraw
    "xc" 'org-excalidraw-create-drawing
