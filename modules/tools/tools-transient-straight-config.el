@@ -1,3 +1,5 @@
+(require 'transient)
+
 (transient-define-prefix straight-main-dispatch ()
   "Interactive dashboard and unified dispatch menu for `straight'."
   [:description
