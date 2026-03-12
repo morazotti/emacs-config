@@ -66,7 +66,7 @@
   [:description
    "Transient for straight"
    ["Rebuild"
-    ("r" "Package..." straight-rebuild-package)
+    ("p" "Package..." straight-rebuild-package)
     ("a" "All packages" straight-rebuild-all)]])
 
 (transient-define-prefix straight-version-control-dispatch ()
@@ -102,4 +102,4 @@
     ("s" "Start watcher" straight-watcher-start)
     ("S" "Stop watcher" straight-watcher-stop)]])
 
-(provide 'transient-straight)
+(provide 'tools-transient-straight-config)
