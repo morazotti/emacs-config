@@ -80,6 +80,6 @@ and insert a link to it in the buffer. Supports Org-mode and LaTeX."
   :after org
   :straight (:host github :repo "wdavew/org-excalidraw" :branch "main")
   :custom (org-excalidraw-directory "~/Pictures/excalidraw/")
-  :config (org-excalidraw-initialize))
+  :init (org-excalidraw-initialize))
 
 (provide 'org-link-config)

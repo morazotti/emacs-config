@@ -1,7 +1,7 @@
 (resnippets-define
  "math-mode"
  '(:mode (LaTeX-mode org-mode)
-	 :condition (or (texmathp) (org-inside-LaTeX-fragment-p))
+	 :condition (and (texmathp) (org-inside-LaTeX-fragment-p))
 	 :priority 10)
  ("hat" '("\\hat{" (resnippets-cursor) "\\}") :priority 1)
  ("bar" '("\\bar{" (resnippets-cursor) "\\}") :priority 1)
@@ -12,7 +12,6 @@
  ("cnc" '("\\cancel{" (resnippets-cursor) "\\}" ) :priority 1)
  ("ck" '("\\check{" (resnippets-cursor) "\\}") :priority 1)
  ("exp" "\\exp")
- ("int" "\\int")
  ("\\([a-zA-Z\\]+\\)hat" '("\\hat{" 1 "}"))
  ("\\([a-zA-Z\\]+\\)bar" '("\\bar{" 1 "}"))
  ("\\([a-zA-Z\\]+\\)dot" '("\\dot{" 1 "}"))
@@ -44,13 +43,14 @@
 			"\\{" (resnippets-group 1))
 		    " " (resnippets-cursor) " \\right"
 		    (when (string= "{" (resnippets-group 1)) "\\")
-		    (cond
-		     ((string= "(" (resnippets-group 1)) ")")
-		     ((string= "{" (resnippets-group 1)) "}")
-		     ((string= "[" (resnippets-group 1)) "]")
-		     )))
+		    ;; (cond
+		    ;;  ((string= "(" (resnippets-group 1)) ")")
+		    ;;  ((string= "{" (resnippets-group 1)) "}")
+		    ;;  ((string= "[" (resnippets-group 1)) "]")
+		    ;;  )
+		    ))
  ("lr<" '("\\left\\langle " (resnippets-cursor) " \\right\\rangle") :word-boundary t)
-
+ ("rl." '("\\right." (resnippets-cursor) " \\left.") :word-boundary t)
  ("^," "&")
  ("\\([&,]+\\)=" "&=")
  ("\\ket{bra" '("\ketbra{" (resnippets-cursor) "}{"))
@@ -75,7 +75,7 @@
  "text-mode-enus"
  '(:mode text-mode
 	 :condition (and
-		     (not (or (texmathp) (org-inside-LaTeX-fragment-p)))
+		     (not (texmathp))
 		     (or
 		      (string= "en" (cadar (org-collect-keywords '("LANGUAGE"))))
 		      (string= "en_US" jinx-languages)))
@@ -99,7 +99,7 @@
  "text-mode-ptbr"
  '(:mode text-mode
 	 :condition (and
-		     (not (or (texmathp) (org-inside-LaTeX-fragment-p)))
+		     (not (texmathp))
 		     (or
 		      (string= "pt" (cadar (org-collect-keywords '("LANGUAGE"))))
 		      (string= "pt_BR" jinx-languages)))
@@ -126,6 +126,7 @@
  ("msm" "mesmo")
  ("mt\\(s?\\)" '("muito" 1))
  ("nao" '(1 "não") :priority 1)
+ ("entao" "então" :word-boundary t)
  ("nn" '(1 "não") :priority 1 :word-boundary t)
  ("port\\(i?\\)f\\([oó]\\)lio" "portfólio")
  ("quencia\\(s?\\)" '("quência" 1))
@@ -140,7 +141,7 @@
 (resnippets-define
  "text-mode"
  '(:mode text-mode
-	 :condition (not (or (texmathp) (org-inside-LaTeX-fragment-p)))
+	 :condition (not (texmathp))
 	 :match-case t
 	 :suffix t)
  ("mk" '("\\(" (resnippets-cursor) "\\)") :word-boundary t :suffix nil)
@@ -151,7 +152,7 @@
  ("ali\\*" '((cdlatex-environment "align*")) :suffix nil)
  ("cite" '((org-cite-insert 1)) :suffix nil)
  ("schro" "Schrödinger" :match-case nil)
- ("hamilton\\([^a-zA-Z]\\)" '("Hamilton" 1) :match-case nil)
+ ("hamilton\\([^a-zA-Z]\\)" '("Hamilton" 1) :match-case nil :suffix nil)
  ("xc" '((org-excalidraw-create-drawing)) :word-boundary t :suffix nil)
  (",," "," :suffix nil))
 

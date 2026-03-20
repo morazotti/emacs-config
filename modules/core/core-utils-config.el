@@ -44,6 +44,7 @@
 (use-package ace-window
   :custom (aw-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
   :bind (("C-x o" . other-window)
+	 ("C-M-s-o" . other-window)
 	 ("M-o" . ace-window)))
 
 ;; avy
@@ -193,37 +194,47 @@
   :after consult
   :straight (:host github :repo "karthink/consult-reftex" :branch "master"))
 
+(defun my/consult-reftex-insert-reference ()
+  "Insert references and wrap certain ones in parentheses."
+  (interactive)
+  (let ((inserted-text (consult-reftex-insert-reference t t))) ; assume this function inserts the reference
+    (when (string-match "\\\\ref{eq:" inserted-text)
+      (setq inserted-text (replace-regexp-in-string "\\(\\\\ref{eq:[^}]+}\\)" "(\\1)" inserted-text)))
+    (insert inserted-text)))
+  
+(global-set-key (kbd "C-M-s-n") 'my/consult-reftex-insert-reference)
+
 (use-package embark
-    :bind
-    (("C-." . embark-act)         ;; pick some comfortable binding
-     ("C-;" . embark-dwim)        ;; good alternative: M-.
-     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+  :bind
+  (("C-." . embark-act)		  ;; pick some comfortable binding
+   ("C-;" . embark-dwim)	  ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
-    :init
-    ;; Optionally replace the key help with a completing-read interface
-    (setq prefix-help-command #'embark-prefix-help-command)
+  :init
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
 
-    ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
-    ;; strategy, if you want to see the documentation from multiple providers.
-    (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
-    ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+  ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
+  ;; strategy, if you want to see the documentation from multiple providers.
+  (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
 
-    :config
-    ;; Hide the mode line of the Embark live/completions buffers
-    (add-to-list 'display-buffer-alist
-                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                   nil
-                   (window-parameters (mode-line-format . none))))
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none))))
 
-    ;; jinx
-    (keymap-set jinx-repeat-map "RET" 'jinx-correct)
-    (embark-define-overlay-target jinx category (eq %p 'jinx-overlay))
-    (add-to-list 'embark-target-finders 'embark-target-jinx-at-point)
-    (add-to-list 'embark-keymap-alist '(jinx jinx-repeat-map embark-general-map))
-    (add-to-list 'embark-repeat-actions #'jinx-next)
-    (add-to-list 'embark-repeat-actions #'jinx-previous)
-    (add-to-list 'embark-target-injection-hooks (list #'jinx-correct #'embark--ignore-target))
-    (add-to-list 'embark-default-action-overrides (list jinx #'jinx-correct)))
+  ;; jinx
+  (keymap-set jinx-repeat-map "RET" 'jinx-correct)
+  (embark-define-overlay-target jinx category (eq %p 'jinx-overlay))
+  (add-to-list 'embark-target-finders 'embark-target-jinx-at-point)
+  (add-to-list 'embark-keymap-alist '(jinx jinx-repeat-map embark-general-map))
+  (add-to-list 'embark-repeat-actions #'jinx-next)
+  (add-to-list 'embark-repeat-actions #'jinx-previous)
+  (add-to-list 'embark-target-injection-hooks (list #'jinx-correct #'embark--ignore-target))
+  (add-to-list 'embark-default-action-overrides (list jinx #'jinx-correct)))
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult

@@ -167,7 +167,7 @@
    ;; org ref
    "[" 'citar-open
    "]" 'org-cite-insert
-   ")" 'consult-reftex-insert-reference
+   ")" 'my/consult-reftex-insert-reference
 
    ;; snippets
    "yi" 'yas-insert-snippet

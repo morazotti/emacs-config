@@ -30,6 +30,8 @@
   :config
   (org-snitch-setup)
   (org-snitch-mode 1)
+  (with-eval-after-load 'git-commit
+    (define-key git-commit-mode-map (kbd "C-c C-t") #'org-snitch-magit-insert-task))
 
   :bind
   (("C-c s" . org-snitch-dispatch)
@@ -39,6 +41,7 @@
   
   :hook
   (prog-mode . org-snitch-link-mode))
+
 
 
 (provide 'org-capture-config)
