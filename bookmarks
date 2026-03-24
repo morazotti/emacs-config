@@ -2,7 +2,13 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("resnippets"
+(("UFSCar"
+ (filename . "~/Dropbox/UFSCar/")
+ (front-context-string . "2025_Aulas\n  drw")
+ (rear-context-string . "0K Mar 19 16:04 ")
+ (position . 74)
+ (last-modified 27072 12366 934367 576000))
+("resnippets"
  (filename . "~/repos/dotfiles/emacs/modules/langs/langs-resnippets-config.el")
  (front-context-string . "(resnippets-defi")
  (rear-context-string)
