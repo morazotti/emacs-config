@@ -84,6 +84,7 @@
  '(org-safe-remote-resources '("\\`\\[\\[file:early-init\\.el]]\\'"))
  '(org-startup-with-latex-preview t)
  '(org-use-sub-superscripts nil)
+ '(ring-bell-function 'ignore)
  '(safe-local-variable-values
    '((jinx-local-words
       . "UdU eq eqref expval mathbb mathbf mathrm notacao otimes propto relacao sqrt su varsigma")
