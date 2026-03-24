@@ -16,7 +16,8 @@
            (gptel-model 'gemini-flash-latest)))
 
 (with-eval-after-load 'gptel
-  (require 'ai-presets-config))
+  (require 'ai-presets-config)
+  (require 'ai-ollama-config))
 
 (defun my/gptel-mode-auto ()
   "Ensure that this file opens with `gptel-mode' enabled."
