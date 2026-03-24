@@ -61,7 +61,7 @@
   :config
   (general-evil-setup t)
   (general-create-definer my/leader-keys
-    :keymaps '(normal visual insert)
+    :keymaps '(normal visual insert emacs)
     ;; :keymaps 'global-map
     :prefix "<leader>")
 

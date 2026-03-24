@@ -26,7 +26,6 @@
   ("C-c c" . org-capture))
 
 (use-package org-snitch
-  :straight (:host github :repo "morazotti/org-snitch")
   :config
   (org-snitch-setup)
   (org-snitch-mode 1)

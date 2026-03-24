@@ -73,6 +73,11 @@
  '(org-hide-macro-markers t)
  '(org-image-actual-width '(350))
  '(org-image-align 'center)
+ '(org-latex-preview-appearance-options
+   '(:foreground default :background default :scale 2.0 :html-foreground
+		 "Black" :html-background "Transparent" :html-scale
+		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")) nil nil "Customized with use-package org")
+ '(org-latex-src-block-backend 'minted nil nil "Customized with use-package org")
  '(org-modern-hide-stars " ")
  '(org-modern-star 'replace)
  '(org-pretty-entities-include-sub-superscripts nil)
@@ -80,7 +85,11 @@
  '(org-startup-with-latex-preview t)
  '(org-use-sub-superscripts nil)
  '(safe-local-variable-values
-   '((eval add-hook 'after-save-hook
+   '((jinx-local-words
+      . "UdU eq eqref expval mathbb mathbf mathrm notacao otimes propto relacao sqrt su varsigma")
+     (eval and (fboundp 'gptel-mode) (gptel-mode 1))
+     (jinx-languages . "pt_BR") (jinx-languages . "en_US pt_BR")
+     (eval add-hook 'after-save-hook
 	   (lambda nil
 	     (shell-command "pandoc README.org -o README.md"))
 	   nil t))))
