@@ -21,13 +21,15 @@
       (shell-command "sudo systemctl start ollama")
       (message "Stopped ollama."))))
 
-;; (advice-add 'gptel-send :before
-;;             (lambda (&rest _)
-;;               (unless (my/ollama-active-p)
-;;                 (when (y-or-n-p "Ollama is off. Do you want to start it now?")
-;;                   (ollama-status-toggle)
-;;                   ;; Give a small delay for the socket to open
-;;                   (sleep-for 1)))))
+(advice-add 'gptel-send :before
+            (lambda (&rest _)
+              (let ((backend (or gptel-backend (default-value 'gptel-backend))))
+                (when (and (cl-typep backend 'gptel-ollama)
+                           (not (my/ollama-active-p)))
+                  (when (y-or-n-p "Ollama is off. Do you want to start it now?")
+                    (ollama-status-toggle)
+                    ;; Give a small delay for the socket to open
+                    (sleep-for 1))))))
 
 (setq-default gptel-model "llama3.1:8b")
 (provide 'ai-ollama-config)

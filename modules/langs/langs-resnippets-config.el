@@ -144,8 +144,10 @@
 	 :condition (not (texmathp))
 	 :match-case t
 	 :suffix t)
- ("mk" '("\\(" (resnippets-cursor) "\\)") :word-boundary t :suffix nil)
- ("dm" '("\\[" (resnippets-cursor) "\\]") :word-boundary t :suffix nil)
+ ("mk" '("\\(" (resnippets-cursor) ;; "\\)"
+	 ) :word-boundary t :suffix nil)
+ ("dm" '("\\[" (resnippets-cursor) ;; "\\]"
+	 ) :word-boundary t :suffix nil)
  ("qt\\(s?\\)" '("qubit" 1))
  ("qi" "qubit")
  ("qii" "qubits")

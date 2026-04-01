@@ -103,6 +103,7 @@
  '(jinx-misspelled ((t (:underline (:color "red" :style wave :position nil)))))
  '(org-document-title ((t (:weight bold :height 1.0))))
  '(org-drawer ((t (:inherit fixed-pitch :foreground "Blue1"))))
+ '(org-level-1 ((t (:extend nil :foreground "medium blue" :weight bold :height 1.2 :family "CMU Serif"))))
  '(org-modern-date-active ((t (:inherit (default fixed-pitch) :background "gray90" :foreground "black" :height 0.8 :family "Ligamonacop"))))
  '(org-modern-date-inactive ((t (:inherit (default fixed-pitch) :background "gray90" :foreground "gray30" :height 0.8))))
  '(org-modern-time-active ((t (0.8 (default fixed-pitch) :inherit :height :background "gray35" :foreground "white" :weight semibold))))
