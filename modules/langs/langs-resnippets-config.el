@@ -135,6 +135,9 @@
  ("ruido\\(s?\\)" '( "ruído" 1))
  ("sao" '(1 "são") :priority 1)
  ("tbm" "também")
+ ("\\([a-z]+\\)ometro" '(1 "ômetro"))
+ ("potencia" "potência")
+ ("resistencia" "resistência")
  ((rx (or "voce" "vc")) "você")
  ((rx (or "voces" "vcs")) "vocês"))
 
