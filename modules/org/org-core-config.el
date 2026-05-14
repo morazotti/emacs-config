@@ -57,12 +57,18 @@
   (org-cite-activate-processor 'citar)
 
   ;; LaTeX
-  (org-latex-listings 'minted)
   (org-latex-packages-alist '(("AUTO" "babel" t)
                               ("" "physics" t)
                               ("" "framed" t)
                               ("style=american" "csquotes" t)
-                              ("" "tikz" t)))
+                              ("" "tikz" t)
+                              ("" "minted" t)))
+  (org-latex-listings 'minted)
+  (org-latex-minted-options
+   '(("style" "emacs")
+     ("linenos" "true")
+     ("bgcolor" "gray!15")
+     ("breaklines" "true")))
 
   (org-latex-pdf-process '("latexmk -synctex=1 -shell-escape -bibtex -interaction=nonstopmode -pdf -f -8bit %f"))
   (org-latex-prefer-user-labels t)
