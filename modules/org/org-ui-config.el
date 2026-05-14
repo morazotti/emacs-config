@@ -181,6 +181,36 @@
                 (my/TeX-fold-label ("label"))
                 (my/TeX-fold-ref ("ref" "pageref" "eqref" "footref"))))
 
+(defun my/org-emphasis-autocomplete ()
+  "Apply the chosen EMPHASIS-TYPE markup to the active region or word at point.
+Uses `completing-read` to prompt the user for the emphasis style."
+  (interactive)
+  (let* ((options '(("Bold (*)" . ?*)
+                   ("Italic (/)" . ?/)
+                   ("Underline (_)" . ?_)
+                   ("Strikethrough (+)" . ?+)
+                   ("Code (~)" . ?~)
+                   ("Verbatim (=)" . ?=)))
+         (selection (minibuffer-with-setup-hook
+                      (lambda ()
+                        (let ((map (make-sparse-keymap)))
+                          (set-keymap-parent map (current-local-map))
+                          (dolist (key '(?* ?/ ?_ ?+ ?~ ?=))
+                            (define-key map (char-to-string key)
+                              (lambda ()
+                                (interactive)
+                                (delete-minibuffer-contents)
+                                (insert (car (rassoc last-command-event options)))
+                                (exit-minibuffer))))
+                          (use-local-map map)))
+                    (completing-read "Emphasis: " options nil t)))
+         (char (cdr (assoc selection options))))
+    (when char
+      (org-emphasize char))))
+
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c C-x C-f") #'my/org-emphasis-autocomplete))
+
 ;; svg-tags: create buttons with svg
 ;; (use-package svg-lib)
 ;; (use-package svg-tag
