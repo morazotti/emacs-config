@@ -6,6 +6,8 @@
          :commit "f97f4b5d8c83e0b901020f835183dde8a2bf649e")
   :bind ("C-M-s-h" . jupyter-org-hydra/body))
 
+;;enhances jupyter by adding menus
+(use-package hydra)
 
 ;; manage ssh servers
 ;; we can set :session as
