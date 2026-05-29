@@ -50,6 +50,11 @@ These modules define the fundamental editor experience, from package management 
 
 #+include: "modules/core/core-utils-config.el"   src elisp
 
+
+- ~core-custom-macros-config.el~ :: Manages the custom macros to make declarations easier.
+
+#+include: "modules/core/core-custom-macros-config.el"   src elisp
+
 - ~core-config.el~ :: Aggregates all core modules.
 
 #+include: "modules/core/core-config.el"   src elisp

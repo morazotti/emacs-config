@@ -272,9 +272,9 @@
     (completion-category-overrides '((file (styles basic partial-completion)))))
 
 (repeat-mode 1)
+(setq repeat-exit-timeout 1.5)
 
 ;; wgrep - allows changing grep buffers
 (use-package wgrep)
-;;(require 'wgrep)
 
 (provide 'core-utils-config)

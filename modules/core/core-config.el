@@ -3,5 +3,6 @@
 (require 'core-utils-config)
 (require 'core-keybindings-config)
 (require 'core-ui-config)
+(require 'core-custom-macros-config)
 
 (provide 'core-config)
