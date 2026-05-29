@@ -114,10 +114,10 @@
 (use-package org-ql)
 
 (my/define-repeat-map "org-outline"
-		      ("n" . org-next-visible-heading)
-		      ("p" . org-previous-visible-heading)
-		      ("f" . org-forward-heading-same-level)
-		      ("b" . org-backward-heading-same-level)
-		      ("u" . outline-up-heading))
+		      '(("n" . org-next-visible-heading)
+			("p" . org-previous-visible-heading)
+			("f" . org-forward-heading-same-level)
+			("b" . org-backward-heading-same-level)
+			("u" . outline-up-heading)))
 
 (provide 'org-core-config)

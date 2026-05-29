@@ -181,8 +181,8 @@
 ;; winner mode allows C-c <left> / C-c <right> to recover previous window configuration
 (winner-mode)
 (my/define-repeat-map "winner"
-		      (("p" . winner-undo)
-		       ("n" . winner-redo)))
+		      '(("p" . winner-undo)
+			("n" . winner-redo)))
 
 ;; tree-sitter
 (use-package tree-sitter

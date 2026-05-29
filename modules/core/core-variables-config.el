@@ -7,6 +7,7 @@
       org-roam-directory (file-name-concat home "Documents" "roam")
       ispell-dictionary "pt_BR"
       fill-column 72
+      repeat-exit-timeout 1.5
 
       ;; authinfo
       auth-sources '("~/.authinfo.gpg" "~/.authinfo")
@@ -36,5 +37,6 @@
   (emacs-lock-mode 'kill))
 (defalias 'yes-or-no-p 'y-or-n-p)
 (global-subword-mode 1)
+(repeat-mode 1)
 
 (provide 'core-variables-config)
