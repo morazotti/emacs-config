@@ -12,9 +12,7 @@
 		    "tools"
 		    "langs"
 		    "ai"))
-    (add-to-list 'load-path
-                 (expand-file-name (format "modules/%s" module)
-                                   user-emacs-directory))
+    (add-to-list 'load-path (file-name-concat user-lisp-directory module))
     (require (intern (format "%s-config" module))))
   (setq file-name-handler-alist file-name-handler-alist-original))
 
