@@ -271,6 +271,8 @@
     (completion-styles '(orderless basic flex))
     (completion-category-overrides '((file (styles basic partial-completion)))))
 
+(repeat-mode 1)
+
 ;; wgrep - allows changing grep buffers
 (use-package wgrep)
 ;;(require 'wgrep)

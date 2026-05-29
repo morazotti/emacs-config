@@ -234,6 +234,13 @@
    "dw" 'dape-watch-dwim
    "dx" 'dape-evaluate-expression
 
+   ;;org outline navigation
+   "ff" 'org-forward-heading-same-level
+   "fb" 'org-backward-heading-same-level
+   "fn" 'org-next-visible-heading
+   "fp" 'org-previous-visible-heading
+   "fu" 'outline-up-heading
+
    ;; other commands
    "ie" 'emoji-search
    "ip" 'org-paste-image

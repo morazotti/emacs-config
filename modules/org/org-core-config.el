@@ -113,4 +113,21 @@
   :config (ox-extras-activate '(latex-header-blocks ignore-headlines)))
 (use-package org-ql)
 
+(defvar my/outline-repeat-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "n" #'org-next-visible-heading)
+    (define-key map "p" #'org-previous-visible-heading)
+    (define-key map "f" #'org-forward-heading-same-level)
+    (define-key map "b" #'org-backward-heading-same-level)
+    (define-key map "u" #'outline-up-heading)
+    map)
+  "Navegação rápida pela estrutura do documento.")
+
+(mapc (lambda (cmd) (put cmd 'repeat-map 'my/outline-repeat-map))
+      '(org-next-visible-heading
+        org-previous-visible-heading
+        org-forward-heading-same-level
+        org-backward-heading-same-level
+        outline-up-heading))
+
 (provide 'org-core-config)

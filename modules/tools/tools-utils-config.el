@@ -180,6 +180,16 @@
 
 ;; winner mode allows C-c <left> / C-c <right> to recover previous window configuration
 (winner-mode)
+(defvar winner-repeat-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "p" #'winner-undo) ; 'p' para voltar
+    (define-key map "n" #'winner-redo) ; 'n' para avançar
+    map)
+  "Keymap para repetir comandos do winner-mode.")
+
+;; 2. Indicamos ao Emacs que este mapa é uma sequência repetível
+(put #'winner-undo 'repeat-map 'winner-repeat-map)
+(put #'winner-redo 'repeat-map 'winner-repeat-map)
 
 ;; tree-sitter
 (use-package tree-sitter
