@@ -25,7 +25,7 @@
              :files (:defaults "etc")
              :build t
              :pre-build (my/org-generate-version-file))
-  :demand t
+  ;; :demand t
   :init
   (defvar org-level-max 8)
   (setq org-directory (file-name-concat home "Documents" "org"))

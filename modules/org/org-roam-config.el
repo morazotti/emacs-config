@@ -1,6 +1,6 @@
 (use-package org-roam
     :straight (:host github :repo "org-roam/org-roam" :branch "main")
-    :config (org-roam-db-autosync-mode)
+    :hook (emacs-startup . org-roam-db-autosync-mode)
     :init (setq org-roam-v2-ack t)
 
     :custom ((org-roam-dailies-directory (file-name-concat org-roam-directory "projeto-pessoal"))
@@ -23,7 +23,7 @@
    (org-roam-ui-sync-theme t)
    (org-roam-ui-follow t)
    (org-roam-ui-update-on-save t))
-  :init
+  :config
   ;; org-roam-ui-mode starts a websocket server; don't start it in batch.
   (unless noninteractive
     (org-roam-ui-mode))

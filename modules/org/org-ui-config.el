@@ -68,7 +68,9 @@
         (setq my/org-color-macro-last-region (cons start end))))))
 
 ;; Adiciona o hook globalmente (ou apenas no hook do org-mode se preferir)
-(add-hook 'post-command-hook #'my/org-color-macro-auto-reveal)
+(add-hook 'org-mode-hook
+              (lambda ()
+                (add-hook 'post-command-hook #'my/org-color-macro-auto-reveal nil t)))
 
 (defun my/org--color-macro-header (backend)
   (pcase backend
