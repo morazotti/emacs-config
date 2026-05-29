@@ -11,4 +11,4 @@
     (dolist (binding bindings)
       (put (cdr binding) 'repeat-map map-name))))
 
-(provide 'core-custom-macros-config)
+(provide 'core-custom-functions-config)
