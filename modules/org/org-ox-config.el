@@ -53,5 +53,9 @@ Converts strings (\"biblatex opt\") or symbols ('bibtex) into lists."
 	       (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "}"           :texinfo "'")
 	       (apostrophe        :utf-8 "’" :html "&rsquo;")))
 
+;; adds default backend to biblatex
+(with-eval-after-load 'oc
+  (setf (alist-get 'latex org-cite-export-processors)
+        '(biblatex "numeric" "backend=biber")))
 
 (provide 'org-ox-config)
