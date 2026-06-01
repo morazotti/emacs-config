@@ -9,6 +9,7 @@
 
 (require 'core-packages-config)
 (require 'core-variables-config)
+(require 'core-custom-functions-config)
 (require 'org-core-config)
 (require 'org-babel-config)
 (require 'org-link-config)

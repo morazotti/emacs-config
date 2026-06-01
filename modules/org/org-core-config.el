@@ -61,6 +61,9 @@
                               ("" "physics" t)
                               ("" "framed" t)
                               ("style=american" "csquotes" t)
+			      ;; ("numbers,sort&compress" "natbib" t)
+			      ;; ("backend=biber,style=numeric" "biblatex" t)
+			      ("" "cleveref" t)
                               ("" "tikz" t)
                               ("" "minted" t)))
   (org-latex-listings 'minted)
@@ -70,7 +73,7 @@
      ("bgcolor" "gray!15")
      ("breaklines" "true")))
 
-  (org-latex-pdf-process '("latexmk -synctex=1 -shell-escape -bibtex -interaction=nonstopmode -pdf -f -8bit %f"))
+  (org-latex-pdf-process '("latexmk -synctex=1 -shell-escape  -interaction=nonstopmode -pdf -f -8bit %f"))
   (org-latex-prefer-user-labels t)
   (org-format-latex-options
    '(:foreground default
