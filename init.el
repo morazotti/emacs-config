@@ -7,7 +7,7 @@
 		  "tools"
 		  "langs"
 		  "ai"))
-  (add-to-list 'load-path (file-name-concat user-lisp-directory module))
+  (add-to-list 'load-path (file-name-concat user-emacs-directory "modules" module))
   (require (intern (format "%s-config" module))))
 
 (add-hook 'emacs-startup-hook
