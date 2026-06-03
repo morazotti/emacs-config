@@ -61,8 +61,6 @@
                               ("" "physics" t)
                               ("" "framed" t)
                               ("style=american" "csquotes" t)
-			      ;; ("numbers,sort&compress" "natbib" t)
-			      ;; ("backend=biber,style=numeric" "biblatex" t)
 			      ("" "cleveref" t)
                               ("" "tikz" t)
                               ("" "minted" t)))

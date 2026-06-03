@@ -51,11 +51,11 @@
 (citar-org-roam-mode)
 (citar-embark-mode)
 
-(use-package bibtex-completion
-  :custom
-  (bibtex-completion-bibliography my/bibliography-file)
-  (bibtex-completion-notes-path org-roam-directory)
-  (bibtex-completion-library-path my/pdf-library))
+;; (use-package bibtex-completion
+;;   :custom
+;;   (bibtex-completion-bibliography my/bibliography-file)
+;;   (bibtex-completion-notes-path org-roam-directory)
+;;   (bibtex-completion-library-path my/pdf-library))
 
 ;; useful to look for papers, never really used it
 (use-package biblio
