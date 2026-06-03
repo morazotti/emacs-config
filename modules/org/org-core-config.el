@@ -63,6 +63,7 @@
                               ("style=american" "csquotes" t)
 			      ("" "cleveref" t)
                               ("" "tikz" t)
+                              ("american" "circuitikz" t)
                               ("" "minted" t)))
   (org-latex-listings 'minted)
   (org-latex-minted-options
