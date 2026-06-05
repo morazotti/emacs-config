@@ -110,7 +110,7 @@
 (use-package blamer
   :straight (:host github :repo "Artawicus/blamer.el")
   :custom
-  (blamer-idle-time 0.5)               ; Tempo de espera do cursor para mostrar a info
+  (blamer-idle-time 0.5)
   (blamer-min-width 20)
   :custom-face
   (blamer-face ((t :foreground "#7a8478" :background nil :italic t))) ; Cor do texto fantasma
