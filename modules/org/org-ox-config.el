@@ -16,6 +16,16 @@
     (setq org-export-dispatch-last-action local-org-export-dispatch-last-action)
     (org-export-dispatch 1)))
 
+(defun my/org-latex-centering-filter (text backend info)
+  "Adiciona \\centering automaticamente dentro de blocos figure no LaTeX."
+  (when (org-export-derived-backend-p backend 'latex)
+    (replace-regexp-in-string "\\\\begin{figure}" "\\\\begin{figure}\n\\\\centering" text)))
+
+(if (bound-and-true-p org-export-filter-special-block-functions)
+    (add-to-list 'org-export-filter-special-block-functions
+		 'my/org-latex-centering-filter)
+  (setq org-export-filter-special-block-functions (list 'my/org-latex-centering-filter)))
+
 (use-package org-reveal)
 (use-package ox-reveal
   :after (org-reveal))

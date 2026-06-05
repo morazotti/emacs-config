@@ -65,7 +65,6 @@
  ("gptel-commit" . "2b1063a01ab894ae5661bfffeb97331ad0cf2e3b")
  ("gptel-got" . "0334b14f93c39e23d40ad1b980556058c1ac58fb")
  ("gptel-quick" . "018ff2be8f860a1e8fe3966eec418ad635620c38")
- ("helm-bibtex" . "6064e8625b2958f34d6d40312903a85c173b5261")
  ("ht.el" . "1c49aad1c820c86f7ee35bf9fff8429502f60fef")
  ("hydra" . "59a2a45a35027948476d1d7751b0f0215b1e61aa")
  ("inheritenv" . "b9e67cc20c069539698a9ac54d0e6cc11e616c6f")

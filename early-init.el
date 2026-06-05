@@ -1,4 +1,4 @@
-(setq gc-cons-threshold most-positive-fixnum)
+(setq gc-cons-threshold most-positive-fixnum
       package-enable-at-startup nil
       inhibit-startup-screen t
       inhibit-startup-message t

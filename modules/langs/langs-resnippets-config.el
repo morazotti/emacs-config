@@ -77,7 +77,7 @@
 	 :condition (and
 		     (not (texmathp))
 		     (or
-		      (string= "en" (cadar (org-collect-keywords '("LANGUAGE"))))
+		      (string= "en-us" (cadar (org-collect-keywords '("LANGUAGE"))))
 		      (string= "en_US" jinx-languages)))
 
 	 :match-case t
@@ -101,7 +101,7 @@
 	 :condition (and
 		     (not (texmathp))
 		     (or
-		      (string= "pt" (cadar (org-collect-keywords '("LANGUAGE"))))
+		      (string= "pt-br" (cadar (org-collect-keywords '("LANGUAGE"))))
 		      (string= "pt_BR" jinx-languages)))
 
 	 :match-case t
