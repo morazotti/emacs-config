@@ -115,7 +115,9 @@
   :custom-face
   (blamer-face ((t :foreground "#7a8478" :background nil :italic t))) ; Cor do texto fantasma
   :config
-  (global-blamer-mode 1))
+  (global-blamer-mode 1)
+  :bind
+  ("s-i" . blamer-show-posframe-commit-info))
 
 ;; email
 (use-package notmuch
