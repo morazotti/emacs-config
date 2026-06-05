@@ -62,6 +62,7 @@
                               ("" "framed" t)
                               ("style=american" "csquotes" t)
 			      ("" "cleveref" t)
+			      ("" "framed" t)
                               ("" "tikz" t)
                               ("american" "circuitikz" t)
                               ("" "minted" t)))

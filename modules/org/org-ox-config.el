@@ -68,4 +68,5 @@ Converts strings (\"biblatex opt\") or symbols ('bibtex) into lists."
   (setf (alist-get 'latex org-cite-export-processors)
         '(biblatex "numeric" "backend=biber")))
 
+(require 'org-ox-classes-config)
 (provide 'org-ox-config)
