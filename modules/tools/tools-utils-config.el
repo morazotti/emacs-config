@@ -88,6 +88,35 @@
 
 (use-package forge)
 
+;; diff-hl
+(use-package diff-hl
+  :hook ((dired-mode . diff-hl-dired-mode))
+  :init
+  (global-diff-hl-mode)
+  :config
+  ;; Atualiza o diff-hl dinamicamente ao digitar (sem precisar salvar)
+  (diff-hl-flydiff-mode 1)
+
+  ;; Integração com o Magit: atualiza os destaques após commits/stages
+  (with-eval-after-load 'magit
+    (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
+    (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+
+  ;; Fallback para terminal (usa a margem quando a fringe não estiver disponível)
+  (unless (display-graphic-p)
+    (diff-hl-margin-mode 1)))
+
+;; blamer
+(use-package blamer
+  :straight (:host github :repo "Artawicus/blamer.el")
+  :custom
+  (blamer-idle-time 0.5)               ; Tempo de espera do cursor para mostrar a info
+  (blamer-min-width 20)
+  :custom-face
+  (blamer-face ((t :foreground "#7a8478" :background nil :italic t))) ; Cor do texto fantasma
+  :config
+  (global-blamer-mode 1))
+
 ;; email
 (use-package notmuch
   :custom ((notmuch-search-oldest-first nil)

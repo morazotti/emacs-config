@@ -108,4 +108,7 @@
  '(org-modern-time-inactive ((t (:inherit (default fixed-pitch) :background "gray50" :foreground "gray95" :height 0.8))))
  '(org-property-value ((t (:inherit fixed-pitch))))
  '(org-special-keyword ((t (:inherit fixed-pitch :foreground "#fe640b"))))
- '(visual-shorthands-face ((t (:inherit font-lock-keyword-face :extend nil :background "#e0e0e0")))))
+ '(visual-shorthands-face ((t (:inherit font-lock-keyword-face :extend nil :background "#e0e0e0"))))
+ '(diff-hl-insert ((t (:background "#a6e3a1" :foreground "#a6e3a1")))) ; Verde (Adições)
+ '(diff-hl-delete ((t (:background "#f38ba8" :foreground "#f38ba8")))) ; Vermelho (Exclusões)
+ '(diff-hl-change ((t (:background "#f9e2af" :foreground "#f9e2af")))))
