@@ -13,5 +13,6 @@
 (require 'org-core-config)
 (require 'org-babel-config)
 (require 'org-link-config)
+(require 'org-ui-config)
 (require 'org-ox-config)
 (require 'langs-latex-config)

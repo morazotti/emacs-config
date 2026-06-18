@@ -3,7 +3,7 @@
   :hook ((org-mode latex-mode C-mode julia-mode python-mode) . smartparens-mode))
 
 (use-package paredit
-  :hook ((snippet-mode lisp-mode lisp-interaction-mode clojure-mode emacs-lisp-mode) . paredit-mode))
+  :hook ((snippet-mode lisp-mode lisp-interaction-mode clojure-ts-mode clojure-mode emacs-lisp-mode) . paredit-mode))
 
 (use-package rainbow-delimiters
   :hook ((prog-mode LaTeX-mode latex-mode org-mode) . rainbow-delimiters-mode))
