@@ -32,14 +32,13 @@
                            :help-echo "Abrir Org-noter"))
 
 ;; ----------------------------------------------------------------------
-;; 1. As funções de busca (Completion) que sequestram o minibuffer
+;;  "1. Search (completion) functions that hijack the minibuffer."
 ;; ----------------------------------------------------------------------
 
-(defconst my/org-target-regexp "<<\\([^>]+\\)>>"
-  "Regular expression to match Org targets (e.g., <<target>>).")
-
-(defconst my/org-name-regexp "^[ \t]*#\\+name:[ \t]*\\([^ \t\n\r]+\\)"
-  "Regular expression to match Org #+name: definitions.")
+(defconst my/org-regexp-links
+  '(("target" . "<<\\([^>]+\\)>>")
+    ("name" . "^[ \t]*#\\+name:[ \t]*\\([^ \t\n\r]+\\)"))
+  "Regular expression to match Org regexps (e.g., <<target>> or #+name:).")
 
 (defun my/org-complete-by-regexp (regexp prompt error-msg)
   "Search the buffer for matches of REGEXP, capturing group 1.
@@ -54,19 +53,27 @@ If no matches are found, raise a `user-error` with ERROR-MSG."
         (completing-read prompt (delete-dups matches))
       (user-error error-msg))))
 
-(defun my/org-complete-target (&optional arg)
-  "Search the buffer for <<targets>>."
-  (interactive "P")
-  (my/org-complete-by-regexp my/org-target-regexp
-                             "Choose target: "
-                             "No <<target>> found in this buffer"))
+(defun my/org-complete-identifier (identifier &optional arg)
+  "Search the buffer for Org regexps matching IDENTIFIER from `my/org-regexp-links`."
+  (interactive
+   (list (completing-read "Identifier: " (mapcar #'car my/org-regexp-links))
+         current-prefix-arg))
+  (let ((regexp (cdr (assoc identifier my/org-regexp-links))))
+    (if (not regexp)
+        (user-error "Identifier '%s' not found in `my/org-regexp-links`" identifier)
+      (my/org-complete-by-regexp regexp
+                                 (format "Choose %s: " identifier)
+                                 (format "No %s found in this buffer" identifier)))))
 
 (defun my/org-complete-name (&optional arg)
-  "Search the buffer for #+name: entries."
-  (interactive "P")
-  (my/org-complete-by-regexp my/org-name-regexp
-                             "Choose name: "
-                             "No #+name: found in this buffer"))
+  "Search the buffer for #+name: entries using `my/org-complete-identifier`."
+  (interactive)
+  (my/org-complete-identifier "name" arg))
+
+(defun my/org-complete-target (&optional arg)
+  "Search the buffer for <<target>> entries using `my/org-complete-identifier`."
+  (interactive)
+  (my/org-complete-identifier "target" arg))
 
 ;; ----------------------------------------------------------------------
 ;; Registering links for completion only
