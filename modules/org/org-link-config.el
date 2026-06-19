@@ -8,6 +8,7 @@
 ;;  [[subfig:img2.png][Subcaption 2 >(scale=0.6)]]
 ;;  [[subfig:img3.png][Subcaption 3 >(scale=0.6)]]
 ;;  #+end_figure
+
 (with-eval-after-load 'org
   (org-link-set-parameters
    "subfig"
@@ -29,6 +30,59 @@
                            :follow (lambda (path) (org-noter))
 			   :face '(:weight bold :foreground "orange" :underline t)
                            :help-echo "Abrir Org-noter"))
+
+;; ----------------------------------------------------------------------
+;;  "1. Search (completion) functions that hijack the minibuffer."
+;; ----------------------------------------------------------------------
+
+(defconst my/org-regexp-links
+  '(("target" . "<<\\([^>]+\\)>>")
+    ("name" . "^[ \t]*#\\+name:[ \t]*\\([^ \t\n\r]+\\)"))
+  "Regular expression to match Org regexps (e.g., <<target>> or #+name:).")
+
+(defun my/org-complete-by-regexp (regexp prompt error-msg)
+  "Search the buffer for matches of REGEXP, capturing group 1.
+Present them via `completing-read` using PROMPT.
+If no matches are found, raise a `user-error` with ERROR-MSG."
+  (let ((matches '()))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward regexp nil t)
+        (push (match-string-no-properties 1) matches)))
+    (if matches
+        (completing-read prompt (delete-dups matches))
+      (user-error error-msg))))
+
+(defun my/org-complete-identifier (identifier &optional arg)
+  "Search the buffer for Org regexps matching IDENTIFIER from `my/org-regexp-links`."
+  (interactive
+   (list (completing-read "Identifier: " (mapcar #'car my/org-regexp-links))
+         current-prefix-arg))
+  (let ((regexp (cdr (assoc identifier my/org-regexp-links))))
+    (if (not regexp)
+        (user-error "Identifier '%s' not found in `my/org-regexp-links`" identifier)
+      (my/org-complete-by-regexp regexp
+                                 (format "Choose %s: " identifier)
+                                 (format "No %s found in this buffer" identifier)))))
+
+(defun my/org-complete-name (&optional arg)
+  "Search the buffer for #+name: entries using `my/org-complete-identifier`."
+  (interactive)
+  (my/org-complete-identifier "name" arg))
+
+(defun my/org-complete-target (&optional arg)
+  "Search the buffer for <<target>> entries using `my/org-complete-identifier`."
+  (interactive)
+  (my/org-complete-identifier "target" arg))
+
+;; ----------------------------------------------------------------------
+;; Registering links for completion only
+;; ----------------------------------------------------------------------
+(with-eval-after-load 'org
+  (org-link-set-parameters "target" :complete #'my/org-complete-target)
+  (org-link-set-parameters "name" :complete #'my/org-complete-name))
+
+;; ----------------------------------------------------------------------
 
 ;; link files and display everything as a single file
 (use-package org-transclusion

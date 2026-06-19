@@ -13,21 +13,41 @@
     ("orange"  . "orange"))
   "Alist mapping macro names to display colors in Emacs.")
 
+(defun my/org-color-macro-sensor (_window oldpos dir)
+  "Cursor sensor function to reveal or hide the color macro.
+When the cursor enters the macro (dir = entered), we temporarily remove the 'invisible'
+property. When the cursor leaves (dir = left), we trigger the refontify of the
+revealed region via `font-lock-flush` so that the markers are hidden again."
+  (let* ((pos (if (eq dir 'entered) (point) oldpos))
+         (prop (get-text-property pos 'my/org-color-macro))
+         (start (when prop (or (previous-single-property-change (1+ pos) 'my/org-color-macro) (point-min))))
+         (end (when prop (or (next-single-property-change pos 'my/org-color-macro) (point-max)))))
+    (when (and prop start end)
+      (pcase dir
+        ('entered
+         (with-silent-modifications
+           (remove-text-properties start end '(invisible nil))))
+        ('left
+         (font-lock-flush start end))))))
+
 (defun my/org-fontify-color-macros ()
-  "Aplica cores às macros {{{cor(texto)}}} e adiciona lógica de revelar ao cursor."
-  ;; Adicionamos 'my/org-color-macro' à lista de propriedades gerenciadas para limpeza correta
-  (setq font-lock-extra-managed-props (append '(invisible display my/org-color-macro) font-lock-extra-managed-props))
+  "Apply colors to {{{color(text)}}} macros and configure cursor sensors for revealing."
+  ;; Add managed properties to font-lock, including 'cursor-sensor-functions'
+  (setq font-lock-extra-managed-props
+        (append '(invisible display my/org-color-macro cursor-sensor-functions)
+                font-lock-extra-managed-props))
   (let ((color-list-aux (list)))
     (dolist (color-entry my/latex-colors-alist)
       (let ((macro-name (car color-entry))
             (color-value (cdr color-entry)))
         (push `(,(format "{{{%s(\\(.*?\\))}}}" macro-name)
                 (0 (progn
-                     ;; Marcamos a região inteira com uma propriedade única (o ponto de início)
-                     ;; Isso permite detectar limites mesmo entre macros adjacentes
+                     ;; Mark the entire region with the macro ID and attach the sensor function
                      (put-text-property (match-beginning 0) (match-end 0)
                                         'my/org-color-macro (match-beginning 0))
-                     ;; Aplica invisibilidade e cores
+                     (put-text-property (match-beginning 0) (match-end 0)
+                                        'cursor-sensor-functions (list #'my/org-color-macro-sensor))
+                     ;; Apply invisibility and visual formatting
                      (put-text-property (match-beginning 0) (match-beginning 1)
                                         'invisible t)
                      (put-text-property (match-beginning 1) (match-end 1)
@@ -37,46 +57,15 @@
               color-list-aux)))
     (font-lock-add-keywords nil color-list-aux 'append)))
 
-;; Variável para rastrear a última região revelada
-(defvar-local my/org-color-macro-last-region nil)
-
-(defun my/org-color-macro-auto-reveal ()
-  "Revela macros de cor quando o cursor está sobre elas."
-  (when (eq major-mode 'org-mode)
-    (let* ((point (point))
-           ;; Verifica se estamos sobre um macro
-           (prop (get-text-property point 'my/org-color-macro))
-           ;; Encontra os limites do macro atual (start e end)
-           (start (if prop (or (previous-single-property-change (1+ point) 'my/org-color-macro) (point-min))))
-           (end (if prop (or (next-single-property-change point 'my/org-color-macro) (point-max)))))
-
-      ;; 1. Se saímos de um macro ou mudamos de macro, esconder o anterior
-      (when (and my/org-color-macro-last-region
-                 (or (not prop)
-                     (not (equal (cons start end) my/org-color-macro-last-region))))
-        (let ((reg-start (car my/org-color-macro-last-region))
-              (reg-end (cdr my/org-color-macro-last-region)))
-          ;; font-lock-flush força o Emacs a reaplicar as regras (re-escondendo o macro)
-          (when (< reg-start reg-end)
-            (font-lock-flush reg-start reg-end)))
-        (setq my/org-color-macro-last-region nil))
-
-      ;; 2. Se estamos dentro de um macro, revelar (remover invisibilidade)
-      (when (and prop start end (not (equal (cons start end) my/org-color-macro-last-region)))
-        (with-silent-modifications
-          (remove-text-properties start end '(invisible nil)))
-        (setq my/org-color-macro-last-region (cons start end))))))
-
-;; Adiciona o hook globalmente (ou apenas no hook do org-mode se preferir)
-(add-hook 'org-mode-hook
-              (lambda ()
-                (add-hook 'post-command-hook #'my/org-color-macro-auto-reveal nil t)))
+;; Activate cursor-sensor-mode to monitor text properties in Org-mode
+(add-hook 'org-mode-hook #'cursor-sensor-mode)
+(add-hook 'org-mode-hook #'my/org-fontify-color-macros)
 
 (defun my/org--color-macro-header (backend)
   (pcase backend
     ('latex "#+MACRO: color \\textcolor{$1}{$2}\n")
     ('html  "#+MACRO: color @@html:<font color=\"$1\">$2</font>@@\n")
-    (_ (error "Backend inválido: %S" backend))))
+    (_ (error "Invalid backend: %S" backend))))
 
 (defun my/org--color-macro-render (backend color &optional mapping)
   (pcase backend
@@ -96,7 +85,7 @@
                   nil nil 1)
                raw-color)))
        (format "@@html:<font color=\"%s\">$1</font>@@" html-color)))
-    (_ (error "Backend inválido: %S" backend))))
+    (_ (error "Invalid backend: %S" backend))))
 
 (defun my/update-colors-org-file (backend)
   (interactive
@@ -104,7 +93,7 @@
   (let* ((relative-path (pcase backend
                           ('latex "macros/latex-colors.org")
                           ('html  "macros/colors.org")
-                          (_ (error "Backend inválido: %S" backend))))
+                          (_ (error "Invalid backend: %S" backend))))
          (file-path (expand-file-name relative-path user-emacs-directory))
          (mapping (pcase backend
                     ('html '(("forest green" . "LightGreen")))
@@ -131,7 +120,7 @@
 
 (add-hook 'org-mode-hook #'my/org-fontify-color-macros)
 
-;; Restante das configurações (org-modern, mixed-pitch, etc)
+;; Remaining configurations (org-modern, mixed-pitch, etc)
 (use-package org-modern
   :after org
   :straight (:host github :repo "minad/org-modern" :branch "main")

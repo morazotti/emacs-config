@@ -59,6 +59,23 @@
   :init (setq jinx-languages "en_US pt_BR")
   :bind (("M-$" . jinx-correct)
          ("C-M-$" . jinx-languages)))
+
+
+(defun my/org-jinx-set-language ()
+  "Adjust the Jinx dictionary based on Org-mode's '#+language:', converting hyphens."
+  (when (derived-mode-p 'org-mode)
+    (let ((lang (cadar (org-collect-keywords '("LANGUAGE")))))
+      (when lang
+        ;; If it is pt-br, it becomes pt_BR. If it is en-us, it becomes en_US.
+        (setq-local jinx-languages
+                    (replace-regexp-in-string
+                     "-\\([a-z]\\{2\\}\\)$"
+                     (lambda (match) (concat "_" (upcase (match-string 1 match))))
+                     (downcase lang)))))))
+
+;; Run the function whenever Jinx is activated in the buffer
+(add-hook 'jinx-mode-hook #'my/org-jinx-set-language)
+
 (add-to-list 'vertico-multiform-categories
                '(jinx grid (vertico-grid-annotate . 20) (vertico-count . 4)))
 
