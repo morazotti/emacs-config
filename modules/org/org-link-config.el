@@ -34,27 +34,39 @@
 ;; ----------------------------------------------------------------------
 ;; 1. As funções de busca (Completion) que sequestram o minibuffer
 ;; ----------------------------------------------------------------------
-(defun my/org-complete-target (&optional arg)
-  "Search the buffer for <<targets>>."
-  (let ((targets '()))
+
+(defconst my/org-target-regexp "<<\\([^>]+\\)>>"
+  "Regular expression to match Org targets (e.g., <<target>>).")
+
+(defconst my/org-name-regexp "^[ \t]*#\\+name:[ \t]*\\([^ \t\n\r]+\\)"
+  "Regular expression to match Org #+name: definitions.")
+
+(defun my/org-complete-by-regexp (regexp prompt error-msg)
+  "Search the buffer for matches of REGEXP, capturing group 1.
+Present them via `completing-read` using PROMPT.
+If no matches are found, raise a `user-error` with ERROR-MSG."
+  (let ((matches '()))
     (save-excursion
       (goto-char (point-min))
-      (while (re-search-forward "<<\\([^>]+\\)>>" nil t)
-        (push (match-string-no-properties 1) targets)))
-    (if targets
-        (completing-read "Choose target: " (delete-dups targets))
-      (user-error "No <<target>> found in this buffer"))))
+      (while (re-search-forward regexp nil t)
+        (push (match-string-no-properties 1) matches)))
+    (if matches
+        (completing-read prompt (delete-dups matches))
+      (user-error error-msg))))
+
+(defun my/org-complete-target (&optional arg)
+  "Search the buffer for <<targets>>."
+  (interactive "P")
+  (my/org-complete-by-regexp my/org-target-regexp
+                             "Choose target: "
+                             "No <<target>> found in this buffer"))
 
 (defun my/org-complete-name (&optional arg)
   "Search the buffer for #+name: entries."
-  (let ((names '()))
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward "^[ \t]*#\\+name:[ \t]*\\([^ \t\n\r]+\\)" nil t)
-        (push (match-string-no-properties 1) names)))
-    (if names
-        (completing-read "Choose name: " (delete-dups names))
-      (user-error "No #+name: found"))))
+  (interactive "P")
+  (my/org-complete-by-regexp my/org-name-regexp
+                             "Choose name: "
+                             "No #+name: found in this buffer"))
 
 ;; ----------------------------------------------------------------------
 ;; Registering links for completion only
