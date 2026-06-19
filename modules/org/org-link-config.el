@@ -8,6 +8,7 @@
 ;;  [[subfig:img2.png][Subcaption 2 >(scale=0.6)]]
 ;;  [[subfig:img3.png][Subcaption 3 >(scale=0.6)]]
 ;;  #+end_figure
+
 (with-eval-after-load 'org
   (org-link-set-parameters
    "subfig"
@@ -29,6 +30,40 @@
                            :follow (lambda (path) (org-noter))
 			   :face '(:weight bold :foreground "orange" :underline t)
                            :help-echo "Abrir Org-noter"))
+
+;; ----------------------------------------------------------------------
+;; 1. As funções de busca (Completion) que sequestram o minibuffer
+;; ----------------------------------------------------------------------
+(defun my/org-complete-target (&optional arg)
+  "Search the buffer for <<targets>>."
+  (let ((targets '()))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "<<\\([^>]+\\)>>" nil t)
+        (push (match-string-no-properties 1) targets)))
+    (if targets
+        (completing-read "Choose target: " (delete-dups targets))
+      (user-error "No <<target>> found in this buffer"))))
+
+(defun my/org-complete-name (&optional arg)
+  "Search the buffer for #+name: entries."
+  (let ((names '()))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "^[ \t]*#\\+name:[ \t]*\\([^ \t\n\r]+\\)" nil t)
+        (push (match-string-no-properties 1) names)))
+    (if names
+        (completing-read "Choose name: " (delete-dups names))
+      (user-error "No #+name: found"))))
+
+;; ----------------------------------------------------------------------
+;; Registering links for completion only
+;; ----------------------------------------------------------------------
+(with-eval-after-load 'org
+  (org-link-set-parameters "target" :complete #'my/org-complete-target)
+  (org-link-set-parameters "name" :complete #'my/org-complete-name))
+
+;; ----------------------------------------------------------------------
 
 ;; link files and display everything as a single file
 (use-package org-transclusion
