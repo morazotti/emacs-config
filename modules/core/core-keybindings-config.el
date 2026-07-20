@@ -84,6 +84,13 @@
    "hh" 'beginning-of-buffer
    "kk" 'end-of-buffer
 
+
+   ;; harpoon
+   "<leader>" 'harpoon-add-file
+   "ESC" 'harpoon-toggle-quick-menu
+   "<backspace>" 'harpoon-clear
+   "qh" 'harpoon-quick-menu-hydra
+
    ;; commands
    ":" 'eval-expression
    ";" 'avy-goto-line

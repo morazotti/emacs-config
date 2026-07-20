@@ -113,7 +113,7 @@
 (use-package org-contrib)
 (use-package ox-extra
   :after (org org-contrib)
-  :config (ox-extras-activate '(latex-header-blocks ignore-headlines)))
+  :hook (org-mode . (lambda () (ox-extras-activate '(latex-header-blocks ignore-headlines)))))
 (use-package org-ql)
 
 (my/define-repeat-map "org-outline"

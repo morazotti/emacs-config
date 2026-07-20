@@ -100,7 +100,7 @@
  '(org-drawer ((t (:inherit fixed-pitch :foreground "Blue1"))))
  '(org-level-1 ((t (:extend nil :foreground "medium blue" :weight bold :height 1.2 :family "CMU Serif"))))
  '(org-level-2 ((t (:foreground "#d20f39" :weight bold :height 1.1 :family "CMU Serif"))))
- ;; '(org-level-3 ((t (:inherit outline-4 :extend t :family "CMU Serif"))))
+ '(org-level-3 ((t (:foreground "#883aef" :weight bold :height 1.00005 :family "CMU Serif")))) ;; '(org-level-3 ((t (:foreground "#883aef" :weight bold :extend nil :height 1 :family "CMU Serif"))))
  ;; '(org-level-4 ((t (:inherit outline-4 :extend t :family "CMU Serif"))))
  '(org-modern-date-active ((t (:inherit (default fixed-pitch) :background "gray90" :foreground "black" :height 0.8 :family "Ligamonacop"))))
  '(org-modern-date-inactive ((t (:inherit (default fixed-pitch) :background "gray90" :foreground "gray30" :height 0.8))))

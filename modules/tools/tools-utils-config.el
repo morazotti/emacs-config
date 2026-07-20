@@ -53,6 +53,14 @@
 	 :map dired-mode-map
 	      ("C-c C-c" . casual-dired-tmenu)))
 
+;; harpoon
+(use-package harpoon
+  :bind
+  ("C-M-s-p" . harpoon-go-to-1)
+  ("C-M-s-f" . harpoon-go-to-2)
+  ("C-M-s-w" . harpoon-go-to-3)
+  ("C-M-s-q" . harpoon-go-to-4))
+
 ;;jinx
 (use-package jinx
   :hook (emacs-startup . global-jinx-mode)
