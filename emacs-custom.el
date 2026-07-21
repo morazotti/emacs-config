@@ -69,6 +69,210 @@
      "General Relativity and Quantum Cosmology"
      "Computer Science - Computational Complexity"))
  '(ebib-reading-list-template "* %M %T\12\12\12:PROPERTIES:\12%K\12:END:\12")
+ '(org-export-smart-quotes-alist
+   '(("pt"
+      (primary-opening :utf-8 "“" :html "&ldquo;" :latex "\\enquote{"
+		       :texinfo "``")
+      (primary-closing :utf-8 "”" :html "&rdquo;" :latex "}" :texinfo
+		       "''")
+      (secondary-opening :utf-8 "‘" :html "&lsquo;" :latex
+			 "\\enquote*{" :texinfo "`")
+      (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "}"
+			 :texinfo "'")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("pt-br"
+      (primary-opening :utf-8 "“" :html "&ldquo;" :latex "\\enquote{"
+		       :texinfo "``")
+      (primary-closing :utf-8 "”" :html "&rdquo;" :latex "}" :texinfo
+		       "''")
+      (secondary-opening :utf-8 "‘" :html "&lsquo;" :latex
+			 "\\enquote*{" :texinfo "`")
+      (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "}"
+			 :texinfo "'")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("ar"
+      (primary-opening :utf-8 "«" :html "&laquo;" :latex
+		       "\\guillemotleft{}" :texinfo "@guillemetleft{}")
+      (primary-closing :utf-8 "»" :html "&raquo;" :latex
+		       "\\guillemotright{}" :texinfo
+		       "@guillemetright{}")
+      (secondary-opening :utf-8 "‹" :html "&lsaquo;" :latex
+			 "\\guilsinglleft{}" :texinfo
+			 "@guilsinglleft{}")
+      (secondary-closing :utf-8 "›" :html "&rsaquo;" :latex
+			 "\\guilsinglright{}" :texinfo
+			 "@guilsinglright{}")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("da"
+      (primary-opening :utf-8 "»" :html "&raquo;" :latex ">>" :texinfo
+		       "@guillemetright{}")
+      (primary-closing :utf-8 "«" :html "&laquo;" :latex "<<" :texinfo
+		       "@guillemetleft{}")
+      (secondary-opening :utf-8 "›" :html "&rsaquo;" :latex "\\frq{}"
+			 :texinfo "@guilsinglright{}")
+      (secondary-closing :utf-8 "‹" :html "&lsaquo;" :latex "\\flq{}"
+			 :texinfo "@guilsingleft{}")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("de"
+      (primary-opening :utf-8 "„" :html "&bdquo;" :latex "\"`"
+		       :texinfo "@quotedblbase{}")
+      (primary-closing :utf-8 "“" :html "&ldquo;" :latex "\"'"
+		       :texinfo "@quotedblleft{}")
+      (secondary-opening :utf-8 "‚" :html "&sbquo;" :latex "\\glq{}"
+			 :texinfo "@quotesinglbase{}")
+      (secondary-closing :utf-8 "‘" :html "&lsquo;" :latex "\\grq{}"
+			 :texinfo "@quoteleft{}")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("el"
+      (primary-opening :utf-8 "«" :html "&laquo;" :latex
+		       "\\guillemotleft{}" :texinfo "@guillemetleft{}")
+      (primary-closing :utf-8 "»" :html "&raquo;" :latex
+		       "\\guillemotright{}" :texinfo
+		       "@guillemetright{}")
+      (secondary-opening :utf-8 "“" :html "&ldquo;" :latex "``"
+			 :texinfo "``")
+      (secondary-closing :utf-8 "”" :html "&rdquo;" :latex "''"
+			 :texinfo "''")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("en"
+      (primary-opening :utf-8 "“" :html "&ldquo;" :latex "``" :texinfo
+		       "``")
+      (primary-closing :utf-8 "”" :html "&rdquo;" :latex "''" :texinfo
+		       "''")
+      (secondary-opening :utf-8 "‘" :html "&lsquo;" :latex "`"
+			 :texinfo "`")
+      (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "'"
+			 :texinfo "'")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("es"
+      (primary-opening :utf-8 "«" :html "&laquo;" :latex
+		       "\\guillemotleft{}" :texinfo "@guillemetleft{}")
+      (primary-closing :utf-8 "»" :html "&raquo;" :latex
+		       "\\guillemotright{}" :texinfo
+		       "@guillemetright{}")
+      (secondary-opening :utf-8 "“" :html "&ldquo;" :latex "``"
+			 :texinfo "``")
+      (secondary-closing :utf-8 "”" :html "&rdquo;" :latex "''"
+			 :texinfo "''")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("fa"
+      (primary-opening :utf-8 "«" :html "&laquo;" :latex
+		       "\\guillemotleft{}" :texinfo "@guillemetleft{}")
+      (primary-closing :utf-8 "»" :html "&raquo;" :latex
+		       "\\guillemotright{}" :texinfo
+		       "@guillemetright{}")
+      (secondary-opening :utf-8 "‹" :html "&lsaquo;" :latex
+			 "\\guilsinglleft{}" :texinfo
+			 "@guilsinglleft{}")
+      (secondary-closing :utf-8 "›" :html "&rsaquo;" :latex
+			 "\\guilsinglright{}" :texinfo
+			 "@guilsinglright{}")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("fr"
+      (primary-opening :utf-8 "« " :html "&laquo;&nbsp;" :latex
+		       "\\og " :texinfo "@guillemetleft{}@tie{}")
+      (primary-closing :utf-8 " »" :html "&nbsp;&raquo;" :latex
+		       "\\fg{}" :texinfo "@tie{}@guillemetright{}")
+      (secondary-opening :utf-8 "“" :html "&ldquo;" :latex "``"
+			 :texinfo "``")
+      (secondary-closing :utf-8 "”" :html "&rdquo;" :latex "''"
+			 :texinfo "''")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("is"
+      (primary-opening :utf-8 "„" :html "&bdquo;" :latex "\"`"
+		       :texinfo "@quotedblbase{}")
+      (primary-closing :utf-8 "“" :html "&ldquo;" :latex "\"'"
+		       :texinfo "@quotedblleft{}")
+      (secondary-opening :utf-8 "‚" :html "&sbquo;" :latex "\\glq{}"
+			 :texinfo "@quotesinglbase{}")
+      (secondary-closing :utf-8 "‘" :html "&lsquo;" :latex "\\grq{}"
+			 :texinfo "@quoteleft{}")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("it"
+      (primary-opening :utf-8 "“" :html "&ldquo;" :latex "``" :texinfo
+		       "``")
+      (primary-closing :utf-8 "”" :html "&rdquo;" :latex "''" :texinfo
+		       "''")
+      (secondary-opening :utf-8 "‘" :html "&lsquo;" :latex "`"
+			 :texinfo "`")
+      (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "'"
+			 :texinfo "'")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("no"
+      (primary-opening :utf-8 "«" :html "&laquo;" :latex
+		       "\\guillemotleft{}" :texinfo "@guillemetleft{}")
+      (primary-closing :utf-8 "»" :html "&raquo;" :latex
+		       "\\guillemotright{}" :texinfo
+		       "@guillemetright{}")
+      (secondary-opening :utf-8 "‘" :html "&lsquo;" :latex "`"
+			 :texinfo "`")
+      (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "'"
+			 :texinfo "'")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("nb"
+      (primary-opening :utf-8 "«" :html "&laquo;" :latex
+		       "\\guillemotleft{}" :texinfo "@guillemetleft{}")
+      (primary-closing :utf-8 "»" :html "&raquo;" :latex
+		       "\\guillemotright{}" :texinfo
+		       "@guillemetright{}")
+      (secondary-opening :utf-8 "‘" :html "&lsquo;" :latex "`"
+			 :texinfo "`")
+      (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "'"
+			 :texinfo "'")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("nn"
+      (primary-opening :utf-8 "«" :html "&laquo;" :latex
+		       "\\guillemotleft{}" :texinfo "@guillemetleft{}")
+      (primary-closing :utf-8 "»" :html "&raquo;" :latex
+		       "\\guillemotright{}" :texinfo
+		       "@guillemetright{}")
+      (secondary-opening :utf-8 "‘" :html "&lsquo;" :latex "`"
+			 :texinfo "`")
+      (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "'"
+			 :texinfo "'")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("ro"
+      (primary-opening :utf-8 "„" :html "&bdquo;" :latex "\"`"
+		       :texinfo "@quotedblbase{}")
+      (primary-closing :utf-8 "”" :html "&rdquo;" :latex "''" :texinfo
+		       "''")
+      (secondary-opening :utf-8 "«" :html "&laquo;" :latex
+			 "\\guillemotleft{}" :texinfo
+			 "@guillemetleft{}")
+      (secondary-closing :utf-8 "»" :html "&raquo;" :latex
+			 "\\guillemotright{}" :texinfo
+			 "@guillemetright{}")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("ru"
+      (primary-opening :utf-8 "«" :html "&laquo;" :latex "{}<<"
+		       :texinfo "@guillemetleft{}")
+      (primary-closing :utf-8 "»" :html "&raquo;" :latex ">>{}"
+		       :texinfo "@guillemetright{}")
+      (secondary-opening :utf-8 "„" :html "&bdquo;" :latex "\\glqq{}"
+			 :texinfo "@quotedblbase{}")
+      (secondary-closing :utf-8 "“" :html "&ldquo;" :latex "\\grqq{}"
+			 :texinfo "@quotedblleft{}")
+      (apostrophe :utf-8 "’" :html "&#39;"))
+     ("sl"
+      (primary-opening :utf-8 "«" :html "&laquo;" :latex "{}<<"
+		       :texinfo "@guillemetleft{}")
+      (primary-closing :utf-8 "»" :html "&raquo;" :latex ">>{}"
+		       :texinfo "@guillemetright{}")
+      (secondary-opening :utf-8 "„" :html "&bdquo;" :latex "\\glqq{}"
+			 :texinfo "@quotedblbase{}")
+      (secondary-closing :utf-8 "“" :html "&ldquo;" :latex "\\grqq{}"
+			 :texinfo "@quotedblleft{}")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))
+     ("sv"
+      (primary-opening :utf-8 "”" :html "&rdquo;" :latex "’’" :texinfo
+		       "’’")
+      (primary-closing :utf-8 "”" :html "&rdquo;" :latex "’’" :texinfo
+		       "’’")
+      (secondary-opening :utf-8 "’" :html "&rsquo;" :latex "’"
+			 :texinfo "`")
+      (secondary-closing :utf-8 "’" :html "&rsquo;" :latex "’"
+			 :texinfo "'")
+      (apostrophe :utf-8 "’" :html "&rsquo;"))))
  '(org-hide-emphasis-markers t)
  '(org-hide-leading-stars t)
  '(org-hide-macro-markers t)

@@ -147,10 +147,8 @@
 	 :condition (not (texmathp))
 	 :match-case t
 	 :suffix t)
- ("mk" '("\\(" (resnippets-cursor)  "\\)"
-	 ) :word-boundary t :suffix nil)
- ("dm" '("\\[" (resnippets-cursor) "\\]"
-	 ) :word-boundary t :suffix nil)
+ ("mk" '("\\(" (resnippets-cursor)  "\\)") :word-boundary t :suffix nil)
+ ("dm" '("\\[" (resnippets-cursor) "\\]") :word-boundary t :suffix nil)
  ("qt\\(s?\\)" '("qubit" 1))
  ("qi" "qubit")
  ("qii" "qubits")
@@ -159,7 +157,7 @@
  ("schro" "Schrödinger" :match-case nil)
  ("hamilton\\([^a-zA-Z]\\)" '("Hamilton" 1) :match-case nil :suffix nil)
  ("xc" '((org-excalidraw-create-drawing)) :word-boundary t :suffix nil)
- ("NS" "Navier-Stokes")
+ ("ns" "Navier-Stokes" :word-boundary t)
  (",," "," :suffix nil))
 
 (provide 'langs-resnippets-config)

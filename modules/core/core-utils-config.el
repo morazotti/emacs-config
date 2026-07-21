@@ -36,9 +36,11 @@
     :config (setq ibuffer-show-empty-filter-groups nil)
     :config (setq ibuffer-expert t)
     :hook (ibuffer-mode . (lambda ()
-      (ibuffer-projectile-set-filter-groups)
-      (unless (eq ibuffer-sorting-mode 'alphabetic)
-        (ibuffer-do-sort-by-alphabetic)))))
+   (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
+   (unless (eq ibuffer-sorting-mode 'project-file-relative)
+     (ibuffer-do-sort-by-project-file-relative)))))
+
+(use-package ibuffer-project)
 
 ;; ace-window - avy for windows
 (use-package ace-window

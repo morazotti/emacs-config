@@ -9,5 +9,6 @@
 (require 'org-capture-config)
 (require 'org-latex-config)
 (require 'org-ox-config)
+(require 'org-custom-keywords-config)
 
 (provide 'org-config)
