@@ -4,6 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(TeX-fold-command-prefix "\3o")
+ '(biblio-download-directory "~/Downloads/")
  '(bibtex-autokey-name-year-separator "_")
  '(bibtex-autokey-titleword-length 'infty)
  '(bibtex-autokey-titlewords 2)
@@ -73,6 +74,11 @@
  '(org-hide-macro-markers t)
  '(org-image-actual-width '(350))
  '(org-image-align 'center)
+ '(org-latex-preview-appearance-options
+   '(:foreground default :background default :scale 2.0 :html-foreground
+		 "Black" :html-background "Transparent" :html-scale
+		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")) nil nil "Customized with use-package org")
+ '(org-latex-src-block-backend 'minted nil nil "Customized with use-package org")
  '(org-modern-hide-stars " ")
  '(org-modern-star 'replace)
  '(org-pretty-entities-include-sub-superscripts nil)
@@ -94,21 +100,20 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(diff-hl-change ((t (:background "#f9e2af" :foreground "#f9e2af"))))
+ '(diff-hl-delete ((t (:background "#f38ba8" :foreground "#f38ba8"))))
+ '(diff-hl-insert ((t (:background "#a6e3a1" :foreground "#a6e3a1"))))
  '(italic ((t (:slant italic))))
  '(jinx-misspelled ((t (:underline (:color "red" :style wave :position nil)))))
  '(org-document-title ((t (:weight bold :height 1.0))))
  '(org-drawer ((t (:inherit fixed-pitch :foreground "Blue1"))))
  '(org-level-1 ((t (:extend nil :foreground "medium blue" :weight bold :height 1.2 :family "CMU Serif"))))
  '(org-level-2 ((t (:foreground "#d20f39" :weight bold :height 1.1 :family "CMU Serif"))))
- '(org-level-3 ((t (:foreground "#883aef" :weight bold :height 1.00005 :family "CMU Serif")))) ;; '(org-level-3 ((t (:foreground "#883aef" :weight bold :extend nil :height 1 :family "CMU Serif"))))
- ;; '(org-level-4 ((t (:inherit outline-4 :extend t :family "CMU Serif"))))
+ '(org-level-3 ((t (:foreground "#883aef" :weight bold :height 1.00005 :family "CMU Serif"))))
  '(org-modern-date-active ((t (:inherit (default fixed-pitch) :background "gray90" :foreground "black" :height 0.8 :family "Ligamonacop"))))
  '(org-modern-date-inactive ((t (:inherit (default fixed-pitch) :background "gray90" :foreground "gray30" :height 0.8))))
  '(org-modern-time-active ((t (0.8 (default fixed-pitch) :inherit :height :background "gray35" :foreground "white" :weight semibold))))
  '(org-modern-time-inactive ((t (:inherit (default fixed-pitch) :background "gray50" :foreground "gray95" :height 0.8))))
  '(org-property-value ((t (:inherit fixed-pitch))))
  '(org-special-keyword ((t (:inherit fixed-pitch :foreground "#fe640b"))))
- '(visual-shorthands-face ((t (:inherit font-lock-keyword-face :extend nil :background "#e0e0e0"))))
- '(diff-hl-insert ((t (:background "#a6e3a1" :foreground "#a6e3a1")))) ; Verde (Adições)
- '(diff-hl-delete ((t (:background "#f38ba8" :foreground "#f38ba8")))) ; Vermelho (Exclusões)
- '(diff-hl-change ((t (:background "#f9e2af" :foreground "#f9e2af")))))
+ '(visual-shorthands-face ((t (:inherit font-lock-keyword-face :extend nil :background "#e0e0e0")))))
