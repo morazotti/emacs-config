@@ -45,8 +45,7 @@
   :custom (citar-org-roam-capture-template-key "r"))
 
 (use-package citar-embark
-  :after (citar embark)
-  :no-require)
+  :after (citar embark))
 
 (citar-org-roam-mode 1)
 (citar-embark-mode 1)
@@ -61,18 +60,17 @@
 
 (defun my/embark-citar-copy-and-format (key)
   (interactive "sKey: ")
-  (citar-copy-reference (list key))
+  (let ((inhibit-message t))
+    (citar-copy-reference (list key))
 
-  (let* ((raw-ref (substring-no-properties (current-kill 0)))
-         (formatted-ref (my/citar-remove-after-parenthesis raw-ref)))
+    (let* ((raw-ref (substring-no-properties (current-kill 0)))
+           (formatted-ref (my/citar-remove-after-parenthesis raw-ref)))
 
-    (kill-new formatted-ref t)
-
-    (message "Referência formatada e copiada!")))
+      (kill-new formatted-ref t))))
 
 (with-eval-after-load 'citar
-  (define-key embark-citation-map (kbd "F") #'my/embark-citar-copy-and-format)
-  (define-key citar-embark-citation-map (kbd "F") #'my/embark-citar-copy-and-format))
+  ;; (define-key embark-citation-map (kbd "a") #'my/embark-citar-copy-and-format)
+  (define-key citar-embark-citation-map (kbd "a") #'my/embark-citar-copy-and-format))
 
 ;; (use-package bibtex-completion
 ;;   :custom

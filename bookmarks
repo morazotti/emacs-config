@@ -33,11 +33,11 @@
  (position . 785)
  (last-modified 27039 74 805327 186000))
 ("org-capture-last-stored"
- (filename . "~/Documents/roam/20260422155616-o_estado_de_gato.org")
- (front-context-string)
- (rear-context-string . " estado de gato\n")
- (position . 94)
- (last-modified 27113 6612 233619 287000))
+ (filename . "~/Dropbox/UFSCar/postdoc/projeto/project.org")
+ (front-context-string . "** TODO 20260720")
+ (rear-context-string . "las no projeto.\n")
+ (position . 293)
+ (last-modified 27230 35521 100774 440000))
 ("info"
  (filename . "~/Documents/org/info.org")
  (front-context-string . "#+TITLE: Informa")

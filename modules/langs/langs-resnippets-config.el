@@ -159,6 +159,7 @@
  ("schro" "Schrödinger" :match-case nil)
  ("hamilton\\([^a-zA-Z]\\)" '("Hamilton" 1) :match-case nil :suffix nil)
  ("xc" '((org-excalidraw-create-drawing)) :word-boundary t :suffix nil)
+ ("NS" "Navier-Stokes")
  (",," "," :suffix nil))
 
 (provide 'langs-resnippets-config)
