@@ -89,7 +89,7 @@
    "<leader>" 'harpoon-add-file
    "ESC" 'harpoon-toggle-quick-menu
    "<backspace>" 'harpoon-clear
-   "qh" 'harpoon-quick-menu-hydra
+   "C-t" 'harpoon-quick-menu-hydra
 
    ;; commands
    ":" 'eval-expression
