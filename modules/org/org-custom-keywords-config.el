@@ -42,4 +42,48 @@
         (setq org-options-keywords (append org-options-keywords (list kw)))))))
 
 (add-hook 'org-export-before-processing-hook #'my/org-inject-custom-keywords)
+
+;; ;; generate keyword macro substitution
+;; (defvar my/org-keyword-macro-map
+;;   '(("TITLE" . "title")
+;;     ("SUBTITLE" . "subtitle")
+;;     ("AUTHOR" . "author")
+;;     ("DATE" . "date"))
+;;   "Alist mapeando keywords Org para nomes de macros.")
+
+;; (defun my/org--keyword-value (keyword)
+;;   "Retorna o valor da keyword org KEYWORD no buffer atual."
+;;   (cadr (assoc keyword (org-collect-keywords (list keyword)))))
+
+;; (defun my/org-sync-keyword-macros ()
+;;   "Sincroniza `org-export-global-macros` com `my/org-keyword-macro-map`."
+;;   (when (derived-mode-p 'org-mode)
+;;     (let ((new-macros nil)
+;;           (macro-names (mapcar #'cdr my/org-keyword-macro-map)))
+;;       (dolist (pair my/org-keyword-macro-map)
+;;         (let* ((keyword (car pair))
+;;                (macro   (cdr pair))
+;;                (value   (my/org--keyword-value keyword)))
+;;           (when value
+;;             (push (cons macro value) new-macros))))
+;;       ;; remove macros antigos com os mesmos nomes e adiciona os novos
+;;       (setq-local org-export-global-macros
+;;                   (append new-macros
+;;                           (cl-remove-if (lambda (m)
+;;                                           (member (car m) macro-names))
+;;                                         org-export-global-macros))))))
+
+;; (defun my/org-sync-keyword-macros-before-export (_backend)
+;;   "Hook executado antes da exportação."
+;;   (my/org-sync-keyword-macros))
+
+;; (add-hook 'org-mode-hook
+;;           (lambda ()
+;;             (my/org-sync-keyword-macros)
+;;             (add-hook 'after-save-hook #'my/org-sync-keyword-macros nil t)))
+
+;; (add-hook 'org-export-before-processing-hook
+;;           #'my/org-sync-keyword-macros-before-export)
+
+
 (provide 'org-custom-keywords-config)
