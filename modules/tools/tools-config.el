@@ -3,5 +3,6 @@
 (require 'tools-debug-config)
 (require 'tools-completion-config)
 (require 'tools-pdf-transient)
+(provide 'tools-music-config)
 
 (provide 'tools-config)

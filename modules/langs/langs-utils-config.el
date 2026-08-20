@@ -1,6 +1,6 @@
 ;; better parenthesis
 (use-package smartparens
-  :hook ((org-mode latex-mode C-mode julia-mode python-mode) . smartparens-mode))
+  :hook ((prog-mode org-mode latex-mode C-mode julia-mode python-mode) . smartparens-mode))
 
 (use-package paredit
   :hook ((snippet-mode lisp-mode lisp-interaction-mode clojure-ts-mode clojure-mode emacs-lisp-mode) . paredit-mode))

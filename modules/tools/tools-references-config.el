@@ -115,6 +115,49 @@
   (ebib-import-source-directory (file-name-concat home "Downloads"))
   (ebib-import-target-directory (file-name-concat ebib-default-directory "pdfs"))
   (ebib-reading-list-file (file-name-concat ebib-default-directory "reading-list.org"))
+  (ebib-keywords
+      '(
+        ;; --- QUANTUM ---
+        "Quantum Computing"
+        "Quantum Computing > Quantum Algorithms"
+        "Quantum Computing > Quantum Complexity Theory"
+        "Quantum Computing > Quantum Hardware"
+        "Quantum Information"
+        "Quantum Information > Quantum Channels / Open Quantum Systems"
+        "Quantum Information > Quantum Foundations / Interpretations"
+        "Quantum Information > Quantum Measurement"
+        "Quantum Control"
+        "Quantum Control > Optimal Quantum Control"
+
+        ;; --- MACHINE LEARNING & AI ---
+        "Machine Learning & AI"
+        "Machine Learning & AI > Physics-Informed Machine Learning"
+        "Machine Learning & AI > Deep Learning > Transformers / Attention"
+
+        ;; --- MATHEMATICS ---
+        "Mathematics"
+        "Mathematics > Differential Geometry / Riemannian Geometry"
+        "Mathematics > Mathematical Physics"
+        "Mathematics > Lie Groups / Lie Algebras / Representation Theory"
+        "Mathematics > Optimal Control Theory"
+
+        ;; --- PHYSICS ---
+        "Physics (general)"
+        "Physics (general) > Condensed Matter"
+        "Physics (general) > Foundations of Physics"
+
+        ;; --- COMPUTATIONAL BIOLOGY ---
+        "Computational Biology & Bioinformatics"
+        "Computational Biology > Synthetic Biology"
+        "Computational Biology > Mass Spectrometry / Metabolomics / Molecular Networking"
+        "Computational Biology > Protein Structure Prediction"
+        "Computational Biology > Genomics & Metagenomics"
+
+        ;; --- OUTROS DOMÍNIOS IMPORTANTES ---
+        "Security & Cryptography > Post-Quantum Cryptography"
+        "Fluid Dynamics & CFD > Navier-Stokes Solvers"
+        "Energy & Sustainability"
+        ))
 
   :bind
   (:map ebib-index-mode-map ("B" . ebib-biblio-import-doi))

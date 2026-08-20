@@ -131,6 +131,7 @@
  ("port\\(i?\\)f\\([oó]\\)lio" "portfólio")
  ("quencia\\(s?\\)" '("quência" 1))
  ("qc" "computação quântica")
+ ("quantic\\(.*\\)" '("quântic" 1) :word-boundary t)
  ("rapido" "rápido ")
  ("ruido\\(s?\\)" '( "ruído" 1))
  ("sao" '(1 "são") :priority 1)

@@ -208,6 +208,12 @@
    ;; "mn" 'evil-multiedit-match-and-next
    ;; "mp" 'evil-multiedit-match-and-prev
 
+   ;; emms
+   "mm" 'emms
+   "mt" 'emms-pause
+   "mn" 'emms-player-mpd-next
+   "mp" 'emms-player-mpd-previous
+   
    ;; narrow
    "ns" 'org-narrow-to-subtree
    "nn" 'narrow-to-region

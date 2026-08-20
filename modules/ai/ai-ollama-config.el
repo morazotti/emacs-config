@@ -3,6 +3,8 @@
   :stream t
   :models '((llama3.2
 	     :description "Meta's efficient AI model, great for lightweight tasks and edge devices.")
+	    (qwen2.5-reason
+	     :description "An advanced LLM with 14B parameters and reasoning")
 	    (qwen2.5:14b-instruct-q3_K_M
 	     :description "An advanced LLM with 14B parameters, optimized for performance and flexibility.")
 	    (qwen2.5:7b
