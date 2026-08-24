@@ -7,6 +7,7 @@
   ;; Carrega as funções padrão do EMMS
   (emms-all)
   (emms-default-players)
+  (emms-player-mpd-connect)
 
   ;; Define o backend do MPD como prioritário
   (setq emms-player-list '(emms-player-mpd))
