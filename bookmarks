@@ -2,7 +2,13 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("repos"
+(("work"
+ (filename . "~/Documents/org/work.org")
+ (front-context-string . "dIn.\n\n** BACKLOG")
+ (rear-context-string . "r Lattes e Linke")
+ (position . 468)
+ (last-modified 27285 36281 766059 428000))
+("repos"
  (filename . "~/repos/")
  (front-context-string . "desklinks\n  drwx")
  (rear-context-string . "0K Apr 15 22:10 ")
@@ -33,11 +39,11 @@
  (position . 785)
  (last-modified 27039 74 805327 186000))
 ("org-capture-last-stored"
- (filename . "~/Dropbox/UFSCar/postdoc/projeto/project.org")
- (front-context-string . "** TODO 20260720")
- (rear-context-string . "las no projeto.\n")
- (position . 293)
- (last-modified 27230 35521 100774 440000))
+ (filename . "~/Documents/roam/20260804094039-metodos_de_solucao_cfd.org")
+ (front-context-string . "#+language: pt-b")
+ (rear-context-string . " de solução CFD\n")
+ (position . 100)
+ (last-modified 27249 56905 109711 15000))
 ("info"
  (filename . "~/Documents/org/info.org")
  (front-context-string . "#+TITLE: Informa")
