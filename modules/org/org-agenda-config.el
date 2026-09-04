@@ -1,5 +1,7 @@
 (setq org-default-notes-file (concat org-directory "/notes.org"))
 (setq org-agenda-files (list (concat org-directory "/tasks.org")
+			     (concat org-directory "/work.org")
+			     (concat org-roam-directory "/20260824084837-acompanhamento_quanta_ai_de.org")
                              (concat org-directory "/opusdei.org")))
 (global-set-key (kbd "C-c a") 'org-agenda)
 

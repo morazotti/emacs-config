@@ -44,11 +44,12 @@
 		    " " (resnippets-cursor) " \\right"
 		    (when (string= "{" (resnippets-group 1)) "\\")
 		    (cond
-		     ((string= "(" (resnippets-group 1)) ")")
-		     ((string= "{" (resnippets-group 1)) "}")
-		     ((string= "[" (resnippets-group 1)) "]")
-		     )
-		    ))
+		     ((string= "(" (resnippets-group 1)) ;; ")"
+		      )
+		     ((string= "{" (resnippets-group 1)) ;; "}"
+		      )
+		     ((string= "[" (resnippets-group 1)) ;; "]"
+		      ))))
  ("lr<" '("\\left\\langle " (resnippets-cursor) " \\right\\rangle") :word-boundary t)
  ("rl." '("\\right." (resnippets-cursor) " \\left.") :word-boundary t)
  ("^," "&")

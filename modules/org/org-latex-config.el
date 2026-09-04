@@ -4,6 +4,7 @@
       ;; comandos extras
       :config (add-to-list 'cdlatex-math-modify-alist '(?s "\\mathscr" nil t nil nil))
               (add-to-list 'cdlatex-math-modify-alist '(?B "\\mathbb" nil t nil nil))
+              (add-to-list 'cdlatex-math-modify-alist '(?y "\\boldsymbol" nil t nil nil))
               (add-to-list 'cdlatex-math-modify-alist '(?k "\\mathfrak" nil t nil nil))
               (add-to-list 'cdlatex-math-symbol-alist '(?E ("\\mathcal{E}" "\\exists")))
               (add-to-list 'cdlatex-math-symbol-alist '(?* ("\\times" "\\otimes")))
