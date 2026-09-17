@@ -3,11 +3,11 @@
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("work"
- (filename . "~/Documents/org/work.org")
- (front-context-string . "dIn.\n\n** BACKLOG")
- (rear-context-string . "r Lattes e Linke")
- (position . 468)
- (last-modified 27285 36281 766059 428000))
+  (filename . "~/Documents/org/work.org")
+  (front-context-string . "dIn.\n\n** BACKLOG")
+  (rear-context-string . "r Lattes e Linke")
+  (position . 468)
+  (last-modified 27285 36281 766059 428000))
 ("repos"
  (filename . "~/repos/")
  (front-context-string . "desklinks\n  drwx")
@@ -15,11 +15,11 @@
  (position . 66)
  (last-modified 27120 44613 182578 124000))
 ("UFSCar"
- (filename . "~/Dropbox/UFSCar/")
+ (filename . "~/Dropbox/UFSCar/postdoc/")
  (front-context-string . "2025_Aulas\n  drw")
  (rear-context-string . "0K Mar 19 16:04 ")
  (position . 74)
- (last-modified 27072 12366 934367 576000))
+ (last-modified 27296 6865 427363 381000))
 ("resnippets"
  (filename . "~/repos/dotfiles/emacs/modules/langs/langs-resnippets-config.el")
  (front-context-string . "(resnippets-defi")
@@ -34,16 +34,16 @@
  (last-modified 27037 36786 12793 393000))
 ("org-refile-last-stored"
  (filename . "~/Dropbox/my_library/reading-list.org")
- (front-context-string . "** DONE [#A] Noi")
- (rear-context-string . "_2026_minimal]\n\n")
- (position . 785)
- (last-modified 27039 74 805327 186000))
+ (front-context-string . "** DONE Attentio")
+ (rear-context-string . "oise_2011\n:END:\n")
+ (position . 1035)
+ (last-modified 27296 6387 488087 887000))
 ("org-capture-last-stored"
- (filename . "~/Documents/roam/20260804094039-metodos_de_solucao_cfd.org")
+ (filename . "~/Documents/roam/20260901153610-artigo_quantum_noise_spectroscopy.org")
  (front-context-string . "#+language: pt-b")
- (rear-context-string . " de solução CFD\n")
- (position . 100)
- (last-modified 27249 56905 109711 15000))
+ (rear-context-string . "Audi 09-01-2026\n")
+ (position . 104)
+ (last-modified 27287 7033 885369 186000))
 ("info"
  (filename . "~/Documents/org/info.org")
  (front-context-string . "#+TITLE: Informa")
