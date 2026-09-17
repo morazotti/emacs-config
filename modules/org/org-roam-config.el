@@ -4,19 +4,20 @@
     :init (setq org-roam-v2-ack t)
 
     :custom ((org-roam-dailies-directory (file-name-concat org-roam-directory "projeto-pessoal"))
-	     (org-roam-graph-link-hidden-types ("files" "https" "ref" "fuzzy")))
+	     (org-roam-graph-link-hidden-types ("files" "https" "ref" "fuzzy"))))
 
-    :bind (("C-c r f" . org-roam-node-find)
-           ("C-c r c" . org-roam-capture)
-           ("C-c r b" . org-roam-buffer-toggle)
-           ("C-c r t a" . org-roam-tag-add)
-           ("C-c r t r" . org-roam-tag-remove)
-           ;; ("C-c r I" . org-roam-node-insert-immediate)
-           :map org-mode-map
-           ("C-c r i" . org-roam-node-insert)))
+(use-package org-ql)
+(use-package consult-org-roam)
+
+(use-package casual-org-roam
+  :ensure t
+  :straight (:host github :repo "morazotti/casual-org-roam" :branch "master")
+  :after org-roam
+  :bind (("C-c r" . casual-org-roam-master)
+	 ("C-c q" . casual-org-ql)))
 
 (use-package org-roam-ui
-  :straight (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+   :straight (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
   :after org-roam
   :custom
   ((org-roam-ui-open-on-start nil)

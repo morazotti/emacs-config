@@ -35,3 +35,4 @@
 
 ;; O depth -100 garante que nossa função seja a primeira a rodar no desligamento
 (add-hook 'kill-emacs-hook #'my/profile-kill-emacs-hook -100)
+

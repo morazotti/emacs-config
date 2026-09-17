@@ -158,6 +158,8 @@
    "rr" 'consult-register
 
    ;; org roam
+   "r" 'casual-org-roam-tmenu
+   "q" 'casual-org-ql-tmenu
    "rf" 'org-roam-node-find
    "rc" 'org-roam-capture
    "rb" 'org-roam-buffer-toggle
