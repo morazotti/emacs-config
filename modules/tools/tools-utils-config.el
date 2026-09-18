@@ -226,6 +226,7 @@
 (use-package vterm)
 
 (use-package transient-straight
+  :ensure t
   :straight (:host github :repo "morazotti/transient-straight")
   :bind
   ("C-M-s-s" . transient-straight))

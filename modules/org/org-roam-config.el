@@ -6,7 +6,8 @@
     :custom ((org-roam-dailies-directory (file-name-concat org-roam-directory "projeto-pessoal"))
 	     (org-roam-graph-link-hidden-types ("files" "https" "ref" "fuzzy"))))
 
-(use-package org-ql)
+(use-package org-roam-ql)
+
 (use-package consult-org-roam)
 
 (use-package casual-org-roam
