@@ -367,6 +367,14 @@
  '(org-safe-remote-resources '("\\`\\[\\[file:early-init\\.el]]\\'"))
  '(org-startup-with-latex-preview t)
  '(org-use-sub-superscripts nil)
+ '(project-switch-commands
+   '((project-find-file "Find file" nil)
+     (project-find-regexp "Find regexp" nil)
+     (project-find-dir "Find directory" nil)
+     (project-vc-dir "VC-Dir" nil) (project-eshell "Eshell" nil)
+     (project-any-command "Other" nil)
+     (magit-project-status "Magit" nil)
+     (project-kill-buffers "Kill" nil)))
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values
    '((jinx-local-words
