@@ -124,7 +124,6 @@
    "wn" 'winner-redo
    "w-" 'balance-windows
    ;; "wt" 'transpose-frame
-   "wo" 'ace-window
 
    ;; open - general
    "om" 'notmuch
@@ -153,23 +152,23 @@
    "h." 'eldoc-box-help-at-point
 
    ;; register
-   "rs" 'consult-register-store
-   "rl" 'consult-register-load
-   "rr" 'consult-register
+   ;; "rs" 'consult-register-store
+   ;; "rl" 'consult-register-load
+   ;; "rr" 'consult-register
 
    ;; org roam
    "r" 'casual-org-roam-tmenu
    "q" 'casual-org-ql-tmenu
-   "rf" 'org-roam-node-find
-   "rc" 'org-roam-capture
-   "rb" 'org-roam-buffer-toggle
-   "rI" 'org-roam-node-insert-immediate
-   "ri" 'org-roam-node-insert
-   "ra" 'org-roam-alias-add
-   "r]" 'org-roam-ref-find
-   ;; "rd" 'org-roam-dailies-goto-today
-   ;; "rg" 'org-roam-dailies-find-date
-   "rt" 'org-transclusion-add
+   ;; "rf" 'org-roam-node-find
+   ;; "rc" 'org-roam-capture
+   ;; "rb" 'org-roam-buffer-toggle
+   ;; "rI" 'org-roam-node-insert-immediate
+   ;; "ri" 'org-roam-node-insert
+   ;; "ra" 'org-roam-alias-add
+   ;; "r]" 'org-roam-ref-find
+   ;; ;; "rd" 'org-roam-dailies-goto-today
+   ;; ;; "rg" 'org-roam-dailies-find-date
+   ;; "rt" 'org-transclusion-add
 
    ;; consult
    "/"  'consult-ripgrep
