@@ -384,7 +384,8 @@
      (eval add-hook 'after-save-hook
 	   (lambda nil
 	     (shell-command "pandoc README.org -o README.md"))
-	   nil t))))
+	   nil t)))
+ '(vterm-shell "/usr/bin/zsh"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
