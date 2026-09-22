@@ -133,7 +133,6 @@
 
 ;; blamer
 (use-package blamer
-  :straight (:host github :repo "Artawicus/blamer.el")
   :custom
   (blamer-idle-time 0.5)
   (blamer-min-width 20)
@@ -225,11 +224,11 @@
 
 (use-package vterm)
 
-(use-package transient-straight
-  :ensure t
-  :straight (:host github :repo "morazotti/transient-straight")
-  :bind
-  ("C-M-s-s" . transient-straight))
+;; (use-package transient-straight
+;;   :ensure t
+;;   :straight (:host github :repo "morazotti/transient-straight")
+;;   :bind
+;;   ("C-M-s-s" . transient-straight))
 
 ;;vundo
 (use-package vundo

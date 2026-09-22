@@ -38,8 +38,8 @@
 (use-package gptel-agent
   :config (gptel-agent-update))
 
-(use-package gptel-org-tools
-  :straight (:host codeberg :repo "bajsicki/gptel-got" :branch "main"))
+;; (use-package gptel-org-tools
+;;   :straight (:host codeberg :repo "bajsicki/gptel-got" :branch "main"))
 
 (use-package gptel-quick
   :straight (:host github :repo "karthink/gptel-quick" :branch "master")
