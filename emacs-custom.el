@@ -10,6 +10,9 @@
  '(bibtex-autokey-titlewords 2)
  '(bibtex-autokey-year-length 4)
  '(bibtex-autokey-year-title-separator "_")
+ '(custom-safe-themes
+   '("9d54d84fc710bc44199a8a33450f69f7131d81c6af6389dba67e1d16af7c24f1"
+     default))
  '(ebib-file-associations '(("pdf") ("ps" . "gv")))
  '(ebib-keywords
    '("Quantum Computation" "Computer Science - Cryptography and Security"
@@ -375,6 +378,8 @@
      (project-any-command "Other" nil)
      (magit-project-status "Magit" nil)
      (project-kill-buffers "Kill" nil)))
+ '(resnippets-snippet-file
+   "/home/nicolas/.config/emacs/modules/langs/langs-resnippets-config.el")
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values
    '((jinx-local-words

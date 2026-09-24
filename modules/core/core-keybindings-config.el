@@ -231,6 +231,10 @@
    ;; ebib
    "eb" 'ebib
 
+
+   ;; org emphasize
+   "em" 'my/org-emphasis-autocomplete
+
    ;; terminal
    "tt" 'vterm
    "et" 'eshell

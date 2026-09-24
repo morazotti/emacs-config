@@ -1,7 +1,7 @@
 (resnippets-define
  "math-mode"
  '(:mode (LaTeX-mode org-mode)
-	 :condition (and (texmathp) (org-inside-LaTeX-fragment-p))
+	 :condition (and (texmathp) (org-inside-LaTeX-fragment-p) (not (org-in-src-block-p)))
 	 :priority 10)
  ("hat" '("\\hat{" (resnippets-cursor) "\\}") :priority 1)
  ("bar" '("\\bar{" (resnippets-cursor) "\\}") :priority 1)
@@ -76,6 +76,7 @@
  "text-mode-enus"
  '(:mode text-mode
 	 :condition (and
+		     (not (org-in-src-block-p))
 		     (not (texmathp))
 		     (or
 		      (string= "en-us" (cadar (org-collect-keywords '("LANGUAGE"))))
@@ -100,6 +101,7 @@
  "text-mode-ptbr"
  '(:mode text-mode
 	 :condition (and
+		     (not (org-in-src-block-p))
 		     (not (texmathp))
 		     (or
 		      (string= "pt-br" (cadar (org-collect-keywords '("LANGUAGE"))))
@@ -146,7 +148,7 @@
 (resnippets-define
  "text-mode"
  '(:mode text-mode
-	 :condition (not (texmathp))
+	 :condition (and (not (org-in-src-block-p)) (not (texmathp)))
 	 :match-case t
 	 :suffix t)
  ("mk" '("\\(" (resnippets-cursor)  "\\)") :word-boundary t :suffix nil)
@@ -160,6 +162,8 @@
  ("hamilton\\([^a-zA-Z]\\)" '("Hamilton" 1) :match-case nil :suffix nil)
  ("xc" '((org-excalidraw-create-drawing)) :word-boundary t :suffix nil)
  ("ns" "Navier-Stokes" :word-boundary t)
+ ("dwv" "D-Wave" :word-boundary t :match-case nil)
+ ("ibm" "IBM" :word-boundary t :match-case nil)
  (",," "," :suffix nil))
 
 (provide 'langs-resnippets-config)

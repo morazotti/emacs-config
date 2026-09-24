@@ -225,10 +225,13 @@
 (use-package vterm)
 
 ;; (use-package transient-straight
-;;   :ensure t
+;;   :ensure nil
+;;   :demand nil
 ;;   :straight (:host github :repo "morazotti/transient-straight")
 ;;   :bind
 ;;   ("C-M-s-s" . transient-straight))
+
+;; (require 'transient-straight)
 
 ;;vundo
 (use-package vundo
