@@ -50,7 +50,8 @@
 		      )
 		     ((string= "[" (resnippets-group 1)) ;; "]"
 		      ))))
- ("lr<" '("\\left\\langle " (resnippets-cursor) " \\right\\rangle") :word-boundary t)
+ ("lr<" '("\\left \\langle " (resnippets-cursor) " \\right \\rangle") :word-boundary t)
+ ("lrf" '("\\left \\lfloor " (resnippets-cursor) " \\right \\rfloor") :word-boundary t)
  ("rl." '("\\right." (resnippets-cursor) " \\left.") :word-boundary t)
  ("^," "&")
  ("\\([&,]+\\)=" "&=")
