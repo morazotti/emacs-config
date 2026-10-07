@@ -72,6 +72,8 @@
      "General Relativity and Quantum Cosmology"
      "Computer Science - Computational Complexity"))
  '(ebib-reading-list-template "* %M %T\12\12\12:PROPERTIES:\12%K\12:END:\12")
+ '(electric-pair-text-pairs '((34 . 8221) (8216 . 8217) (8220 . 8221)))
+ '(electric-quote-replace-double t)
  '(image-auto-resize 'fit-window)
  '(org-export-smart-quotes-alist
    '(("pt"
