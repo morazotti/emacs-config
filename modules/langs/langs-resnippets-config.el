@@ -157,6 +157,7 @@
  ("qt\\(s?\\)" '("qubit" 1))
  ("qi" "qubit")
  ("qii" "qubits")
+ ("pinn\\(s?\\)" '("PINN" 1) :word-boundary t)
  ("ali\\*" '((cdlatex-environment "align*")) :suffix nil)
  ("cite" '((org-cite-insert 1)) :suffix nil)
  ("schro" "Schrödinger" :match-case nil)
@@ -165,6 +166,7 @@
  ("ns" "Navier-Stokes" :word-boundary t)
  ("dwv" "D-Wave" :word-boundary t :match-case nil)
  ("ibm" "IBM" :word-boundary t :match-case nil)
+ ("\\. \\([a-zA-Z]\\)" '(". " (capitalize (resnippets-group 1))) :word-boundary nil :suffix nil :match-case nil)
  (",," "," :suffix nil))
 
 (provide 'langs-resnippets-config)
