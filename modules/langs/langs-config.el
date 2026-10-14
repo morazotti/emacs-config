@@ -3,5 +3,6 @@
 (require 'langs-python-config)
 (require 'langs-clojure-config)
 (require 'langs-julia-config)
+(require 'langs-formatter-config)
 
 (provide 'langs-config)

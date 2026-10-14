@@ -13,4 +13,4 @@
 	     :description  "strong at reasoning, coding, and multilingual tasks.")))
 
 (setq-default gptel-model "llama3.2")
-(provide 'ai-ollama-config)
+(provide 'ai-gptel-ollama-config)

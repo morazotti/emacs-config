@@ -121,4 +121,4 @@ Guidelines:
  </formatting>"
   :tools '("introspection"))
 
-(provide 'ai-presets-config)
+(provide 'ai-gptel-presets-config)
