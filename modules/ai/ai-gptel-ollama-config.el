@@ -12,5 +12,5 @@
 	    (minimax-m3:cloud
 	     :description  "strong at reasoning, coding, and multilingual tasks.")))
 
-(setq-default gptel-model "llama3.2")
+(setq-default gptel-model "gemini-flash-lite-latest")
 (provide 'ai-gptel-ollama-config)

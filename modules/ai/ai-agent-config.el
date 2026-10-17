@@ -13,12 +13,20 @@
   ;; Agente secundário: Gemini CLI, iniciado sob demanda com
   ;; M-x agent-shell-google-start-gemini (o Claude continua o padrão)
   (setq agent-shell-google-authentication
-        (agent-shell-google-make-authentication :login t))
+        (agent-shell-google-make-authentication
+         :api-key (lambda () (auth-source-pass-get 'secret "google-api-key"))))
   (setq agent-shell-google-gemini-environment
         (agent-shell-make-environment-variables :inherit-env t))
+  (setq agent-shell-google-gemini-acp-command
+        '("gemini" "--experimental-acp" "--allowed-tools" "run_shell_command"))
+  (setq agent-shell-github-authentication
+        (agent-shell-github-make-authentication :login t))
+  (setq agent-shell-github-acp-command '("copilot" "--acp"))
+  (setq agent-shell-github-default-model-id "claude-sonnet-5.5")
   :bind (:map agent-shell-mode-map
               ("RET" . newline)
               ("C-c C-c" . shell-maker-submit)
               ("C-c C-k" . agent-shell-interrupt)))
+
 
 (provide 'ai-agent-config)
