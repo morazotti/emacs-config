@@ -11,6 +11,7 @@
               :user "apikey"))
       :stream t))
   (with-eval-after-load 'gptel
+    (gptel-make-gh-copilot "Copilot"))
   (with-eval-after-load 'gptel
     (gptel-make-tool
      :name "git"
@@ -68,13 +69,13 @@
   :after gptel
   :config
   (let (( -mcp-filesystem-allowed-directories
-   (mapcar 'expand-file-name '("~/repos" "~/Projects"))))
-  (setq mcp-hub-servers
-   `(("filesystem" . (:command "npx" 
-                      :args ,(append '("-y" "@modelcontextprotocol/server-filesystem")
-				     -mcp-filesystem-allowed-directories)))
-     ("fetch"      . (:command "uvx" 
-                      :args ("mcp-server-fetch"))))))
+	  (mapcar 'expand-file-name '("~/repos" "~/Projects"))))
+    (setq mcp-hub-servers
+	  `(("filesystem" . (:command "npx" 
+				      :args ,(append '("-y" "@modelcontextprotocol/server-filesystem")
+						     -mcp-filesystem-allowed-directories)))
+	    ("fetch"      . (:command "uvx" 
+				      :args ("mcp-server-fetch"))))))
   :config
   ;; Opcional: inicia os servidores automaticamente ao abrir o Emacs
   (add-hook 'after-init-hook #'mcp-hub-start-all-server))
