@@ -25,7 +25,7 @@
   (setq agent-shell-github-default-model-id "claude-sonnet-5.5")
   :bind (:map agent-shell-mode-map
               ("RET" . newline)
-              ("C-c C-c" . shell-maker-submit)
+              ("C-c RET" . shell-maker-submit)
               ("C-c C-k" . agent-shell-interrupt)))
 
 
