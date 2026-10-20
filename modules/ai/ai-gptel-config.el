@@ -19,8 +19,7 @@
 
 (with-eval-after-load 'gptel
   (require 'ai-gptel-tools-config)
-  (require 'ai-gptel-presets-config)
-  (require 'ai-gptel-ollama-config))
+  (require 'ai-gptel-presets-config))
 
 (defun my/gptel-mode-auto ()
   "Ensure that this file opens with `gptel-mode' enabled."
