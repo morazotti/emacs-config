@@ -5,6 +5,10 @@
           (quote (("default"
                    ("dired" (mode . dired-mode))
                    ("org" (mode . org-mode))
+		   ("agent-shell" (or
+                                   (mode . agent-shell-mode)
+                                   (name . "^\\*agent-shell.*")
+                                   (name . "^\\*Claude.*")))
   		 
                    ("programming" (or
                                    (mode . sh-mode)

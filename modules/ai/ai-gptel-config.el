@@ -9,9 +9,7 @@
              (auth-source-pick-first-password
               :host "generativelanguage.googleapis.com"
               :user "apikey"))
-      :stream t)
-
-    (gptel-make-gh-copilot "Copilot"))
+      :stream t))
   :custom ((gptel-default-mode #'org-mode)
            (gptel-track-media t)
            (gptel-use-tools t)
