@@ -13,7 +13,6 @@
 (use-package casual-org-roam
   :ensure t
   :straight (:host github :repo "morazotti/casual-org-roam" :branch "master")
-  :after org-roam
   :bind (("C-c r" . casual-org-roam-master)
 	 ("C-c q" . casual-org-ql)))
 

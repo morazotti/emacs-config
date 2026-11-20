@@ -4,6 +4,7 @@
 
   (setq agent-shell-omp-models (vector "anthropic/claude-opus-5-5"
                                        "anthropic/claude-sonnet-5-5"
+                                       "anthropic/claude-fable-5-1"
                                        "anthropic/claude-haiku-5-5"
                                        "openai/gpt-5.6"
                                        "openai/gpt-5.5"

@@ -1,7 +1,7 @@
 (require 'org-ob-jupyter-config)
 
 (defvar my/org-latex-babel-lang-list
-  '(C jupyter shell latex fortran python ledger))
+  '(C jupyter shell latex fortran python ledger emacs-lisp))
 
 (setq org-babel-load-languages '())
 (dolist (lang my/org-latex-babel-lang-list)

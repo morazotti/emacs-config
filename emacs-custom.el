@@ -75,6 +75,9 @@
  '(electric-pair-text-pairs '((34 . 8221) (8216 . 8217) (8220 . 8221)))
  '(electric-quote-replace-double t)
  '(image-auto-resize 'fit-window)
+ '(neomacs-effect-cursor-color-cycle
+   '(:fps 24 :speed 0.5 :saturation 0.800000011920929 :lightness
+	  0.6000000238418579))
  '(org-export-smart-quotes-alist
    '(("pt"
       (primary-opening :utf-8 "“" :html "&ldquo;" :latex "\\enquote{"
@@ -378,8 +381,9 @@
      (project-find-dir "Find directory" nil)
      (project-vc-dir "VC-Dir" nil) (project-eshell "Eshell" nil)
      (project-any-command "Other" nil)
-     (magit-project-status "Magit" nil)
-     (project-kill-buffers "Kill" nil)))
+     (magit-project-status "Magit" 98) (agent-shell "Claude" 99)
+     (agent-shell-omp-start "Oh My-Pi" 97)
+     (project-kill-buffers "Kill" 107)))
  '(resnippets-snippet-file
    "/home/nicolas/.config/emacs/modules/langs/langs-resnippets-config.el")
  '(ring-bell-function 'ignore)
@@ -403,7 +407,6 @@
  '(diff-hl-insert ((t (:background "#a6e3a1" :foreground "#a6e3a1"))))
  '(italic ((t (:slant italic))))
  '(jinx-misspelled ((t (:underline (:color "red" :style wave :position nil)))))
- '(org-document-title ((t (:weight bold :height 1.0))))
  '(org-drawer ((t (:inherit fixed-pitch :foreground "Blue1"))))
  '(org-level-1 ((t (:extend nil :foreground "medium blue" :weight bold :height 1.2 :family "CMU Serif"))))
  '(org-level-2 ((t (:foreground "#d20f39" :weight bold :height 1.1 :family "CMU Serif"))))
@@ -413,5 +416,5 @@
  '(org-modern-time-active ((t (0.8 (default fixed-pitch) :inherit :height :background "gray35" :foreground "white" :weight semibold))))
  '(org-modern-time-inactive ((t (:inherit (default fixed-pitch) :background "gray50" :foreground "gray95" :height 0.8))))
  '(org-property-value ((t (:inherit fixed-pitch))))
- '(org-special-keyword ((t (:inherit fixed-pitch :foreground "#fe640b"))))
+ '(tab-bar ((t (:inherit fixed-pitch :background "grey20" :foreground "white"))))
  '(visual-shorthands-face ((t (:inherit font-lock-keyword-face :extend nil :background "#e0e0e0")))))

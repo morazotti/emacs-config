@@ -107,4 +107,13 @@
 		  :buffer "*Jupyter Kernel*"
 		  :command command)))
 
+;; Org 9.8 requires :pre-blank on drawers; emacs-jupyter's RESULTS drawer omits it,
+;; which makes `org-element-drawer-interpreter' signal (wholenump nil) for any
+;; non-:output result (e.g. `2+3', raw drawer, images).
+(with-eval-after-load 'jupyter-org-client
+  (advice-add 'jupyter-org-results-drawer :filter-return
+              (lambda (drawer)
+                (org-element-put-property drawer :pre-blank 0)
+                drawer)))
+
 (provide 'org-ob-jupyter-config)
