@@ -31,6 +31,55 @@
   :after (org-reveal))
 (load-library "ox-reveal")
 
+;; templates de apresentação: submódulos git em templates/, montados em
+;; cada apresentação como submódulo (M-x my/presentation-new)
+(defvar my/presentation-templates-dir
+  (expand-file-name "templates" user-emacs-directory)
+  "Diretório com os templates de apresentação (submódulos git).")
+
+(defvar my/presentation-templates
+  '(("reveal-quanta" :mount "quanta" :setupfile "quanta.setup"))
+  "Templates: nome do diretório em `my/presentation-templates-dir',
+pasta onde o submódulo é montado na apresentação e setupfile do org.")
+
+(defun my/--git (dir &rest args)
+  "Roda git ARGS em DIR; erro com a saída do git se falhar."
+  (let ((default-directory (file-name-as-directory dir)))
+    (with-temp-buffer
+      (unless (zerop (apply #'process-file "git" nil t nil args))
+        (error "git %s: %s" (string-join args " ") (string-trim (buffer-string))))
+      (string-trim (buffer-string)))))
+
+(defun my/presentation-new (dir template)
+  "Cria (ou prepara) a apresentação em DIR usando TEMPLATE como submódulo."
+  (interactive
+   (list (read-directory-name "Diretório da apresentação: ")
+         (completing-read "Template: " my/presentation-templates nil t
+                          nil nil (caar my/presentation-templates))))
+  (let* ((spec (cdr (assoc template my/presentation-templates)))
+         (mount (plist-get spec :mount))
+         (local (expand-file-name template my/presentation-templates-dir))
+         (url (my/--git local "remote" "get-url" "origin"))
+         (org (expand-file-name "present.org" dir)))
+    (make-directory dir t)
+    (unless (file-directory-p (expand-file-name ".git" dir))
+      (my/--git dir "init"))
+    (if (file-exists-p (expand-file-name mount dir))
+        (message "%s/ já existe; submódulo não adicionado" mount)
+      ;; Clona do template local (sem rede) e aponta o submódulo para o remoto.
+      (my/--git dir "-c" "protocol.file.allow=always"
+                "submodule" "add" local mount)
+      (my/--git dir "submodule" "set-url" mount url)
+      (my/--git dir "add" ".gitmodules"))
+    (unless (file-exists-p org)
+      (with-temp-file org
+        (insert (format "#+title: \n#+author: %s\n#+email: %s\n#+language: pt-br\n#+SETUPFILE: %s/%s\n\n* \n"
+                        user-full-name user-mail-address
+                        mount (plist-get spec :setupfile)))))
+    (find-file org)
+    (goto-char (point-min))
+    (end-of-line)))
+
 ;; fixes preview with #+cite_export malforming
 (defun my/fix-org-cite-export-parsing (info)
   "Fix the :cite-export data type before Org attempts to process it.
