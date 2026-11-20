@@ -26,10 +26,7 @@
 		 'my/org-latex-centering-filter)
   (setq org-export-filter-special-block-functions (list 'my/org-latex-centering-filter)))
 
-(use-package org-reveal)
-(use-package ox-reveal
-  :after (org-reveal))
-(load-library "ox-reveal")
+(use-package org-re-reveal)
 
 ;; templates de apresentação: submódulos git em templates/, montados em
 ;; cada apresentação como submódulo (M-x my/presentation-new)
@@ -79,6 +76,8 @@ pasta onde o submódulo é montado na apresentação e setupfile do org.")
     (find-file org)
     (goto-char (point-min))
     (end-of-line)))
+
+(require 'org-reveal-transient)
 
 ;; fixes preview with #+cite_export malforming
 (defun my/fix-org-cite-export-parsing (info)
