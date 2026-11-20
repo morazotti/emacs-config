@@ -1,4 +1,5 @@
 (require 'ai-gptel-config)
 (require 'ai-tools-config)
 (require 'ai-agent-config)
+(require 'agent-shell-subagent)
 (provide 'ai-config)
