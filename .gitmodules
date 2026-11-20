@@ -1,3 +1,6 @@
 [submodule "snippets"]
 	path = snippets
 	url = git@github.com:morazotti/snippets.git
+[submodule "templates/reveal-quanta"]
+	path = templates/reveal-quanta
+	url = git@github.com:morazotti/quanta-ufscar-reveal-presentation.git
